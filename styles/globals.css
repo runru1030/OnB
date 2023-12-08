@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  width:100%;
+  height:100%;
+  font-synthesis: none;
+}
+
+@layer base {
+  [data-nextjs-scroll-focus-boundary] {
+    display: contents;
+  }
+}
+
+@layer components {
+}
+
+@layer base {
+  *::-webkit-scrollbar {
+    width: 5px;
+  }
+  *::-webkit-scrollbar-thumb {
+    @apply bg-grey-0 rounded-2xl
+  }
+
+  *::-webkit-scrollbar-track {
+    @apply bg-transparent
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+input, textarea {
+  outline-width: 1px;
+}
+button {
+  border-radius: unset;
+}
