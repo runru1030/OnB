@@ -1,0 +1,5 @@
+branchName: '${issue.title}-${issue.number}'
+branches:
+  - label: '*'
+    prefix: feature/
+autoCloseIssue: true
