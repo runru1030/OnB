@@ -13,7 +13,7 @@ import { Country } from "@prisma/client";
 import clsx from "clsx";
 import { useSetAtom } from "jotai";
 import { FormEvent, useState } from "react";
-import { myTripsAtom } from "../HomeProvider";
+import { myTripStore, myTripsAtom } from "./MyTripProvider";
 
 const CreateTripModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +33,7 @@ const CreateTripModal = () => {
       setIsOpen(false);
     },
   });
-  const setMyTrips = useSetAtom(myTripsAtom);
+  const setMyTrips = useSetAtom(myTripsAtom, { store: myTripStore });
 
   const onCreateTrip = (e: FormEvent) => {
     try {

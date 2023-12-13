@@ -1,27 +1,16 @@
-"use client";
-import { useQuery } from "@apollo/client";
+import { getClient } from "@app/_components/ApolloClientRSC";
 import { GET_TRIPS } from "@lib/graphql/queries";
-import TripBox from "./_components/TripBox";
-import { TripQueryData } from "./_types";
+import { use } from "react";
+import MyTripProvider from "./_components/MyTripProvider";
+import PageContent from "./_components/PageContent";
 
 const Page = () => {
-  const { data, loading, error } = useQuery(GET_TRIPS, {
-    variables: { userId: 1 },
-  });
+  const { data } = use(getClient().query({ query: GET_TRIPS }));
 
   return (
-    <div>
-      <header className="h-[52px]"></header>
-      <div className="w-full flex flex-col gap-4 px-4">
-        {data?.trips?.map((trip: TripQueryData) => (
-          <TripBox key={trip.id} {...{ ...trip }} />
-        ))}
-
-        <button className="fixed bottom-10 left-1/2 -translate-x-1/2">
-          여행 추가
-        </button>
-      </div>
-    </div>
+    <MyTripProvider myTrips={data?.trips}>
+      <PageContent />
+    </MyTripProvider>
   );
 };
 
