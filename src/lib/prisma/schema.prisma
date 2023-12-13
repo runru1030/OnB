@@ -7,11 +7,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id    String  @id @default(uuid())
+  id    String @id @default(uuid())
   email String
-  name String
+  name  String
   trips Trip[]
 
   createdAt DateTime @default(now())
@@ -19,55 +18,58 @@ model User {
 }
 
 model Country {
-  id      String  @id @default(uuid())
+  id      String @id @default(uuid())
   name    String
-  name_en    String
-  trips Trip[]
+  name_en String
+  trips   Trip[]
 }
 
 model Currency {
-  id      String  @id @default(uuid())
+  id      String   @id @default(uuid())
   name    String
   budgets Budget[]
 }
 
 model Trip {
-  id      String  @id @default(uuid())
-  title    String
+  id        String   @id @default(uuid())
+  title     String
   startedAt DateTime
-  endedAt DateTime
+  endedAt   DateTime
 
-  budgets Budget[]
+  budgets  Budget[]
   expenses Expense[]
 
-  User   User?  @relation(fields: [userId], references: [id])
-  Country   Country?  @relation(fields: [countryId], references: [id])
-  userId String
+  User      User?    @relation(fields: [userId], references: [id])
+  Country   Country? @relation(fields: [countryId], references: [id])
+  userId    String
   countryId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Budget {
-  id      String  @id @default(uuid())
-  type    String
+  id     String @id @default(uuid())
+  type   String
   amount Int
 
   expenses Expense[]
 
-  Trip   Trip?  @relation(fields: [tripId], references: [id])
-  Currency   Currency?  @relation(fields: [currencyId], references: [id])
-  tripId String
+  Trip       Trip?     @relation(fields: [tripId], references: [id])
+  Currency   Currency? @relation(fields: [currencyId], references: [id])
+  tripId     String
   currencyId String
 }
 
-
 model Expense {
-  id      String  @id @default(uuid())
-  category    String
-  amount Int
-  usedAt DateTime
+  id       String   @id @default(uuid())
+  category String
+  amount   Int
+  usedAt   DateTime
 
-  Trip   Trip?  @relation(fields: [tripId], references: [id])
-  Budget   Budget?  @relation(fields: [budgetId], references: [id])
-  tripId String
-  budgetId String
+  Trip      Trip?    @relation(fields: [tripId], references: [id])
+  Budget    Budget?  @relation(fields: [budgetId], references: [id])
+  tripId    String
+  budgetId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

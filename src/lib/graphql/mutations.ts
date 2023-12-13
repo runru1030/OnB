@@ -20,6 +20,11 @@ export const CREATE_TRIP = gql`
       startedAt
       endedAt
       countryId
+      Country {
+        id
+        name
+        name_en
+      }
     }
   }
 `;

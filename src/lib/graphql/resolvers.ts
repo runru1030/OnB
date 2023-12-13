@@ -17,6 +17,7 @@ export const resolvers = {
         include: {
           Country: true,
         },
+        orderBy: { createdAt: "desc" },
       });
     },
     countries: async (_parent: any, args: any, context: Context) => {
@@ -25,14 +26,6 @@ export const resolvers = {
   },
   Mutation: {
     createTrip: async (_parent: any, args: any, context: Context) => {
-      console.log({
-        title: args.title,
-        startedAt: args.startedAt,
-        endedAt: args.endedAt,
-        countryId: args.countryId,
-        userId: args.userId,
-      });
-
       return await context.prisma.trip.create({
         data: {
           title: args.title,
@@ -40,6 +33,9 @@ export const resolvers = {
           endedAt: args.endedAt,
           countryId: args.countryId,
           userId: args.userId,
+        },
+        include: {
+          Country: true,
         },
       });
     },
