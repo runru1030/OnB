@@ -41,29 +41,5 @@ export const resolvers = {
         },
       });
     },
-    countries: async (_parent: any, args: any, context: Context) => {
-      return await context.prisma.country.findMany();
-    },
-  },
-  Mutation: {
-    createTrip: async (_parent: any, args: any, context: Context) => {
-      console.log({
-        title: args.title,
-        startedAt: args.startedAt,
-        endedAt: args.endedAt,
-        countryId: args.countryId,
-        userId: args.userId,
-      });
-
-      return await context.prisma.trip.create({
-        data: {
-          title: args.title,
-          startedAt: args.startedAt,
-          endedAt: args.endedAt,
-          countryId: args.countryId,
-          userId: args.userId,
-        },
-      });
-    },
   },
 };
