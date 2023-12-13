@@ -21,6 +21,7 @@ model User {
 model Country {
   id      String  @id @default(uuid())
   name    String
+  name_en    String
   trips Trip[]
 }
 

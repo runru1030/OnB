@@ -3,6 +3,7 @@ export const typeDefs = `#graphql
   type Country{
     id:ID!
     name:String
+    name_en:String
   }
   type Trip{
     id:ID!
@@ -15,5 +16,15 @@ export const typeDefs = `#graphql
   type Query {
 	  trip(id: ID!): Trip 
     trips:[Trip]
+    countries:[Country]
+  }	
+  type Mutation {
+    createTrip (
+    title:String,
+    startedAt:Date,
+    endedAt:Date,
+    countryId:String, 
+    userId:ID) : Trip
   }
+
 `;

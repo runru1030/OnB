@@ -16,7 +16,7 @@ export const GET_TRIPS = gql`
   }
 `;
 
-export const GET_NOVEL = gql`
+export const GET_TRIP = gql`
   query Trip($id: ID!) {
     trip(id: $id) {
       id
@@ -24,6 +24,15 @@ export const GET_NOVEL = gql`
       startedAt
       endedAt
       countryId
+    }
+  }
+`;
+export const GET_COUNTRIES = gql`
+  query Countries {
+    countries {
+      id
+      name
+      name_en
     }
   }
 `;
