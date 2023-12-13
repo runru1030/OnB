@@ -1,6 +1,8 @@
-import { Providers } from "@components/ApolloProvider";
+// import { Providers } from "@components/ApolloProvider";
 import "@styles/globals.css";
 import localFont from "next/font/local";
+import GlobalProvider from "./GlobalProvider";
+import { ApolloProviders } from "@app/_components/ApolloProvider";
 
 const pretendard = localFont({
   src: "../../public/font/PretendardVariable.woff2",
@@ -16,7 +18,9 @@ export default function RootLayout({
     <html lang="en" className={pretendard.className}>
       <head />
       <body>
-        <Providers>{children}</Providers>
+        <ApolloProviders>
+          <GlobalProvider>{children}</GlobalProvider>
+        </ApolloProviders>
       </body>
     </html>
   );
