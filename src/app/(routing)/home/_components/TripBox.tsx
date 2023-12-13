@@ -1,11 +1,7 @@
 import { TripQueryData } from "../_types";
 
 const dateformatter = (date: Date) =>
-  new Intl.DateTimeFormat("nu", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(date);
+  `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`;
 
 const TripBox = ({ title, startedAt, endedAt, Country }: TripQueryData) => {
   return (
