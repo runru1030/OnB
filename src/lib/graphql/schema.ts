@@ -1,7 +1,19 @@
 export const typeDefs = `#graphql 
-  type Query {
+  scalar Date
+  type Country{
+    id:ID!
+    name:String
   }
-
-  type Mutation {
+  type Trip{
+    id:ID!
+    title:String
+    startedAt:Date
+    endedAt:Date
+    countryId:String
+    Country:Country
+  }
+  type Query {
+	  trip(id: ID!): Trip 
+    trips:[Trip]
   }
 `;
