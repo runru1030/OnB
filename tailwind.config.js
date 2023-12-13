@@ -7,6 +7,12 @@ module.exports = {
   ],
   theme: {
     colors: {
+      blue: {
+        DEFAULT: "#3D91FF",
+        300: "#73B0FF",
+        400: "#3D91FF",
+        500: "#2373DD",
+      },
       grey: {
         DEFAULT: "#434343",
         0: "#F3F3F3",
@@ -20,12 +26,12 @@ module.exports = {
         700: "#303030",
         800: "#252525",
         900: "#1C1C1C",
-        bg: {
+        light: {
           50: "#FEFEFE",
           100: "#FDFCFB",
           200: "#FBFAF9",
           300: "#FAF8F6",
-          400: "#F9F7F4",
+          400: "#EFF2F7",
           500: "#F7F5F1",
           600: "#E1DFDB",
           700: "#AFAEAB",
