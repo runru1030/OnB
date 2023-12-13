@@ -15,6 +15,7 @@ import { useSetAtom } from "jotai";
 import { FormEvent, useState } from "react";
 import { myTripStore, myTripsAtom } from "./MyTripProvider";
 import AddSharpIcon from "@mui/icons-material/AddSharp";
+import Image from "next/image";
 const CreateTripModal = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -117,10 +118,16 @@ const CreateTripModal = () => {
                   className={clsx(
                     tripData.countryId === country.id &&
                       "bg-grey-light-400 duration-300 text-blue",
-                    "p-1.5 rounded-md"
+                    "p-1.5 rounded-md flex justify-between"
                   )}
                 >
                   {country.name}
+                  <Image
+                    src={country.flag_img ?? ""}
+                    width={40}
+                    height={100}
+                    alt="국기"
+                  />
                 </div>
               ))}
             </div>
