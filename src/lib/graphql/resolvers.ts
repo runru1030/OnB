@@ -21,7 +21,9 @@ export const resolvers = {
       });
     },
     countries: async (_parent: any, args: any, context: Context) => {
-      return await context.prisma.country.findMany();
+      return await context.prisma.country.findMany({
+        orderBy: { name: "asc" },
+      });
     },
   },
   Mutation: {
