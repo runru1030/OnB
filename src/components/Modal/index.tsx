@@ -27,9 +27,14 @@ const ModalClose = ({
 
 const ModalTitle = ({
   children,
-}: PropsWithChildren<{ step?: string; totalStep?: string }>) => {
+  className,
+}: PropsWithChildren<{
+  className?: string;
+}>) => {
   return (
-    <Dialog.Title className="relative flex flex-col text-xl text-center">
+    <Dialog.Title
+      className={clsx("relative flex flex-col text-xl text-center", className)}
+    >
       {children}
     </Dialog.Title>
   );

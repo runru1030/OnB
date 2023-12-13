@@ -14,7 +14,7 @@ import clsx from "clsx";
 import { useSetAtom } from "jotai";
 import { FormEvent, useState } from "react";
 import { myTripStore, myTripsAtom } from "./MyTripProvider";
-
+import AddSharpIcon from "@mui/icons-material/AddSharp";
 const CreateTripModal = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -71,15 +71,16 @@ const CreateTripModal = () => {
       }}
     >
       <Modal.Trigger>
-        <Button className="fixed bottom-10 left-1/2 -translate-x-1/2">
-          여행 추가
+        <Button className="fixed bottom-10 left-1/2 -translate-x-1/2 rounded-full px-6 shadow-md btn-blue text-lg flex items-center gap-2 pl-2">
+          <AddSharpIcon sx={{ fontSize: 24 }} />
+          여행 만들기
         </Button>
       </Modal.Trigger>
-      <Modal.Content className="w-full top-[52px] bottom-0 translate-y-0 px-0">
-        <Modal.Title>
+      <Modal.Content className="w-full top-[52px] bottom-0 translate-y-0 !p-0 rounded-b-none">
+        <Modal.Title className="p-4">
           나의 여행 만들기
           <Modal.Close>
-            <Button className="absolute top-0 left-4 !p-0">
+            <Button className="absolute top-1/2 left-4 !p-0 -translate-y-1/2">
               <CloseSharpIcon />
             </Button>
           </Modal.Close>
@@ -87,7 +88,7 @@ const CreateTripModal = () => {
 
         <form
           onSubmit={onCreateTrip}
-          className="flex flex-col gap-4 py-5 h-full overflow-y-auto px-4"
+          className="flex flex-col gap-4 overflow-y-auto px-4 py-4 h-[calc(100%-60px)]"
         >
           <Input
             placeholder="여행 이름을 입력해주세요"
