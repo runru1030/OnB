@@ -29,7 +29,7 @@ const ModalTitle = ({
   children,
 }: PropsWithChildren<{ step?: string; totalStep?: string }>) => {
   return (
-    <Dialog.Title className="relative flex flex-col text-xl">
+    <Dialog.Title className="relative flex flex-col text-xl text-center">
       {children}
     </Dialog.Title>
   );
