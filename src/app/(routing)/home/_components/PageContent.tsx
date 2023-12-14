@@ -28,7 +28,7 @@ const PageContent = () => {
       <header className="bg-white h-[52px] flex items-center sticky top-0 left-0 px-4">
         <LOGO />
       </header>
-      <div className="w-full flex flex-col gap-4 p-4 min-h-[calc(100vh-52px)]">
+      <div className="main-content">
         <div className="flex flex-col bg-white rounded-xl p-3 border border-grey-light-400 gap-3">
           <h2 className="text-lg font-medium">내 여행</h2>
           <CreateTripModal />

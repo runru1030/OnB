@@ -14,7 +14,6 @@ const PageContent = () => {
         <LOGO />
         <h1 className="font-medium">{title}</h1>
       </header>
-      <CreateBudgetModal />
       <div className="main-content">
         {budgets.map((budget) => (
           <div className="flex justify-between items-center" key={budget.id}>
@@ -39,6 +38,7 @@ const PageContent = () => {
             </div>
           </div>
         ))}
+        <CreateBudgetModal />
       </div>
     </div>
   );
