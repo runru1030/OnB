@@ -4,18 +4,18 @@ import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import Button from "@components/Button";
 import DateSelector from "@components/DateSelector";
 import { Input } from "@components/Input";
+import StepModal from "@components/Modal/StepModal";
 import useDateSelect from "@components/useDateSelect";
 import { CREATE_TRIP } from "@lib/graphql/mutations";
 import { GET_COUNTRIES } from "@lib/graphql/queries";
 import AddSharpIcon from "@mui/icons-material/AddSharp";
 import { Country } from "@prisma/client";
 import clsx from "clsx";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import Image from "next/image";
-import { FormEvent, useEffect } from "react";
-import { myTripStore, myTripsAtom } from "./MyTripProvider";
-import StepModal from "@components/Modal/StepModal";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const tripReqAtom = atomWithReset({
   title: "",
@@ -25,14 +25,14 @@ const tripReqAtom = atomWithReset({
 });
 
 const CreateTripStepModal = () => {
+  const router = useRouter();
+
   const tripData = useAtomValue(tripReqAtom);
   const resetTripData = useResetAtom(tripReqAtom);
   const userId = "1";
-  const setMyTrips = useSetAtom(myTripsAtom, { store: myTripStore });
-
   const [createTrip] = useMutation(CREATE_TRIP, {
     onCompleted: (res) => {
-      setMyTrips((p) => [res.createTrip, ...p]);
+      router.refresh();
     },
   });
 
