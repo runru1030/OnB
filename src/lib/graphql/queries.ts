@@ -11,6 +11,8 @@ export const GET_TRIPS = gql`
       Country {
         id
         name
+        name_en
+        flag_img
       }
     }
   }
@@ -33,6 +35,7 @@ export const GET_COUNTRIES = gql`
       id
       name
       name_en
+      flag_img
     }
   }
 `;

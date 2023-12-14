@@ -30,7 +30,7 @@ module.exports = {
           50: "#FEFEFE",
           100: "#FDFCFB",
           200: "#FBFAF9",
-          300: "#FAF8F6",
+          300: "#F6F7F9",
           400: "#EFF2F7",
           500: "#F7F5F1",
           600: "#E1DFDB",
@@ -50,7 +50,7 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       boxShadow: {
-        normal: "2px 2px 15px 0px rgba(0,0,0,0.12)",
+        normal: "2px 2px 8px 0px rgba(0,0,0,0.05)",
       },
     },
   },

@@ -4,6 +4,7 @@ export const typeDefs = `#graphql
     id:ID!
     name:String
     name_en:String
+    flag_img:String
   }
   type Trip{
     id:ID!
