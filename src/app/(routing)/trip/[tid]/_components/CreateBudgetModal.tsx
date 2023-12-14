@@ -14,7 +14,7 @@ import clsx from "clsx";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import { ChangeEvent, FormEvent, useMemo, useState } from "react";
-import { tripAtom } from "../TripProvider";
+import { tripAtom, tripStore } from "../TripProvider";
 
 interface budgetReqAtom {
   title: string;
@@ -32,6 +32,7 @@ const CreateBudgetModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useAtom(stepAtom);
 
+  const setTrip = useSetAtom(tripAtom, { store: tripStore });
   const budgetData = useAtomValue(budgetReqAtom);
   const resetTripData = useResetAtom(budgetReqAtom);
   const { id } = useAtomValue(tripAtom);
@@ -39,6 +40,7 @@ const CreateBudgetModal = () => {
   const [createBudget] = useMutation(CREATE_BUDGET, {
     onCompleted: (res) => {
       setIsOpen(false);
+      setTrip((p) => ({ ...p, budgets: [res.createBudget, ...p.budgets] }));
     },
   });
 

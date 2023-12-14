@@ -1,16 +1,23 @@
 "use client";
 
-import { Budget, Country, Expense } from "@prisma/client";
+import { Budget, Country, Currency, Expense, Income } from "@prisma/client";
 import { Provider, atom, createStore } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import { PropsWithChildren } from "react";
+interface JoinedBudget extends Budget {
+  Currency: Currency;
+  incomes: Income[];
+  expenses: Expense[];
+  totalIncomes: number;
+  totalExpenses: number;
+}
 interface Trip {
   id: string;
   title: String;
   startedAt: Date;
   endedAt: Date;
   Country: Country;
-  budgets: Budget[];
+  budgets: JoinedBudget[];
   expenses: Expense[];
 }
 export const tripAtom = atom<Trip>({
