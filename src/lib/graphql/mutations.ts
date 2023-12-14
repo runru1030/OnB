@@ -24,6 +24,7 @@ export const CREATE_TRIP = gql`
         id
         name
         name_en
+        flag_img
       }
     }
   }

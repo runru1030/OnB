@@ -3,10 +3,17 @@ import { Range } from "react-date-range";
 interface SelectionRange {
   [key: string]: Range;
 }
-const useDateSelect = () => {
+interface useDateSelectProps {
+  defaultStartDate?: Date;
+  defaultEndDate?: Date;
+}
+const useDateSelect = ({
+  defaultStartDate = new Date(),
+  defaultEndDate = new Date(),
+}: useDateSelectProps) => {
   const [selectionRange, setSelectionRange] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: defaultStartDate,
+    endDate: defaultEndDate,
     key: "selection",
   });
   const handleSelectDate = (ranges: SelectionRange) => {
