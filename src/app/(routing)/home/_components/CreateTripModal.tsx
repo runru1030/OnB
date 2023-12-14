@@ -25,10 +25,11 @@ const tripReqAtom = atomWithReset({
   startedAt: new Date(),
   endedAt: new Date(),
 });
+const stepAtom = atomWithReset(1);
 
 const CreateTripModal = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useAtom(stepAtom);
 
   const tripData = useAtomValue(tripReqAtom);
   const resetTripData = useResetAtom(tripReqAtom);
@@ -99,27 +100,13 @@ const CreateTripModal = () => {
         </Modal.Title>
 
         <div className="flex flex-col gap-4 h-[calc(100%-60px)]">
-          <div className="flex-1 overflow-auto p-4">
+          {
             {
-              {
-                1: <TitleInputContent />,
-                2: <SelectCountryContent />,
-                3: <SelectDateContent />,
-              }[step]
-            }
-          </div>
-          {step !== 3 ? (
-            <Button
-              onClick={() => setStep((p) => p + 1)}
-              className="btn-blue m-4"
-            >
-              다음
-            </Button>
-          ) : (
-            <Button onClick={onCreateTrip} className="btn-blue m-4">
-              여행 만들기
-            </Button>
-          )}
+              1: <TitleInputContent />,
+              2: <SelectCountryContent />,
+              3: <SelectDateContent onCreateTrip={onCreateTrip} />,
+            }[step]
+          }
         </div>
       </Modal.Content>
     </Modal>
@@ -130,65 +117,102 @@ export default CreateTripModal;
 
 const TitleInputContent = () => {
   const [tripData, setTripData] = useAtom(tripReqAtom);
+  const setStep = useSetAtom(stepAtom);
   return (
-    <div className="flex flex-col gap-4 ">
-      <h2 className="text-xl font-medium">
-        여행 이름을 입력해주세요{" "}
-        <span className="text-xs font-normal text-grey-400">최대 10자</span>
-      </h2>
-      <Input
-        placeholder="여행 이름"
-        type="text"
-        value={tripData.title}
-        onChange={(e) => setTripData((p) => ({ ...p, title: e.target.value }))}
-        required
-        autoFocus
-        maxLength={10}
-        className="w-full text-lg border-blue-300 rounded-xl"
-      />
-    </div>
+    <>
+      <div className="flex-1 overflow-auto p-4">
+        <div className="flex flex-col gap-4 ">
+          <h2 className="text-xl font-medium">
+            여행 이름을 입력해주세요{" "}
+            <span className="text-xs font-normal text-grey-400">최대 10자</span>
+          </h2>
+          <Input
+            placeholder="여행 이름"
+            type="text"
+            value={tripData.title}
+            onChange={(e) =>
+              setTripData((p) => ({ ...p, title: e.target.value }))
+            }
+            required
+            autoFocus
+            maxLength={10}
+            className="w-full text-lg border-blue-300 rounded-xl"
+          />
+        </div>
+      </div>
+      <Button
+        onClick={() => {
+          if (tripData.title.trim().length == 0) {
+            return alert("이름을 입력해주세요!");
+          }
+          setStep((p) => p + 1);
+        }}
+        className="btn-blue m-4"
+      >
+        다음
+      </Button>
+    </>
   );
 };
 const SelectCountryContent = () => {
   const { data: countriesQuery } = useQuery(GET_COUNTRIES);
   const [tripData, setTripData] = useAtom(tripReqAtom);
+  const setStep = useSetAtom(stepAtom);
   return (
-    <div className="flex flex-col gap-4">
-      <h2 className="text-xl font-medium">
-        여행 국가를 선택해주세요{" "}
-        <span className="text-xs font-normal text-grey-400">단일 선택</span>
-      </h2>
-      <div className="flex flex-col gap-2 ">
-        {countriesQuery?.countries?.map((country: Country) => (
-          <div
-            key={country.id}
-            onClick={() => {
-              if (tripData.countryId === country.id) {
-                setTripData((p) => ({ ...p, countryId: "" }));
-              } else {
-                setTripData((p) => ({ ...p, countryId: country.id }));
-              }
-            }}
-            className={clsx(
-              tripData.countryId === country.id &&
-                "bg-grey-light-400 duration-300 text-blue",
-              "p-1.5 rounded-lg flex justify-between"
-            )}
-          >
-            {country.name}
-            <Image
-              src={country.flag_img ?? ""}
-              width={40}
-              height={100}
-              alt="국기"
-            />
+    <>
+      <div className="flex-1 overflow-auto p-4">
+        <div className="flex flex-col gap-4">
+          <h2 className="text-xl font-medium">
+            여행 국가를 선택해주세요{" "}
+            <span className="text-xs font-normal text-grey-400">단일 선택</span>
+          </h2>
+          <div className="flex flex-col gap-2 ">
+            {countriesQuery?.countries?.map((country: Country) => (
+              <div
+                key={country.id}
+                onClick={() => {
+                  if (tripData.countryId === country.id) {
+                    setTripData((p) => ({ ...p, countryId: "" }));
+                  } else {
+                    setTripData((p) => ({ ...p, countryId: country.id }));
+                  }
+                }}
+                className={clsx(
+                  tripData.countryId === country.id &&
+                    "bg-grey-light-400 duration-300 text-blue",
+                  "p-1.5 rounded-lg flex justify-between"
+                )}
+              >
+                {country.name}
+                <Image
+                  src={country.flag_img ?? ""}
+                  width={40}
+                  height={100}
+                  alt="국기"
+                />
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
-    </div>
+      <Button
+        onClick={() => {
+          if (tripData.countryId === "") {
+            return alert("국가를 선택해주세요!");
+          }
+          setStep((p) => p + 1);
+        }}
+        className="btn-blue m-4"
+      >
+        다음
+      </Button>
+    </>
   );
 };
-const SelectDateContent = () => {
+interface SelectDateContentProps {
+  onCreateTrip: (e: FormEvent) => void;
+}
+const SelectDateContent = ({ onCreateTrip }: SelectDateContentProps) => {
   const [tripData, setTripData] = useAtom(tripReqAtom);
   const { selectionRange, handleSelectDate } = useDateSelect({
     defaultStartDate: tripData.startedAt,
@@ -204,9 +228,16 @@ const SelectDateContent = () => {
   }, [selectionRange]);
 
   return (
-    <div className="flex flex-col gap-4">
-      <h2 className="text-xl font-medium">여행 날짜를 선택해주세요 </h2>
-      <DateSelector ranges={[selectionRange]} onChange={handleSelectDate} />
-    </div>
+    <>
+      <div className="flex-1 overflow-auto p-4">
+        <div className="flex flex-col gap-4">
+          <h2 className="text-xl font-medium">여행 날짜를 선택해주세요 </h2>
+          <DateSelector ranges={[selectionRange]} onChange={handleSelectDate} />
+        </div>
+      </div>
+      <Button onClick={onCreateTrip} className="btn-blue m-4">
+        여행 만들기
+      </Button>
+    </>
   );
 };
