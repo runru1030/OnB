@@ -2,6 +2,7 @@
 import { useAtomValue } from "jotai";
 import LOGO from "public/assets/logo_sm.svg";
 import { tripAtom } from "./TripProvider";
+import CreateBudgetModal from "./_components/CreateBudgetModal";
 const PageContent = () => {
   const trip = useAtomValue(tripAtom);
   return (
@@ -10,6 +11,7 @@ const PageContent = () => {
         <LOGO />
         <h1 className="font-medium">{trip.title}</h1>
       </header>
+      <CreateBudgetModal />
     </div>
   );
 };
