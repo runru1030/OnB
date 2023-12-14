@@ -46,6 +46,7 @@ model Trip {
   updatedAt DateTime  @updatedAt
   budgets   Budget[]
   expenses  Expense[]
+  incomes   Income[]
   Country   Country   @relation(fields: [countryId], references: [id])
   User      User      @relation(fields: [userId], references: [id])
 
@@ -55,13 +56,14 @@ model Trip {
 
 model Budget {
   id         String    @id @default(uuid())
+  title      String
   type       String
-  amount     Int
   tripId     String
   currencyId String
   Currency   Currency  @relation(fields: [currencyId], references: [id])
   Trip       Trip      @relation(fields: [tripId], references: [id])
   expenses   Expense[]
+  incomes    Income[]
 
   @@index([currencyId], map: "Budget_currencyId_fkey")
   @@index([tripId], map: "Budget_tripId_fkey")
@@ -78,6 +80,21 @@ model Expense {
   updatedAt DateTime @updatedAt
   Budget    Budget   @relation(fields: [budgetId], references: [id])
   Trip      Trip     @relation(fields: [tripId], references: [id])
+
+  @@index([budgetId], map: "Expense_budgetId_fkey")
+  @@index([tripId], map: "Expense_tripId_fkey")
+}
+
+model Income {
+  id           String   @id @default(uuid())
+  amount       Int
+  exchangeRate Int
+  tripId       String
+  budgetId     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  Budget       Budget   @relation(fields: [budgetId], references: [id])
+  Trip         Trip     @relation(fields: [tripId], references: [id])
 
   @@index([budgetId], map: "Expense_budgetId_fkey")
   @@index([tripId], map: "Expense_tripId_fkey")

@@ -29,3 +29,33 @@ export const CREATE_TRIP = gql`
     }
   }
 `;
+
+export const CREATE_BUDGET = gql`
+  mutation CreateBudget(
+    $title: String
+    $currencyId: String
+    $type: String
+    $tripId: ID
+  ) {
+    createBudget(
+      title: $title
+      type: $type
+      currencyId: $currencyId
+      tripId: $tripId
+    ) {
+      id
+      title
+      Currency {
+        id
+        name
+      }
+      expenses {
+        amount
+      }
+      incomes {
+        amount
+        exchangeRate
+      }
+    }
+  }
+`;

@@ -34,7 +34,7 @@ export const GET_TRIP = gql`
       budgets {
         id
         type
-        amount
+        title
         Currency {
           id
           name
@@ -44,7 +44,11 @@ export const GET_TRIP = gql`
           category
           amount
           usedAt
-          budgetId
+        }
+        incomes {
+          id
+          amount
+          exchangeRate
         }
       }
       expenses {
@@ -64,6 +68,16 @@ export const GET_COUNTRIES = gql`
       name
       name_en
       flag_img
+    }
+  }
+`;
+
+export const GET_CURRENCIES = gql`
+  query Currencies {
+    currencies {
+      id
+      name
+      countryId
     }
   }
 `;

@@ -9,7 +9,9 @@ export const resolvers = {
         },
         include: {
           Country: true,
-          budgets: { include: { expenses: true } },
+          budgets: {
+            include: { expenses: true, incomes: true, Currency: true },
+          },
           expenses: true,
         },
       });
@@ -30,6 +32,9 @@ export const resolvers = {
         orderBy: { name: "asc" },
       });
     },
+    currencies: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.currency.findMany();
+    },
   },
   Mutation: {
     createTrip: async (_parent: any, args: any, context: Context) => {
@@ -43,6 +48,21 @@ export const resolvers = {
         },
         include: {
           Country: true,
+        },
+      });
+    },
+    createBudget: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.budget.create({
+        data: {
+          title: args.title,
+          type: args.type,
+          currencyId: args.currencyId,
+          tripId: args.tripId,
+        },
+        include: {
+          Currency: true,
+          expenses: true,
+          incomes: true,
         },
       });
     },
