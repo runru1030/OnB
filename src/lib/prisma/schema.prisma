@@ -17,17 +17,22 @@ model User {
 }
 
 model Country {
-  id       String  @id @default(uuid())
-  name     String
-  name_en  String
-  flag_img String? @db.VarChar(500)
-  trips    Trip[]
+  id         String     @id @default(uuid())
+  name       String
+  name_en    String
+  flag_img   String?    @db.VarChar(500)
+  currencies Currency[]
+  trips      Trip[]
 }
 
 model Currency {
-  id      String   @id @default(uuid())
-  name    String
-  budgets Budget[]
+  id        String   @id @default(uuid())
+  name      String
+  countryId String
+  budgets   Budget[]
+  Country   Country  @relation(fields: [countryId], references: [id])
+
+  @@index([countryId], map: "Currency_countryId_fkey")
 }
 
 model Trip {

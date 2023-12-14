@@ -25,7 +25,35 @@ export const GET_TRIP = gql`
       title
       startedAt
       endedAt
-      countryId
+      Country {
+        id
+        name
+        name_en
+        flag_img
+      }
+      budgets {
+        id
+        type
+        amount
+        Currency {
+          id
+          name
+        }
+        expenses {
+          id
+          category
+          amount
+          usedAt
+          budgetId
+        }
+      }
+      expenses {
+        id
+        category
+        amount
+        usedAt
+        budgetId
+      }
     }
   }
 `;

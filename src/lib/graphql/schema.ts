@@ -14,8 +14,35 @@ export const typeDefs = `#graphql
     countryId:String
     Country:Country
   }
+  type Currency{
+    id:ID!
+    name:String
+  }
+  type Expense{
+    id:ID!
+    category:String
+    amount:Int
+    usedAt:Date
+    budgetId:ID!
+  }
+  type Budget{
+    id:ID!
+    type:String
+    amount:Int
+    Currency:Currency
+    expenses:[Expense]
+  }
+  type TripJoined{
+    id:ID!
+    title:String
+    startedAt:Date
+    endedAt:Date
+    Country:Country
+    budgets:[Budget]
+    expenses:[Expense]
+  }
   type Query {
-	  trip(id: ID!): Trip 
+	  trip(id: ID!): TripJoined 
     trips:[Trip]
     countries:[Country]
   }	

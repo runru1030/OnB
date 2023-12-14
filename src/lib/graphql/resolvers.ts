@@ -7,6 +7,11 @@ export const resolvers = {
         where: {
           id: args.id,
         },
+        include: {
+          Country: true,
+          budgets: { include: { expenses: true } },
+          expenses: true,
+        },
       });
     },
     trips: async (_parent: any, args: any, context: Context) => {
