@@ -25,6 +25,12 @@ body {
   .btn-blue-border {
     @apply duration-300 py-2 px-4 border-blue-400 text-blue-500 border rounded-xl disabled:cursor-not-allowed hover:shadow-normal active:border-blue-500 disabled:opacity-50
   }
+  .btn-red {
+    @apply duration-300 py-2 px-4 bg-red-600 text-white rounded-xl disabled:cursor-not-allowed hover:shadow-normal active:border active:border-red-500 disabled:opacity-50
+  }
+  .btn-red-border {
+    @apply duration-300 py-2 px-4 border-red-400 text-red-500 border rounded-xl disabled:cursor-not-allowed hover:shadow-normal active:border-red-500 disabled:opacity-50
+  }
   .main-content {
     @apply w-full flex flex-col gap-4 p-4 min-h-[calc(100vh-52px)]
   }
