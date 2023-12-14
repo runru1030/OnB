@@ -12,7 +12,8 @@ import clsx from "clsx";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import { ChangeEvent, FormEvent, useMemo } from "react";
-import { tripAtom, tripStore } from "../TripProvider";
+import { tripAtom, tripStore } from "./TripProvider";
+import { useRouter } from "next/navigation";
 
 interface budgetReqAtom {
   title: string;
@@ -26,14 +27,14 @@ const budgetReqAtom = atomWithReset<budgetReqAtom>({
 });
 
 const CreateBudgetModal = () => {
-  const setTrip = useSetAtom(tripAtom, { store: tripStore });
+  const router = useRouter();
+
   const budgetData = useAtomValue(budgetReqAtom);
   const resetTripData = useResetAtom(budgetReqAtom);
-  const { id } = useAtomValue(tripAtom);
-
+  const { id } = useAtomValue(tripAtom, { store: tripStore });
   const [createBudget] = useMutation(CREATE_BUDGET, {
-    onCompleted: (res) => {
-      setTrip((p) => ({ ...p, budgets: [res.createBudget, ...p.budgets] }));
+    onCompleted: () => {
+      router.refresh();
     },
   });
 
@@ -158,7 +159,7 @@ const SelectCurrencyContent = () => {
   const { data: currenciesQuery } = useQuery(GET_CURRENCIES);
 
   const [budgetData, setBudgetData] = useAtom(budgetReqAtom);
-  const { Country } = useAtomValue(tripAtom);
+  const { Country } = useAtomValue(tripAtom, { store: tripStore });
 
   const defaultCurrencies = useMemo(
     () =>
