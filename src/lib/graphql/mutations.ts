@@ -62,3 +62,10 @@ export const CREATE_BUDGET = gql`
     }
   }
 `;
+export const DELETE_BUDGET = gql`
+  mutation DeleteBudget($id: ID!) {
+    deleteBudget(id: $id) {
+      id
+    }
+  }
+`;

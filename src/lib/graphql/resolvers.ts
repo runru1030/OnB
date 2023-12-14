@@ -79,5 +79,12 @@ export const resolvers = {
         },
       });
     },
+    deleteBudget: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.budget.delete({
+        where: {
+          id: args.id,
+        },
+      });
+    },
   },
 };
