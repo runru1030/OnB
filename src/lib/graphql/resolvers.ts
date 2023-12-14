@@ -79,6 +79,13 @@ export const resolvers = {
         },
       });
     },
+    deleteTrip: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.trip.delete({
+        where: {
+          id: args.id,
+        },
+      });
+    },
     deleteBudget: async (_parent: any, args: any, context: Context) => {
       return await context.prisma.budget.delete({
         where: {

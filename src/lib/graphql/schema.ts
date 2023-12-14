@@ -66,6 +66,7 @@ export const typeDefs = `#graphql
     userId:ID) : Trip
     createBudget(title:String, type:String, currencyId:String, tripId:ID):Budget
     deleteBudget(id:ID!):Budget!
+    deleteTrip(id:ID!):Trip!
   }
 
 `;

@@ -69,3 +69,10 @@ export const DELETE_BUDGET = gql`
     }
   }
 `;
+export const DELETE_TRIP = gql`
+  mutation DeleteTrip($id: ID!) {
+    deleteTrip(id: $id) {
+      id
+    }
+  }
+`;
