@@ -1,8 +1,8 @@
 import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
-import { extendedBudget } from "../_types";
+import { BudgetQueryData } from "../_types";
 interface BudgetBoxProps {
-  budget: extendedBudget;
+  budget: BudgetQueryData;
 }
 const BudgetBox = ({ budget }: BudgetBoxProps) => {
   return (

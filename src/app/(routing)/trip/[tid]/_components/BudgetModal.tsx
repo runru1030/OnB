@@ -3,14 +3,14 @@ import Modal from "@components/Modal";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { PropsWithChildren } from "react";
-import { extendedBudget } from "../_types";
 import clsx from "clsx";
 import { useMutation } from "@apollo/client";
 import { DELETE_BUDGET } from "@lib/graphql/mutations";
 import { useRouter } from "next/navigation";
+import { BudgetQueryData } from "../_types";
 
 const modalOpenAtom = atom<boolean>(false);
-const budgetAtom = atom<extendedBudget | undefined>(undefined);
+const budgetAtom = atom<BudgetQueryData | undefined>(undefined);
 
 const BudgetModal = () => {
   const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);
@@ -88,7 +88,7 @@ const BudgetModalTrigger = ({
   budget,
   ...props
 }: PropsWithChildren<
-  React.ComponentProps<typeof Button> & { budget: extendedBudget }
+  React.ComponentProps<typeof Button> & { budget: BudgetQueryData }
 >) => {
   const setOpenAtom = useSetAtom(modalOpenAtom);
   const setBudgetAtom = useSetAtom(budgetAtom);

@@ -3,9 +3,9 @@
 import { Provider, atom, createStore } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import { PropsWithChildren } from "react";
-import { Trip } from "../_types";
+import { TripQueryData } from "../_types";
 
-export const tripAtom = atom<Trip>({
+export const tripAtom = atom<TripQueryData>({
   id: "",
   title: "",
   startedAt: new Date(),
@@ -21,7 +21,7 @@ export const tripStore = createStore();
 export default function TripProvider({
   children,
   trip,
-}: PropsWithChildren<{ trip: Trip }>) {
+}: PropsWithChildren<{ trip: TripQueryData }>) {
   if (trip)
     useHydrateAtoms([[tripAtom, trip]], {
       store: tripStore,
