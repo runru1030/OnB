@@ -3,7 +3,7 @@ import { Context } from "@api/graphql";
 export const resolvers = {
   Query: {
     trip: async (_parent: any, args: any, context: Context) => {
-      return await context.prisma.trip.findUnique({
+      const trip = await context.prisma.trip.findUnique({
         where: {
           id: args.id,
         },
@@ -11,10 +11,23 @@ export const resolvers = {
           Country: true,
           budgets: {
             include: { expenses: true, incomes: true, Currency: true },
+            orderBy: { createdAt: "desc" },
           },
           expenses: true,
         },
       });
+      const aggregationTrip = trip?.budgets.map((budget) => ({
+        ...budget,
+        totalIncomes: budget.incomes.reduce(
+          (acc, curr) => acc + curr.amount,
+          0
+        ),
+        totalExpenses: budget.expenses.reduce(
+          (acc, curr) => acc + curr.amount,
+          0
+        ),
+      }));
+      return { ...trip, budgets: aggregationTrip };
     },
     trips: async (_parent: any, args: any, context: Context) => {
       return await context.prisma.trip.findMany({

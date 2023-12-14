@@ -45,6 +45,9 @@ export const CREATE_BUDGET = gql`
     ) {
       id
       title
+      type
+      totalIncomes
+      totalExpenses
       Currency {
         id
         name

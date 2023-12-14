@@ -35,6 +35,8 @@ export const GET_TRIP = gql`
         id
         type
         title
+        totalIncomes
+        totalExpenses
         Currency {
           id
           name

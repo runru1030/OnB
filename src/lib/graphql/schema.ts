@@ -39,6 +39,8 @@ export const typeDefs = `#graphql
     Currency:Currency
     expenses:[Expense]
     incomes:[Income]
+    totalIncomes:Int
+    totalExpenses:Int
   }
   type TripJoined{
     id:ID!

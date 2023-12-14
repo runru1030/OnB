@@ -64,6 +64,8 @@ model Budget {
   Trip       Trip      @relation(fields: [tripId], references: [id])
   expenses   Expense[]
   incomes    Income[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
 
   @@index([currencyId], map: "Budget_currencyId_fkey")
   @@index([tripId], map: "Budget_tripId_fkey")
