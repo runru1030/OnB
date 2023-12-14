@@ -73,6 +73,7 @@ const StepModalStepSection = ({
               idx + 1 === step ? "visible" : "hidden",
               "flex flex-col gap-4 h-[calc(100%-60px)]"
             ),
+            key: idx,
           },
           <>
             {stepContent.content}
