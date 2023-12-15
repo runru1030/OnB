@@ -40,6 +40,7 @@ export const GET_TRIP = gql`
         Currency {
           id
           name
+          amountUnit
         }
         expenses {
           id
@@ -80,6 +81,7 @@ export const GET_CURRENCIES = gql`
       id
       name
       countryId
+      amountUnit
     }
   }
 `;

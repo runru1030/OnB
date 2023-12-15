@@ -79,6 +79,17 @@ export const resolvers = {
         },
       });
     },
+    createIncome: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.income.create({
+        data: {
+          amount: args.amount,
+          exchangeRate: args.exchangeRate,
+          budgetId: args.budgetId,
+          tripId: args.tripId,
+        },
+        include: {},
+      });
+    },
     deleteTrip: async (_parent: any, args: any, context: Context) => {
       return await context.prisma.trip.delete({
         where: {

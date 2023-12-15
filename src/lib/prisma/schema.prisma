@@ -26,11 +26,12 @@ model Country {
 }
 
 model Currency {
-  id        String   @id @default(uuid())
-  name      String
-  countryId String
-  budgets   Budget[]
-  Country   Country  @relation(fields: [countryId], references: [id])
+  id         String   @id @default(uuid())
+  name       String
+  countryId  String
+  amountUnit Int      @default(1)
+  budgets    Budget[]
+  Country    Country  @relation(fields: [countryId], references: [id])
 
   @@index([countryId], map: "Currency_countryId_fkey")
 }
@@ -56,16 +57,16 @@ model Trip {
 
 model Budget {
   id         String    @id @default(uuid())
-  title      String
   type       String
   tripId     String
   currencyId String
+  title      String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
   Currency   Currency  @relation(fields: [currencyId], references: [id])
   Trip       Trip      @relation(fields: [tripId], references: [id])
   expenses   Expense[]
   incomes    Income[]
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @default(now()) @updatedAt
 
   @@index([currencyId], map: "Budget_currencyId_fkey")
   @@index([tripId], map: "Budget_tripId_fkey")
@@ -90,11 +91,11 @@ model Expense {
 model Income {
   id           String   @id @default(uuid())
   amount       Int
-  exchangeRate Int
   tripId       String
   budgetId     String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  exchangeRate Float
   Budget       Budget   @relation(fields: [budgetId], references: [id])
   Trip         Trip     @relation(fields: [tripId], references: [id])
 
