@@ -1,13 +1,14 @@
 "use client";
+import { useMutation } from "@apollo/client";
+import Button from "@components/Button";
+import { DELETE_TRIP } from "@lib/graphql/mutations";
+import { useRouter } from "next/navigation";
 import LOGO from "public/assets/logo_sm.svg";
+import { TripQueryData } from "../_types";
 import BudgetBox from "./BudgetBox";
 import BudgetModal from "./BudgetModal";
 import CreateBudgetModal from "./CreateBudgetModal";
-import { TripQueryData } from "../_types";
-import Button from "@components/Button";
-import { useMutation } from "@apollo/client";
-import { DELETE_TRIP } from "@lib/graphql/mutations";
-import { useRouter } from "next/navigation";
+import CreateIncomeModal from "./CreateIncomeModal";
 const PageContent = ({ trip }: { trip: TripQueryData }) => {
   const router = useRouter();
   const [deleteBudget] = useMutation(DELETE_TRIP, {
@@ -37,6 +38,7 @@ const PageContent = ({ trip }: { trip: TripQueryData }) => {
             </BudgetModal.Trigger>
           ))}
           <BudgetModal />
+          {trip.budgets.length > 0 && <CreateIncomeModal />}
         </div>
         <Button
           className="btn-red-border text-sm"
