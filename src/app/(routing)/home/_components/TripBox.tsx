@@ -1,12 +1,16 @@
 import Image from "next/image";
 import { TripQueryData } from "../_types";
+import Link from "next/link";
 
 const dateformatter = (date: Date) =>
   `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`;
 
-const TripBox = ({ title, startedAt, endedAt, Country }: TripQueryData) => {
+const TripBox = ({ id, title, startedAt, endedAt, Country }: TripQueryData) => {
   return (
-    <div className="bg-grey-light-300 border border-grey-light-400 flex flex-col h-[160px] p-4 justify-between items-center rounded-2xl">
+    <Link
+      href={`/trip/${id}`}
+      className="bg-grey-light-300 border border-grey-light-400 flex flex-col h-[160px] p-4 justify-between items-center rounded-2xl"
+    >
       <div className="font-medium">{title}</div>
       <div className="flex flex-col gap-2 items-center">
         <Image src={Country.flag_img ?? ""} width={50} height={10} alt="국기" />
@@ -16,7 +20,7 @@ const TripBox = ({ title, startedAt, endedAt, Country }: TripQueryData) => {
         <span>{dateformatter(new Date(startedAt))}</span>-
         <span>{dateformatter(new Date(endedAt))}</span>
       </div>
-    </div>
+    </Link>
   );
 };
 

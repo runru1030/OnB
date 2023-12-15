@@ -1,5 +1,5 @@
 import { Country, Trip } from "@prisma/client";
 
-export interface TripQueryData extends Trip {
+export interface MyTripQueryData extends Trip {
   Country: Country;
 }

@@ -1,14 +1,10 @@
 "use client";
-import { useAtomValue } from "jotai";
 import LOGO from "public/assets/logo_sm.svg";
 import { useMemo } from "react";
-import { TripQueryData } from "../_types";
+import { MyTripQueryData } from "../_types";
 import CreateTripModal from "./CreateTripModal";
-import { myTripsAtom } from "./MyTripProvider";
 import TripBox from "./TripBox";
-const PageContent = () => {
-  const myTrips = useAtomValue(myTripsAtom);
-
+const PageContent = ({ myTrips }: { myTrips: MyTripQueryData[] }) => {
   const nonePassedTrips = useMemo(
     () =>
       myTrips?.filter(
@@ -28,11 +24,11 @@ const PageContent = () => {
       <header className="bg-white h-[52px] flex items-center sticky top-0 left-0 px-4">
         <LOGO />
       </header>
-      <div className="w-full flex flex-col gap-4 p-4 min-h-[calc(100vh-52px)]">
+      <div className="main-content">
         <div className="flex flex-col bg-white rounded-xl p-3 border border-grey-light-400 gap-3">
           <h2 className="text-lg font-medium">내 여행</h2>
           <CreateTripModal />
-          {nonePassedTrips.map((trip: TripQueryData) => (
+          {nonePassedTrips.map((trip: MyTripQueryData) => (
             <TripBox key={trip.id} {...{ ...trip }} />
           ))}
 
@@ -45,7 +41,7 @@ const PageContent = () => {
         </div>
         <div className="flex flex-col bg-white rounded-xl p-3 border border-grey-light-400 gap-3">
           <h2 className="text-lg font-medium text-grey-300">지난 여행</h2>
-          {passedTrips.map((trip: TripQueryData) => (
+          {passedTrips.map((trip: MyTripQueryData) => (
             <TripBox key={trip.id} {...{ ...trip }} />
           ))}
           {passedTrips.length === 0 && (
