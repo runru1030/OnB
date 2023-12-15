@@ -18,7 +18,6 @@ const StepModal = ({
   ...props
 }: PropsWithChildren<Omit<DialogProps, "open">>) => {
   const [open, setOpen] = useAtom(openAtom);
-  const setStep = useSetAtom(stepAtom);
 
   return (
     <Modal
@@ -26,9 +25,6 @@ const StepModal = ({
       open={open}
       onOpenChange={(open) => {
         setOpen(open);
-        if (!open) {
-          setStep(1);
-        }
         onOpenChange?.(open);
       }}
     >
@@ -38,9 +34,11 @@ const StepModal = ({
 };
 const StepModalContent = ({
   children,
+  onCloseAutoFocus,
   className,
   ...props
 }: PropsWithChildren<Dialog.DialogContentProps>) => {
+  const setStep = useSetAtom(stepAtom);
   return (
     <Modal.Content
       {...props}
@@ -48,6 +46,10 @@ const StepModalContent = ({
         "w-full top-[52px] bottom-0 translate-y-0 !p-0 rounded-b-none",
         className
       )}
+      onCloseAutoFocus={(e) => {
+        setStep(1);
+        onCloseAutoFocus?.(e);
+      }}
     >
       {children}
     </Modal.Content>
