@@ -49,7 +49,7 @@ model Trip {
   expenses  Expense[]
   incomes   Income[]
   Country   Country   @relation(fields: [countryId], references: [id])
-  User      User      @relation(fields: [userId], references: [id])
+  User      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([countryId], map: "Trip_countryId_fkey")
   @@index([userId], map: "Trip_userId_fkey")
@@ -64,7 +64,7 @@ model Budget {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @default(now()) @updatedAt
   Currency   Currency  @relation(fields: [currencyId], references: [id])
-  Trip       Trip      @relation(fields: [tripId], references: [id])
+  Trip       Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)
   expenses   Expense[]
   incomes    Income[]
 
@@ -81,8 +81,8 @@ model Expense {
   budgetId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Budget    Budget   @relation(fields: [budgetId], references: [id])
-  Trip      Trip     @relation(fields: [tripId], references: [id])
+  Budget    Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  Trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
 
   @@index([budgetId], map: "Expense_budgetId_fkey")
   @@index([tripId], map: "Expense_tripId_fkey")
@@ -96,8 +96,8 @@ model Income {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   exchangeRate Float
-  Budget       Budget   @relation(fields: [budgetId], references: [id])
-  Trip         Trip     @relation(fields: [tripId], references: [id])
+  Budget       Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  Trip         Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
 
   @@index([budgetId], map: "Expense_budgetId_fkey")
   @@index([tripId], map: "Expense_tripId_fkey")
