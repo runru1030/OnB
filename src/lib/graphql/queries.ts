@@ -37,6 +37,7 @@ export const GET_TRIP = gql`
         title
         totalIncomes
         totalExpenses
+        totalIncomesKRW
         Currency {
           id
           name
@@ -52,6 +53,7 @@ export const GET_TRIP = gql`
           id
           amount
           exchangeRate
+          createdAt
         }
       }
       expenses {

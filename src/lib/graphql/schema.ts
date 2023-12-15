@@ -32,6 +32,7 @@ export const typeDefs = `#graphql
     amount:Int
     exchangeRate:Float
     budgetId:ID!
+    createdAt:Date
   }
   type Budget{
     id:ID!
@@ -42,6 +43,7 @@ export const typeDefs = `#graphql
     incomes:[Income]
     totalIncomes:Int
     totalExpenses:Int
+    totalIncomesKRW:Int
   }
   type TripJoined{
     id:ID!

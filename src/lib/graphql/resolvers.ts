@@ -22,6 +22,10 @@ export const resolvers = {
           (acc, curr) => acc + curr.amount,
           0
         ),
+        totalIncomesKRW: budget.incomes.reduce(
+          (acc, curr) => acc + Math.ceil(curr.amount * curr.exchangeRate),
+          0
+        ),
         totalExpenses: budget.expenses.reduce(
           (acc, curr) => acc + curr.amount,
           0
