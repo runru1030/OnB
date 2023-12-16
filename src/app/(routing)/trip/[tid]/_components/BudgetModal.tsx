@@ -1,24 +1,31 @@
+import { useMutation } from "@apollo/client";
 import Button from "@components/Button";
 import Modal from "@components/Modal";
-import CloseSharpIcon from "@mui/icons-material/CloseSharp";
-import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
-import { PropsWithChildren } from "react";
-import clsx from "clsx";
-import { useMutation } from "@apollo/client";
 import { DELETE_BUDGET } from "@lib/graphql/mutations";
+import CloseSharpIcon from "@mui/icons-material/CloseSharp";
+import clsx from "clsx";
+import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
-import { BudgetQueryData } from "../_types";
+import { PropsWithChildren, useMemo } from "react";
+import IncomeList from "./IncomeList";
+import { tripAtom, tripStore } from "./TripProvider";
 
 const modalOpenAtom = atom<boolean>(false);
-const budgetAtom = atom<BudgetQueryData | undefined>(undefined);
+const budgetIdAtom = atom<string>("");
 
 const BudgetModal = () => {
   const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);
-  const budget = useAtomValue(budgetAtom);
+  const { budgets } = useAtomValue(tripAtom, { store: tripStore });
+  const budgetId = useAtomValue(budgetIdAtom);
+
   const router = useRouter();
+  const budget = useMemo(
+    () => budgets.find((b) => b.id === budgetId),
+    [budgets, budgetId]
+  );
 
   const [deleteBudget] = useMutation(DELETE_BUDGET, {
-    variables: { id: budget?.id },
+    variables: { id: budgetId },
     onCompleted: () => {
       setOpenAtom(false);
       router.refresh();
@@ -37,15 +44,30 @@ const BudgetModal = () => {
         </Modal.Title>{" "}
         <div className="flex flex-col gap-4 h-[calc(100%-60px)]">
           <div className="flex-1 overflow-auto p-4 flex flex-col gap-4">
+            <div className="text-2xl flex gap-1 justify-end py-2 items-end">
+              <span>
+                {(
+                  (budget?.totalIncomes || 0) - (budget?.totalExpenses || 0)
+                ).toLocaleString()}
+              </span>
+              <span className="text-grey-400">/</span>
+              <span className="text-grey-400">
+                {budget?.totalIncomes.toLocaleString() ?? 0}
+              </span>
+              <span className="text-base">{budget?.Currency.id}</span>
+            </div>
+            <div className="flex justify-end">
+              총 {budget?.totalIncomesKRW.toLocaleString()}원
+            </div>
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-medium">예산 종류</h2>
+              <h2 className="">예산 종류</h2>
               <div className="flex gap-4">
                 <div
                   className={clsx(
                     budget?.type === "CASH"
                       ? "btn-blue py-2 px-4"
                       : "text-grey-100",
-                    "py-2"
+                    "py-2 text-sm"
                   )}
                 >
                   현금
@@ -55,7 +77,7 @@ const BudgetModal = () => {
                     budget?.type === "CARD"
                       ? "btn-blue pt-2 px-4"
                       : "text-grey-100",
-                    "py-2"
+                    "py-2 text-sm"
                   )}
                 >
                   카드
@@ -63,17 +85,23 @@ const BudgetModal = () => {
               </div>
             </div>
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-medium">화폐 단위</h2>
+              <h2 className="">화폐</h2>
               <div className="flex gap-4">
                 <span className="font-medium">{budget?.Currency.id}</span>
                 <span>{budget?.Currency.name}</span>
               </div>
             </div>
+            {budget?.incomes && budget?.incomes.length > 0 && (
+              <IncomeList
+                incomes={budget?.incomes}
+                curencyUnit={budget?.Currency.id}
+              />
+            )}
           </div>
           <Button
             className="btn-red m-4"
             onClick={() => {
-              deleteBudget({ variables: { id: budget?.id } });
+              deleteBudget({ variables: { id: budgetId } });
             }}
           >
             예산 삭제하기
@@ -85,18 +113,18 @@ const BudgetModal = () => {
 };
 const BudgetModalTrigger = ({
   children,
-  budget,
+  budgetId,
   ...props
 }: PropsWithChildren<
-  React.ComponentProps<typeof Button> & { budget: BudgetQueryData }
+  React.ComponentProps<typeof Button> & { budgetId: string }
 >) => {
   const setOpenAtom = useSetAtom(modalOpenAtom);
-  const setBudgetAtom = useSetAtom(budgetAtom);
+  const setBudgetId = useSetAtom(budgetIdAtom);
   return (
     <Button
       onClick={(e) => {
         setOpenAtom(true);
-        setBudgetAtom(budget);
+        setBudgetId(budgetId);
         props?.onClick?.(e);
       }}
       {...props}

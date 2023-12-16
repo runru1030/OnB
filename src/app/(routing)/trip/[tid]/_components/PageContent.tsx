@@ -31,7 +31,7 @@ const PageContent = ({ trip }: { trip: TripQueryData }) => {
           {trip?.budgets.map((budget) => (
             <BudgetModal.Trigger
               key={budget.id}
-              budget={budget}
+              budgetId={budget.id}
               className="!px-0"
             >
               <BudgetBox budget={budget} />
