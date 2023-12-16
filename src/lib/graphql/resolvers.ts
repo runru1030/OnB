@@ -10,7 +10,11 @@ export const resolvers = {
         include: {
           Country: true,
           budgets: {
-            include: { expenses: true, incomes: true, Currency: true },
+            include: {
+              expenses: true,
+              incomes: { orderBy: { createdAt: "desc" } },
+              Currency: true,
+            },
             orderBy: { createdAt: "desc" },
           },
           expenses: true,
