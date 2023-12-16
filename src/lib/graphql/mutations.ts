@@ -98,3 +98,11 @@ export const DELETE_TRIP = gql`
     }
   }
 `;
+
+export const DELETE_INCOME = gql`
+  mutation DeleteIncome($id: ID!) {
+    deleteIncome(id: $id) {
+      id
+    }
+  }
+`;

@@ -108,5 +108,12 @@ export const resolvers = {
         },
       });
     },
+    deleteIncome: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.income.delete({
+        where: {
+          id: args.id,
+        },
+      });
+    },
   },
 };

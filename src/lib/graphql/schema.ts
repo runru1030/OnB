@@ -73,6 +73,7 @@ export const typeDefs = `#graphql
     deleteBudget(id:ID!):Budget!
 
     createIncome(amount:Int, exchangeRate:Float, budgetId:ID, tripId:ID):Income
+    deleteIncome(id:ID!):Income!
    
   }
 
