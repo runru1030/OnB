@@ -3,12 +3,14 @@ import Button from "@components/Button";
 import Modal from "@components/Modal";
 import { DELETE_BUDGET } from "@lib/graphql/mutations";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
+import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
+import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import clsx from "clsx";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { PropsWithChildren, useMemo } from "react";
-import { tripAtom, tripStore } from "./TripProvider";
 import IncomeExpenseList from "./IncomeExpenseList";
+import { tripAtom, tripStore } from "./TripProvider";
 
 const modalOpenAtom = atom<boolean>(false);
 const budgetIdAtom = atom<string>("");
@@ -59,32 +61,30 @@ const BudgetModal = () => {
             <div className="flex justify-end">
               총 {budget?.totalIncomesKRW.toLocaleString()}원
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center text-grey-300">
               <h2 className="">예산 종류</h2>
               <div className="flex gap-4">
-                <div
-                  className={clsx(
-                    budget?.type === "CASH"
-                      ? "btn-blue py-2 px-4"
-                      : "text-grey-100",
-                    "py-2 text-sm"
-                  )}
-                >
-                  현금
-                </div>
-                <div
-                  className={clsx(
-                    budget?.type === "CARD"
-                      ? "btn-blue pt-2 px-4"
-                      : "text-grey-100",
-                    "py-2 text-sm"
-                  )}
-                >
-                  카드
+                <div className={clsx("py-2 text-sm flex gap-2 items-center")}>
+                  {
+                    {
+                      CASH: (
+                        <>
+                          <PaymentsTwoToneIcon />
+                          현금
+                        </>
+                      ),
+                      CARD: (
+                        <>
+                          <PaymentTwoToneIcon />
+                          카드
+                        </>
+                      ),
+                    }[budget?.type as "CARD" | "CASH"]
+                  }
                 </div>
               </div>
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center text-grey-300">
               <h2 className="">화폐</h2>
               <div className="flex gap-4">
                 <span className="font-medium">{budget?.Currency.id}</span>
@@ -94,7 +94,7 @@ const BudgetModal = () => {
             {(budget?.incomes || budget?.expenses) && (
               <IncomeExpenseList
                 datas={[...budget?.incomes, ...budget.expenses].sort((a, b) =>
-                  a.createdAt > b.createdAt ? 1 : -1
+                  a.createdAt < b.createdAt ? 1 : -1
                 )}
                 curencyUnit={budget?.Currency.id}
               />

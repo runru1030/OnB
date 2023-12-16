@@ -18,14 +18,14 @@ const BudgetBox = ({ budget }: BudgetBoxProps) => {
           }
         </span>
         <div className="text-lg flex gap-0.5">
-          <span>
+          <span className="font-medium">
             {(budget.totalIncomes - budget.totalExpenses).toLocaleString()}
           </span>
-          <span className="text-grey-400">/</span>
-          <span className="text-grey-400">
+          <span className="">/</span>
+          <span className="text-grey-300">
             {budget.totalIncomes.toLocaleString() ?? 0}
           </span>
-          <span className="w-10">{budget.Currency.id}</span>
+          <span className="pl-1">{budget.Currency.id}</span>
         </div>
       </div>
     </div>

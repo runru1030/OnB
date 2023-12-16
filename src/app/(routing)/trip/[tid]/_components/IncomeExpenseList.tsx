@@ -50,7 +50,7 @@ const IncomeExpenseList = ({ datas, curencyUnit }: IncomeExpenseListProps) => {
             {data.amount.toLocaleString()}
             <span>{curencyUnit}</span>
           </div>
-          <span className="text-grey-200 font-light">
+          <span className="text-grey-200 font-light tracking-wide">
             {dateformatter(new Date(data.createdAt))}
           </span>
         </ElementModal.Trigger>

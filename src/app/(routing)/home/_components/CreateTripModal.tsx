@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import Button from "@components/Button";
 import { Input } from "@components/Input";
 import StepModal from "@components/Modal/StepModal";
-import useDateSelect from "@components/useDateSelect";
+import useDateSelect from "@components/hooks/useDateSelect";
 import { CREATE_TRIP } from "@lib/graphql/mutations";
 import { GET_COUNTRIES } from "@lib/graphql/queries";
 import AddSharpIcon from "@mui/icons-material/AddSharp";

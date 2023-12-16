@@ -14,7 +14,8 @@ import { atomWithReset, useResetAtom } from "jotai/utils";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useMemo } from "react";
 import { tripAtom, tripStore } from "./TripProvider";
-
+import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
+import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 interface budgetReqAtom {
   title: string;
   currencyId: string;
@@ -112,11 +113,7 @@ const TitleInputContent = () => {
   return (
     <div className="flex-1 overflow-auto p-4">
       <div className="flex flex-col gap-8">
-        <div className="flex flex-col gap-4 ">
-          <h2 className="text-xl font-medium">
-            예산 이름을 입력해주세요{" "}
-            <span className="text-xs font-normal text-grey-400">최대 10자</span>
-          </h2>
+        <div className="flex flex-col gap-4">
           <Input
             placeholder="예산 이름"
             name="title"
@@ -126,26 +123,37 @@ const TitleInputContent = () => {
             required
             autoFocus
             maxLength={10}
-            className="w-full text-lg border-blue-300 rounded-xl"
+            className="h-[42px] text-2xl outline-none focus:border-b-2 border-grey-400 rounded-none !px-0 w-full"
           />
+          <span className="text-xs font-normal text-grey-400 text-right">
+            최대 10자
+          </span>
         </div>
-        <div className="flex flex-col gap-4 ">
-          <h2 className="text-xl font-medium">예산 종류를 선택해주세요 </h2>
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl font-medium">예산 종류</h2>
           <div className="flex">
             <Button
-              className={clsx(budgetData.type === "CASH" && "btn-blue")}
+              className={clsx(
+                budgetData.type === "CASH" ? "btn-blue-grey" : "text-grey-300",
+                "flex gap-1"
+              )}
               onClick={onChangeValueHandler}
               value={"CASH"}
               name="type"
             >
+              <PaymentsTwoToneIcon />
               현금
             </Button>
             <Button
-              className={clsx(budgetData.type === "CARD" && "btn-blue")}
+              className={clsx(
+                budgetData.type === "CARD" ? "btn-blue-grey" : "text-grey-300",
+                "flex gap-1"
+              )}
               onClick={onChangeValueHandler}
               value={"CARD"}
               name="type"
             >
+              <PaymentTwoToneIcon />
               카드
             </Button>
           </div>
