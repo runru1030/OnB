@@ -76,7 +76,6 @@ model Expense {
   id        String   @id @default(uuid())
   category  String
   amount    Int
-  usedAt    DateTime
   tripId    String
   budgetId  String
   createdAt DateTime @default(now())

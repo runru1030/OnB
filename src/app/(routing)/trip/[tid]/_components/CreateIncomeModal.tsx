@@ -66,7 +66,7 @@ const CreateIncomeModal = () => {
   return (
     <StepModal>
       <StepModal.Trigger>
-        <Button className="btn-blue">예산 채우기</Button>
+        <Button className="btn-blue w-full">예산 채우기</Button>
       </StepModal.Trigger>
       <StepModal.Content
         onCloseAutoFocus={() => {
@@ -93,7 +93,7 @@ const CreateIncomeModal = () => {
             {
               content: <IcomeInputContent />,
               nextButton: (
-                <StepModal.StepNext onLastStepHandler={onCreateIncome}>
+                <StepModal.StepNext onNextStepHandler={onCreateIncome}>
                   예산 채우기
                 </StepModal.StepNext>
               ),

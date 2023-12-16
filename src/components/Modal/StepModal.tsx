@@ -5,32 +5,18 @@ import Modal from "@components/Modal";
 import ArrowBackIosNewSharpIcon from "@mui/icons-material/ArrowBackIosNewSharp";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import clsx from "clsx";
-import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { atomWithReset } from "jotai/utils";
-import { PropsWithChildren, createElement, useState } from "react";
+import React, { PropsWithChildren, createElement } from "react";
 
 const stepAtom = atomWithReset(1);
-const openAtom = atom(false);
 
 const StepModal = ({
   children,
   onOpenChange,
   ...props
 }: PropsWithChildren<Omit<DialogProps, "open">>) => {
-  const [open, setOpen] = useAtom(openAtom);
-
-  return (
-    <Modal
-      {...props}
-      open={open}
-      onOpenChange={(open) => {
-        setOpen(open);
-        onOpenChange?.(open);
-      }}
-    >
-      {children}
-    </Modal>
-  );
+  return <Modal {...props}>{children}</Modal>;
 };
 const StepModalContent = ({
   children,
@@ -79,7 +65,11 @@ const StepModalStepSection = ({
           },
           <>
             {stepContent.content}
-            {stepContent.nextButton}
+            {idx + 1 === stepContentList.length ? (
+              <Modal.Close>{stepContent.nextButton}</Modal.Close>
+            ) : (
+              stepContent.nextButton
+            )}
           </>
         )
       )}
@@ -116,29 +106,26 @@ const StepModalNextButton = ({
   children,
   requiredCondition,
   onNextStepHandler,
-  onLastStepHandler,
-}: PropsWithChildren<{
-  className?: string;
-  requiredCondition?: { condition: boolean; description: string };
-  onNextStepHandler?: Function;
-  onLastStepHandler?: Function;
-}>) => {
+  ...props
+}: PropsWithChildren<
+  React.ComponentProps<typeof Button> & {
+    requiredCondition?: { condition: boolean; description: string };
+    onNextStepHandler?: Function;
+  }
+>) => {
   const setStep = useSetAtom(stepAtom);
-  const setOpen = useSetAtom(openAtom);
   return (
     <Button
-      onClick={() => {
+      {...props}
+      onClick={(e) => {
         if (requiredCondition?.condition) {
           return alert(requiredCondition.description);
         }
         setStep((p) => p + 1);
-        onNextStepHandler?.();
-        if (onLastStepHandler) {
-          onLastStepHandler();
-          setOpen(false);
-        }
+        onNextStepHandler?.(e);
+        props.onClick?.(e);
       }}
-      className="btn-blue m-4"
+      className={clsx("btn-blue m-4", props.className)}
     >
       {children}
     </Button>
