@@ -7,8 +7,8 @@ import clsx from "clsx";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { PropsWithChildren, useMemo } from "react";
-import IncomeList from "./IncomeList";
 import { tripAtom, tripStore } from "./TripProvider";
+import IncomeExpenseList from "./IncomeExpenseList";
 
 const modalOpenAtom = atom<boolean>(false);
 const budgetIdAtom = atom<string>("");
@@ -91,9 +91,11 @@ const BudgetModal = () => {
                 <span>{budget?.Currency.name}</span>
               </div>
             </div>
-            {budget?.incomes && budget?.incomes.length > 0 && (
-              <IncomeList
-                incomes={budget?.incomes}
+            {(budget?.incomes || budget?.expenses) && (
+              <IncomeExpenseList
+                datas={[...budget?.incomes, ...budget.expenses].sort((a, b) =>
+                  a.createdAt > b.createdAt ? 1 : -1
+                )}
                 curencyUnit={budget?.Currency.id}
               />
             )}

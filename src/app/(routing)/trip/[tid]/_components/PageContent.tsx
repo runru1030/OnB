@@ -9,6 +9,7 @@ import BudgetBox from "./BudgetBox";
 import BudgetModal from "./BudgetModal";
 import CreateBudgetModal from "./CreateBudgetModal";
 import CreateIncomeModal from "./CreateIncomeModal";
+import CreateExpenseModal from "./CreateExpenseModal";
 const PageContent = ({ trip }: { trip: TripQueryData }) => {
   const router = useRouter();
   const [deleteBudget] = useMutation(DELETE_TRIP, {
@@ -38,7 +39,10 @@ const PageContent = ({ trip }: { trip: TripQueryData }) => {
             </BudgetModal.Trigger>
           ))}
           <BudgetModal />
-          {trip.budgets.length > 0 && <CreateIncomeModal />}
+          <div className="flex gap-4">
+            {trip.budgets.length > 0 && <CreateIncomeModal />}
+            {trip.budgets.length > 0 && <CreateExpenseModal />}
+          </div>
         </div>
         <Button
           className="btn-red-border text-sm"
