@@ -17,6 +17,7 @@ export const typeDefs = `#graphql
   type Currency{
     id:ID!
     name:String
+    amountUnit:Int
     countryId:String
   }
   type Expense{
@@ -29,8 +30,9 @@ export const typeDefs = `#graphql
   type Income{
     id:ID!
     amount:Int
-    exchangeRate:Int
+    exchangeRate:Float
     budgetId:ID!
+    createdAt:Date
   }
   type Budget{
     id:ID!
@@ -41,6 +43,7 @@ export const typeDefs = `#graphql
     incomes:[Income]
     totalIncomes:Int
     totalExpenses:Int
+    totalIncomesKRW:Int
   }
   type TripJoined{
     id:ID!
@@ -64,9 +67,14 @@ export const typeDefs = `#graphql
     endedAt:Date,
     countryId:String, 
     userId:ID) : Trip
+    deleteTrip(id:ID!):Trip!
+
     createBudget(title:String, type:String, currencyId:String, tripId:ID):Budget
     deleteBudget(id:ID!):Budget!
-    deleteTrip(id:ID!):Trip!
+
+    createIncome(amount:Int, exchangeRate:Float, budgetId:ID, tripId:ID):Income
+    deleteIncome(id:ID!):Income!
+   
   }
 
 `;

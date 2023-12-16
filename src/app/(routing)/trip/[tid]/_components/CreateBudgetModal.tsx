@@ -61,7 +61,7 @@ const CreateBudgetModal = () => {
   return (
     <StepModal>
       <StepModal.Trigger>
-        <Button className="btn-blue-border flex items-center justify-center gap-1">
+        <Button className="btn-grey-border border-dashed flex items-center justify-center gap-1">
           <AddSharpIcon sx={{ fontSize: 18 }} />
           예산 만들기
         </Button>

@@ -9,12 +9,6 @@ const BudgetBox = ({ budget }: BudgetBoxProps) => {
     <div className="flex justify-between items-center" key={budget.id}>
       <h2 className="font-medium text-lg">{budget.title}</h2>
       <div className="flex items-center gap-2">
-        <div className="text-lg flex gap-0.5">
-          <span>{budget.totalIncomes - budget.totalExpenses}</span>
-          <span className="text-grey-400">/</span>
-          <span className="text-grey-400">{budget.totalIncomes ?? 0}</span>
-          <span className="w-12 pl-2">{budget.Currency.id}</span>
-        </div>
         <span className="text-sm text-grey-300">
           {
             {
@@ -23,6 +17,16 @@ const BudgetBox = ({ budget }: BudgetBoxProps) => {
             }[budget.type]
           }
         </span>
+        <div className="text-lg flex gap-0.5">
+          <span>
+            {(budget.totalIncomes - budget.totalExpenses).toLocaleString()}
+          </span>
+          <span className="text-grey-400">/</span>
+          <span className="text-grey-400">
+            {budget.totalIncomes.toLocaleString() ?? 0}
+          </span>
+          <span className="w-10">{budget.Currency.id}</span>
+        </div>
       </div>
     </div>
   );
