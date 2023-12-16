@@ -1,19 +1,19 @@
 "use client";
 import { useMutation } from "@apollo/client";
 import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import StepModal from "@components/Modal/StepModal";
 import Button from "@components/Button";
 import { Input } from "@components/Input";
+import StepModal from "@components/Modal/StepModal";
 import { CREATE_BUDGET } from "@lib/graphql/mutations";
 import { GET_CURRENCIES } from "@lib/graphql/queries";
 import AddSharpIcon from "@mui/icons-material/AddSharp";
 import { Currency } from "@prisma/client";
 import clsx from "clsx";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
-import { ChangeEvent, FormEvent, useMemo } from "react";
-import { tripAtom, tripStore } from "./TripProvider";
 import { useRouter } from "next/navigation";
+import { ChangeEvent, useMemo } from "react";
+import { tripAtom, tripStore } from "./TripProvider";
 
 interface budgetReqAtom {
   title: string;
@@ -86,7 +86,7 @@ const CreateBudgetModal = () => {
             {
               content: <SelectCurrencyContent />,
               nextButton: (
-                <StepModal.StepNext onLastStepHandler={onCreateBudget}>
+                <StepModal.StepNext onNextStepHandler={onCreateBudget}>
                   예산 만들기
                 </StepModal.StepNext>
               ),

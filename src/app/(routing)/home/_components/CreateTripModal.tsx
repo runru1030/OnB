@@ -98,7 +98,7 @@ const CreateTripStepModal = () => {
             {
               content: <SelectDateContent />,
               nextButton: (
-                <StepModal.StepNext onLastStepHandler={onCreateTrip}>
+                <StepModal.StepNext onNextStepHandler={onCreateTrip}>
                   여행 만들기
                 </StepModal.StepNext>
               ),
