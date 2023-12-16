@@ -51,6 +51,7 @@ export const CREATE_BUDGET = gql`
       Currency {
         id
         name
+        amountUnit
       }
       expenses {
         amount
@@ -59,6 +60,27 @@ export const CREATE_BUDGET = gql`
         amount
         exchangeRate
       }
+    }
+  }
+`;
+
+export const CREATE_INCOME = gql`
+  mutation CreateIncome(
+    $amount: Int
+    $exchangeRate: Float
+    $budgetId: ID
+    $tripId: ID
+  ) {
+    createIncome(
+      amount: $amount
+      exchangeRate: $exchangeRate
+      budgetId: $budgetId
+      tripId: $tripId
+    ) {
+      id
+      amount
+      exchangeRate
+      budgetId
     }
   }
 `;
@@ -72,6 +94,14 @@ export const DELETE_BUDGET = gql`
 export const DELETE_TRIP = gql`
   mutation DeleteTrip($id: ID!) {
     deleteTrip(id: $id) {
+      id
+    }
+  }
+`;
+
+export const DELETE_INCOME = gql`
+  mutation DeleteIncome($id: ID!) {
+    deleteIncome(id: $id) {
       id
     }
   }

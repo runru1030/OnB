@@ -6,6 +6,7 @@ export interface BudgetQueryData extends Budget {
   expenses: Expense[];
   totalIncomes: number;
   totalExpenses: number;
+  totalIncomesKRW: number;
 }
 export interface TripQueryData {
   id: string;

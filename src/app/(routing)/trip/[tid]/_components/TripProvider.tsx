@@ -1,8 +1,8 @@
 "use client";
 
-import { Provider, atom, createStore } from "jotai";
+import { Provider, atom, createStore, useAtomValue, useSetAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useEffect } from "react";
 import { TripQueryData } from "../_types";
 
 export const tripAtom = atom<TripQueryData>({
@@ -22,10 +22,13 @@ export default function TripProvider({
   children,
   trip,
 }: PropsWithChildren<{ trip: TripQueryData }>) {
-  if (trip)
-    useHydrateAtoms([[tripAtom, trip]], {
-      store: tripStore,
-    });
+  useHydrateAtoms([[tripAtom, trip]], {
+    store: tripStore,
+  });
+  const setTripData = useSetAtom(tripAtom, { store: tripStore });
 
+  useEffect(() => {
+    setTripData(trip);
+  }, [trip]);
   return <Provider store={tripStore}>{children}</Provider>;
 }

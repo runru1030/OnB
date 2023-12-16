@@ -10,7 +10,11 @@ export const resolvers = {
         include: {
           Country: true,
           budgets: {
-            include: { expenses: true, incomes: true, Currency: true },
+            include: {
+              expenses: true,
+              incomes: { orderBy: { createdAt: "desc" } },
+              Currency: true,
+            },
             orderBy: { createdAt: "desc" },
           },
           expenses: true,
@@ -20,6 +24,10 @@ export const resolvers = {
         ...budget,
         totalIncomes: budget.incomes.reduce(
           (acc, curr) => acc + curr.amount,
+          0
+        ),
+        totalIncomesKRW: budget.incomes.reduce(
+          (acc, curr) => acc + Math.ceil(curr.amount * curr.exchangeRate),
           0
         ),
         totalExpenses: budget.expenses.reduce(
@@ -79,6 +87,17 @@ export const resolvers = {
         },
       });
     },
+    createIncome: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.income.create({
+        data: {
+          amount: args.amount,
+          exchangeRate: args.exchangeRate,
+          budgetId: args.budgetId,
+          tripId: args.tripId,
+        },
+        include: {},
+      });
+    },
     deleteTrip: async (_parent: any, args: any, context: Context) => {
       return await context.prisma.trip.delete({
         where: {
@@ -88,6 +107,13 @@ export const resolvers = {
     },
     deleteBudget: async (_parent: any, args: any, context: Context) => {
       return await context.prisma.budget.delete({
+        where: {
+          id: args.id,
+        },
+      });
+    },
+    deleteIncome: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.income.delete({
         where: {
           id: args.id,
         },

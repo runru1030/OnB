@@ -1,11 +1,9 @@
 import Image from "next/image";
-import { TripQueryData } from "../_types";
 import Link from "next/link";
+import { MyTripQueryData } from "../_types";
+import { dateformatter } from "@app/utils";
 
-const dateformatter = (date: Date) =>
-  `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`;
-
-const TripBox = ({ id, title, startedAt, endedAt, Country }: TripQueryData) => {
+const TripBox = ({ id, title, startedAt, endedAt, Country }: MyTripQueryData) => {
   return (
     <Link
       href={`/trip/${id}`}
