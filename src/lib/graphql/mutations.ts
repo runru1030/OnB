@@ -84,6 +84,30 @@ export const CREATE_INCOME = gql`
     }
   }
 `;
+
+export const CREATE_EXPENSE = gql`
+  mutation CreateExpense(
+    $amount: Int
+    $category: String
+    $createdAt: Date
+    $budgetId: ID
+    $tripId: ID
+  ) {
+    createExpense(
+      amount: $amount
+      category: $category
+      createdAt: $createdAt
+      budgetId: $budgetId
+      tripId: $tripId
+    ) {
+      id
+      amount
+      category
+      createdAt
+      budgetId
+    }
+  }
+`;
 export const DELETE_BUDGET = gql`
   mutation DeleteBudget($id: ID!) {
     deleteBudget(id: $id) {
@@ -102,6 +126,14 @@ export const DELETE_TRIP = gql`
 export const DELETE_INCOME = gql`
   mutation DeleteIncome($id: ID!) {
     deleteIncome(id: $id) {
+      id
+    }
+  }
+`;
+
+export const DELETE_EXPENSE = gql`
+  mutation DeleteExpense($id: ID!) {
+    deleteExpense(id: $id) {
       id
     }
   }

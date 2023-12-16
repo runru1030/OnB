@@ -24,7 +24,7 @@ export const typeDefs = `#graphql
     id:ID!
     category:String
     amount:Int
-    usedAt:Date
+    createdAt:Date
     budgetId:ID!
   }
   type Income{
@@ -67,13 +67,16 @@ export const typeDefs = `#graphql
     endedAt:Date,
     countryId:String, 
     userId:ID) : Trip
-    deleteTrip(id:ID!):Trip!
+    deleteTrip(id:ID!):Trip
 
     createBudget(title:String, type:String, currencyId:String, tripId:ID):Budget
-    deleteBudget(id:ID!):Budget!
+    deleteBudget(id:ID!):Budget
 
     createIncome(amount:Int, exchangeRate:Float, budgetId:ID, tripId:ID):Income
-    deleteIncome(id:ID!):Income!
+    deleteIncome(id:ID!):Income
+
+    createExpense(category:String, amount:Int, createdAt:Date, budgetId:ID, tripId:ID):Expense
+    deleteExpense(id:ID!):Expense
    
   }
 
