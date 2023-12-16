@@ -31,6 +31,9 @@ body {
   .btn-blue-border {
     @apply duration-300 py-2 px-4 border-blue-400 text-blue-500 border rounded-xl disabled:cursor-not-allowed hover:shadow-normal active:border-blue-500 disabled:opacity-50
   }
+  .btn-blue-grey {
+    @apply duration-300 py-2 px-4 bg-grey-light-300 text-blue rounded-xl disabled:cursor-not-allowed hover:shadow-normal disabled:opacity-50
+  }
   .btn-red {
     @apply duration-300 py-2 px-4 bg-red-600 text-white rounded-xl disabled:cursor-not-allowed hover:shadow-normal active:border active:border-red-500 disabled:opacity-50
   }
@@ -69,4 +72,9 @@ input, textarea {
 }
 button {
   border-radius: unset;
+ 
+}
+
+button:active { 
+  filter: brightness(.75);
 }

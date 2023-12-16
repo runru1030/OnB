@@ -98,6 +98,17 @@ export const resolvers = {
         include: {},
       });
     },
+    createExpense: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.expense.create({
+        data: {
+          category: args.category,
+          amount: args.amount,
+          createdAt: args.createdAt,
+          budgetId: args.budgetId,
+          tripId: args.tripId,
+        },
+      });
+    },
     deleteTrip: async (_parent: any, args: any, context: Context) => {
       return await context.prisma.trip.delete({
         where: {
@@ -114,6 +125,13 @@ export const resolvers = {
     },
     deleteIncome: async (_parent: any, args: any, context: Context) => {
       return await context.prisma.income.delete({
+        where: {
+          id: args.id,
+        },
+      });
+    },
+    deleteExpense: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.expense.delete({
         where: {
           id: args.id,
         },

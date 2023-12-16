@@ -47,7 +47,7 @@ export const GET_TRIP = gql`
           id
           category
           amount
-          usedAt
+          createdAt
         }
         incomes {
           id
@@ -60,7 +60,6 @@ export const GET_TRIP = gql`
         id
         category
         amount
-        usedAt
         budgetId
       }
     }
