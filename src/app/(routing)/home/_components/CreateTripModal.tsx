@@ -2,7 +2,6 @@
 import { useMutation } from "@apollo/client";
 import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import Button from "@components/Button";
-import DateSelector from "@components/DateSelector";
 import { Input } from "@components/Input";
 import StepModal from "@components/Modal/StepModal";
 import useDateSelect from "@components/useDateSelect";
@@ -16,6 +15,7 @@ import { atomWithReset, useResetAtom } from "jotai/utils";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { DateRange } from "react-date-range";
 
 const tripReqAtom = atomWithReset({
   title: "",
@@ -197,7 +197,7 @@ const SelectDateContent = () => {
     <div className="flex-1 overflow-auto p-4">
       <div className="flex flex-col gap-4">
         <h2 className="text-xl font-medium">여행 날짜를 선택해주세요 </h2>
-        <DateSelector ranges={[selectionRange]} onChange={handleSelectDate} />
+        <DateRange ranges={[selectionRange]} onChange={handleSelectDate} />
       </div>
     </div>
   );

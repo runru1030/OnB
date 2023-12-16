@@ -1,8 +1,10 @@
-// import { Providers } from "@components/ApolloProvider";
 import "@styles/globals.css";
 import localFont from "next/font/local";
 import GlobalProvider from "./GlobalProvider";
 import { ApolloProviders } from "@app/_components/ApolloProvider";
+
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
 
 const pretendard = localFont({
   src: "../../public/font/PretendardVariable.woff2",
