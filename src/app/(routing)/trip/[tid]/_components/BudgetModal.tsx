@@ -46,20 +46,35 @@ const BudgetModal = () => {
         </Modal.Title>{" "}
         <div className="flex flex-col gap-4 h-[calc(100%-60px)]">
           <div className="flex-1 overflow-auto p-4 flex flex-col gap-4">
-            <div className="text-2xl flex gap-1 justify-end py-2 items-end">
-              <span>
+            <div className="text-3xl flex gap-1 justify-end items-end pb-2">
+              <span className=" font-medium">
                 {(
                   (budget?.totalIncomes || 0) - (budget?.totalExpenses || 0)
                 ).toLocaleString()}
               </span>
-              <span className="text-grey-400">/</span>
+              <span>/</span>
               <span className="text-grey-400">
                 {budget?.totalIncomes.toLocaleString() ?? 0}
               </span>
               <span className="text-base">{budget?.Currency.id}</span>
             </div>
-            <div className="flex justify-end">
-              총 {budget?.totalIncomesKRW.toLocaleString()}원
+            <div className="flex flex-col items-end gap-1">
+              <span className="font-medium">
+                총 예산 {budget?.totalIncomes.toLocaleString()}{" "}
+                {budget?.Currency.id}
+              </span>
+              <span className="text-sm">
+                = {budget?.totalIncomesKRW.toLocaleString()} 원
+              </span>
+            </div>
+            <div className="flex flex-col items-end gap-1">
+              <span className="font-medium">
+                총 지출 {budget?.totalExpenses.toLocaleString()}{" "}
+                {budget?.Currency.id}
+              </span>
+              <span className="text-sm">
+                = {budget?.totalExpensesKRW.toLocaleString()} 원
+              </span>
             </div>
             <div className="flex justify-between items-center text-grey-300">
               <h2 className="">예산 종류</h2>
