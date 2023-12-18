@@ -22,6 +22,14 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
+  async rewrites() {
+    return [
+      {
+        destination: "https://www.koreaexim.go.kr/:path*",
+        source: "/koreaxim/:path*",
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
