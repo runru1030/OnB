@@ -4,10 +4,11 @@ import { Expense, Income } from "@prisma/client";
 import { Provider, atom, createStore, useSetAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import { PropsWithChildren, useEffect } from "react";
+import { ExpenseQueryData, IncomeQueryData } from "../_types";
 
-export const expensesAtom = atom<Expense[]>([]);
+export const expensesAtom = atom<ExpenseQueryData[]>([]);
 expensesAtom.debugLabel = "expensesAtom";
-export const incomesAtom = atom<Income[]>([]);
+export const incomesAtom = atom<IncomeQueryData[]>([]);
 incomesAtom.debugLabel = "incomesAtom";
 
 export const tripExpenseStore = createStore();
@@ -16,7 +17,10 @@ export default function TripDetailProvider({
   children,
   expenses,
   incomes,
-}: PropsWithChildren<{ expenses: Expense[]; incomes: Income[] }>) {
+}: PropsWithChildren<{
+  expenses: ExpenseQueryData[];
+  incomes: IncomeQueryData[];
+}>) {
   useHydrateAtoms(
     [
       [expensesAtom, expenses],
