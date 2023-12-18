@@ -13,6 +13,8 @@ export const tripAtom = atom<TripQueryData>({
   Country: { id: "", name: "", name_en: "", flag_img: "" },
   budgets: [],
   expenses: [],
+  totalBudgetIncomesKRW: 0,
+  totalBudgetExpenseKRW: 0,
 });
 tripAtom.debugLabel = "tripAtom";
 
