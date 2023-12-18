@@ -25,6 +25,8 @@ export const GET_TRIP = gql`
       title
       startedAt
       endedAt
+      totalBudgetIncomesKRW
+      totalBudgetExpenseKRW
       Country {
         id
         name
@@ -38,6 +40,7 @@ export const GET_TRIP = gql`
         totalIncomes
         totalExpenses
         totalIncomesKRW
+        totalExpensesKRW
         Currency {
           id
           name

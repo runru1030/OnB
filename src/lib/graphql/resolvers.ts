@@ -20,22 +20,42 @@ export const resolvers = {
           expenses: true,
         },
       });
-      const aggregationTrip = trip?.budgets.map((budget) => ({
-        ...budget,
-        totalIncomes: budget.incomes.reduce(
+      const aggregationBudget = trip?.budgets.map((budget) => {
+        const totalIncomes = budget.incomes.reduce(
           (acc, curr) => acc + curr.amount,
           0
-        ),
-        totalIncomesKRW: budget.incomes.reduce(
+        );
+        const totalIncomesKRW = budget.incomes.reduce(
           (acc, curr) => acc + Math.ceil(curr.amount * curr.exchangeRate),
           0
-        ),
-        totalExpenses: budget.expenses.reduce(
+        );
+        const totalExpenses = budget.expenses.reduce(
           (acc, curr) => acc + curr.amount,
           0
-        ),
-      }));
-      return { ...trip, budgets: aggregationTrip };
+        );
+        const avgExchangeRate = totalIncomesKRW / totalIncomes;
+        return {
+          ...budget,
+          totalIncomes,
+          totalIncomesKRW,
+          totalExpenses,
+          totalExpensesKRW: totalExpenses * avgExchangeRate,
+        };
+      });
+      const totalBudgetIncomesKRW = aggregationBudget?.reduce(
+        (acc, curr) => acc + curr.totalIncomesKRW,
+        0
+      );
+      const totalBudgetExpenseKRW = aggregationBudget?.reduce(
+        (acc, curr) => acc + curr.totalExpensesKRW,
+        0
+      );
+      return {
+        ...trip,
+        budgets: aggregationBudget,
+        totalBudgetIncomesKRW,
+        totalBudgetExpenseKRW,
+      };
     },
     trips: async (_parent: any, args: any, context: Context) => {
       return await context.prisma.trip.findMany({
