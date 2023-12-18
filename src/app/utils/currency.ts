@@ -2,7 +2,7 @@ export const getExchangeData = async (currency: string) => {
   try {
     const baseurl = "/koreaxim/site/program/financial/exchangeJSON";
     const params = {
-      authkey: process.env.NEXT_SERVER_KX_KEY ?? "",
+      authkey: process.env.NEXT_PUBLIC_KX_KEY ?? "",
       data: "AP01",
     };
 
@@ -16,11 +16,7 @@ export const getExchangeData = async (currency: string) => {
     }
 
     const result = data.find((d: any) => d?.cur_unit?.includes(currency));
-    return {
-      cur_unit: "JPY(100)",
-      cur_nm: "",
-      deal_bas_r: 913.06,
-    };
+    return result;
   } catch (error) {
     throw error;
     console.error(error);

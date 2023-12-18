@@ -44,6 +44,7 @@ export const typeDefs = `#graphql
     totalIncomes:Int
     totalExpenses:Int
     totalIncomesKRW:Int
+    totalExpensesKRW:Int
   }
   type TripJoined{
     id:ID!
@@ -53,6 +54,8 @@ export const typeDefs = `#graphql
     Country:Country
     budgets:[Budget]
     expenses:[Expense]
+    totalBudgetIncomesKRW:Int
+    totalBudgetExpenseKRW:Int
   }
   type Query {
 	  trip(id: ID!): TripJoined 
