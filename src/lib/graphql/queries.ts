@@ -51,12 +51,22 @@ export const GET_TRIP = gql`
           category
           amount
           createdAt
+          budgetId
+          Budget {
+            title
+            currencyId
+          }
         }
         incomes {
           id
           amount
           exchangeRate
           createdAt
+          budgetId
+          Budget {
+            title
+            currencyId
+          }
         }
       }
       expenses {
@@ -99,9 +109,8 @@ export const GET_EXPENSES = gql`
       createdAt
       budgetId
       Budget {
-        Currency {
-          id
-        }
+        title
+        currencyId
       }
     }
   }
@@ -116,9 +125,8 @@ export const GET_INCOMES = gql`
       createdAt
       budgetId
       Budget {
-        Currency {
-          id
-        }
+        title
+        currencyId
       }
     }
   }

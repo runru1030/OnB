@@ -40,6 +40,7 @@ export const typeDefs = `#graphql
     id:ID!
     title:String
     type:String
+    currencyId:String
     Currency:Currency
     expenses:[Expense]
     incomes:[Income]
