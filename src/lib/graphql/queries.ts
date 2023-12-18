@@ -89,3 +89,20 @@ export const GET_CURRENCIES = gql`
     }
   }
 `;
+
+export const GET_EXPENSES = gql`
+  query Expenses {
+    expenses {
+      id
+      category
+      amount
+      createdAt
+      budgetId
+      Budget {
+        Currency{
+          id
+        }
+      }
+    }
+  }
+`;
