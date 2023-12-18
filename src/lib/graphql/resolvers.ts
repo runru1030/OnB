@@ -83,6 +83,13 @@ export const resolvers = {
         orderBy: { createdAt: "desc" },
       });
     },
+    incomes: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.income.findMany({
+        where: { tripId: args.tripId },
+        include: { Budget: { include: { Currency: true } } },
+        orderBy: { createdAt: "desc" },
+      });
+    },
   },
   Mutation: {
     createTrip: async (_parent: any, args: any, context: Context) => {

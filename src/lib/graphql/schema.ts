@@ -30,10 +30,11 @@ export const typeDefs = `#graphql
   }
   type Income{
     id:ID!
-    amount:Int
     exchangeRate:Float
-    budgetId:ID!
+    amount:Int
     createdAt:Date
+    budgetId:ID!
+    Budget:Budget
   }
   type Budget{
     id:ID!
@@ -64,6 +65,7 @@ export const typeDefs = `#graphql
     countries:[Country]
     currencies:[Currency]
     expenses:[Expense]
+    incomes:[Income]
   }	
   type Mutation {
     createTrip (

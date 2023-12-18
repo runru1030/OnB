@@ -99,7 +99,24 @@ export const GET_EXPENSES = gql`
       createdAt
       budgetId
       Budget {
-        Currency{
+        Currency {
+          id
+        }
+      }
+    }
+  }
+`;
+
+export const GET_INCOMES = gql`
+  query Incomes {
+    incomes {
+      id
+      amount
+      exchangeRate
+      createdAt
+      budgetId
+      Budget {
+        Currency {
           id
         }
       }
