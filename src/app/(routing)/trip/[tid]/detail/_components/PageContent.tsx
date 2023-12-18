@@ -1,5 +1,6 @@
 "use client";
 import { useAtomValue } from "jotai";
+import IncomeExpenseList from "../../_components/IncomeExpenseList";
 import {
   expensesAtom,
   incomesAtom,
@@ -8,9 +9,12 @@ import {
 const PageContent = () => {
   const expenses = useAtomValue(expensesAtom, { store: tripExpenseStore });
   const incomes = useAtomValue(incomesAtom, { store: tripExpenseStore });
-  console.log(expenses, incomes);
 
-  return <div className="main-content flex flex-col"></div>;
+  return (
+    <div className="main-content flex flex-col px-0 gap-2">
+      <IncomeExpenseList dataList={[...expenses, ...incomes]} />
+    </div>
+  );
 };
 
 export default PageContent;
