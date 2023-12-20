@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { MyTripQueryData } from "../_types";
 import CreateTripModal from "./CreateTripModal";
 import TripBox from "./TripBox";
+import MyInfoModal from "./MyInfoModal";
 const PageContent = ({ myTrips }: { myTrips: MyTripQueryData[] }) => {
   const nonePassedTrips = useMemo(
     () =>
@@ -21,8 +22,9 @@ const PageContent = ({ myTrips }: { myTrips: MyTripQueryData[] }) => {
   );
   return (
     <div className="bg-grey-light-300">
-      <header className="bg-white h-[52px] flex items-center sticky top-0 left-0 px-4">
+      <header className="bg-white h-[52px] flex items-center sticky top-0 left-0 px-4 justify-between">
         <LOGO />
+        <MyInfoModal />
       </header>
       <div className="main-content">
         <div className="flex flex-col bg-white rounded-xl p-3 border border-grey-light-400 gap-3">
