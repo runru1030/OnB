@@ -98,6 +98,11 @@ export const resolvers = {
         orderBy: { createdAt: "desc" },
       });
     },
+    user: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.user.findUnique({
+        where: { email: args.email },
+      });
+    },
   },
   Mutation: {
     createTrip: async (_parent: any, args: any, context: Context) => {
@@ -148,6 +153,16 @@ export const resolvers = {
           createdAt: args.createdAt,
           budgetId: args.budgetId,
           tripId: args.tripId,
+        },
+      });
+    },
+    createAuth: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.user.upsert({
+        where: { email: args.email },
+        update: {},
+        create: {
+          email: args.email,
+          name: args.name,
         },
       });
     },
