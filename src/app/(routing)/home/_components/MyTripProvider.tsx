@@ -20,5 +20,10 @@ export default function MyTripProvider({
     setMyTripsData(myTrips);
   }, [myTrips]);
 
+  const setMyTripsData = useSetAtom(myTripsAtom, { store: myTripStore });
+  useEffect(() => {
+    setMyTripsData(myTrips);
+  }, [myTrips]);
+
   return <Provider store={myTripStore}>{children}</Provider>;
 }
