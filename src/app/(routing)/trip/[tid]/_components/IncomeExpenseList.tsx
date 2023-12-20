@@ -23,8 +23,9 @@ const IncomeExpenseList = ({ dataList }: IncomeExpenseListProps) => {
     setElementData,
     setOpen: setOpenElementModal,
   } = useElementModal();
+  const selectedElement = elementData as DataType;
   const dataByCreatedAt = useMemo(() => {
-    let dataObj = {} as {
+    const dataObj = {} as {
       [key: string]: DataType[];
     };
     dataList.forEach((el) => {
@@ -32,11 +33,11 @@ const IncomeExpenseList = ({ dataList }: IncomeExpenseListProps) => {
       const key = dateformatter(date);
       const li = {
         ...el,
-        type: (el.hasOwnProperty("category")
+        type: (Object.hasOwn(el, "category")
           ? "Expense"
           : "Income") as DetailType,
       };
-      if (dataObj.hasOwnProperty(key)) {
+      if (Object.hasOwn(dataObj, key)) {
         dataObj[key].push(li);
       } else {
         dataObj[key] = [li];
@@ -46,14 +47,14 @@ const IncomeExpenseList = ({ dataList }: IncomeExpenseListProps) => {
   }, [dataList]);
 
   const [deleteIncome] = useMutation(DELETE_INCOME, {
-    variables: { id: elementData?.id },
+    variables: { id: selectedElement.id },
     onCompleted: () => {
       setOpenElementModal(false);
       router.refresh();
     },
   });
   const [deleteExpense] = useMutation(DELETE_EXPENSE, {
-    variables: { id: elementData?.id },
+    variables: { id: selectedElement.id },
     onCompleted: () => {
       setOpenElementModal(false);
       router.refresh();
@@ -72,7 +73,7 @@ const IncomeExpenseList = ({ dataList }: IncomeExpenseListProps) => {
                 key={li.id}
                 className={clsx(
                   "w-full flex items-center justify-between !p-4",
-                  elementData?.id == li.id && "opacity-50 bg-grey-light-300"
+                  selectedElement?.id == li.id && "opacity-50 bg-grey-light-300"
                 )}
                 onClick={() => setElementData(li)}
               >
@@ -81,7 +82,7 @@ const IncomeExpenseList = ({ dataList }: IncomeExpenseListProps) => {
                   className={clsx(
                     li.type === "Expense" ? "text-red" : "text-blue",
                     "flex gap-4 items-center text-lg font-medium",
-                    elementData?.id == li.id && "opacity-0"
+                    selectedElement?.id == li.id && "opacity-0"
                   )}
                 >
                   <span className="text-red-300">
@@ -102,9 +103,9 @@ const IncomeExpenseList = ({ dataList }: IncomeExpenseListProps) => {
           <ElementModal className="-translate-x-[calc(100%+16px)] -translate-y-[50px]">
             <Button
               onClick={() => {
-                elementData.hasOwnProperty("exchangeRate")
-                  ? deleteIncome({ variables: elementData.id })
-                  : deleteExpense({ variables: elementData.id });
+                selectedElement.type === "Income"
+                  ? deleteIncome({ variables: { id: selectedElement.id } })
+                  : deleteExpense({ variables: { id: selectedElement.id } });
               }}
               className="btn-red text-sm h-[40px]"
             >

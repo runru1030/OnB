@@ -174,7 +174,7 @@ const SelectCurrencyContent = () => {
       currenciesQuery?.currencies?.filter(
         (currency: Currency) => currency.countryId === Country.id
       ) ?? [],
-    [currenciesQuery]
+    [currenciesQuery, Country.id]
   );
   return (
     <div className="flex-1 overflow-auto p-4">

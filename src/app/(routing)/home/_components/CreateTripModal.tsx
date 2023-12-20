@@ -12,6 +12,7 @@ import { Country } from "@prisma/client";
 import clsx from "clsx";
 import { useAtom, useAtomValue } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -29,9 +30,11 @@ const CreateTripStepModal = () => {
 
   const tripData = useAtomValue(tripReqAtom);
   const resetTripData = useResetAtom(tripReqAtom);
-  const userId = "1";
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
   const [createTrip] = useMutation(CREATE_TRIP, {
-    onCompleted: (res) => {
+    onCompleted: () => {
       router.refresh();
     },
   });
@@ -116,11 +119,7 @@ const TitleInputContent = () => {
   const [tripData, setTripData] = useAtom(tripReqAtom);
   return (
     <div className="flex-1 overflow-auto p-4">
-      <div className="flex flex-col gap-4 ">
-        <h2 className="text-xl font-medium">
-          여행 이름을 입력해주세요{" "}
-          <span className="text-xs font-normal text-grey-400">최대 10자</span>
-        </h2>
+      <div className="flex flex-col gap-4">
         <Input
           placeholder="여행 이름"
           type="text"
@@ -131,8 +130,11 @@ const TitleInputContent = () => {
           required
           autoFocus
           maxLength={10}
-          className="w-full text-lg border-blue-300 rounded-xl"
+          className="h-[42px] text-2xl outline-none focus:border-b-2 border-grey-400 rounded-none !px-0 w-full"
         />
+        <span className="text-xs font-normal text-grey-400 text-right">
+          최대 10자
+        </span>
       </div>
     </div>
   );
@@ -165,12 +167,14 @@ const SelectCountryContent = () => {
               )}
             >
               {country.name}
-              <Image
-                src={country.flag_img ?? ""}
-                width={40}
-                height={100}
-                alt="국기"
-              />
+              {country.flag_img && (
+                <Image
+                  src={country.flag_img}
+                  width={40}
+                  height={100}
+                  alt="국기"
+                />
+              )}
             </div>
           ))}
         </div>

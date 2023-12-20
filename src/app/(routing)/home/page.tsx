@@ -9,7 +9,7 @@ const Page = () => {
 
   return (
     <MyTripProvider myTrips={data?.trips}>
-      <PageContent myTrips={data?.trips} />
+      <PageContent />
     </MyTripProvider>
   );
 };

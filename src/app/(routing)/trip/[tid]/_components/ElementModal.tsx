@@ -6,7 +6,7 @@ import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import { PropsWithChildren } from "react";
 
-const elementDataAtom = atomWithReset<any>({});
+const elementDataAtom = atomWithReset({});
 export const useElementModal = () => {
   const [elementData, setElementData] = useAtom(elementDataAtom);
   const [open, setOpen] = useAtom(modalOpenAtom);
@@ -28,10 +28,7 @@ const ElementModal = ({
     <Modal open={openAtom} onOpenChange={setOpenAtom}>
       <Modal.Content
         {...props}
-        className={clsx(
-          `!p-0 rounded-xl w-max shadow-normal`,
-          className
-        )}
+        className={clsx(`!p-0 rounded-xl w-max shadow-normal`, className)}
         style={{
           top: buttonPos.bottom,
           left: buttonPos.right,

@@ -1,8 +1,13 @@
 import { Context } from "@api/graphql";
+import { Budget, Expense, Income, Trip, User } from "@prisma/client";
 
 export const resolvers = {
   Query: {
-    trip: async (_parent: any, args: any, context: Context) => {
+    trip: async (
+      _parent: undefined,
+      args: { id: string },
+      context: Context
+    ) => {
       const trip = await context.prisma.trip.findUnique({
         where: {
           id: args.id,
@@ -65,7 +70,11 @@ export const resolvers = {
         totalBudgetExpenseKRW,
       };
     },
-    trips: async (_parent: any, args: any, context: Context) => {
+    trips: async (
+      _parent: undefined,
+      args: { userId: string },
+      context: Context
+    ) => {
       return await context.prisma.trip.findMany({
         where: {
           userId: args.userId,
@@ -76,31 +85,56 @@ export const resolvers = {
         orderBy: { createdAt: "desc" },
       });
     },
-    countries: async (_parent: any, args: any, context: Context) => {
+    countries: async (
+      _parent: undefined,
+      args: undefined,
+      context: Context
+    ) => {
       return await context.prisma.country.findMany({
         orderBy: { name: "asc" },
       });
     },
-    currencies: async (_parent: any, args: any, context: Context) => {
+    currencies: async (
+      _parent: undefined,
+      args: undefined,
+      context: Context
+    ) => {
       return await context.prisma.currency.findMany();
     },
-    expenses: async (_parent: any, args: any, context: Context) => {
+    expenses: async (
+      _parent: undefined,
+      args: { tripId: string },
+      context: Context
+    ) => {
       return await context.prisma.expense.findMany({
         where: { tripId: args.tripId },
         include: { Budget: { include: { Currency: true } } },
         orderBy: { createdAt: "desc" },
       });
     },
-    incomes: async (_parent: any, args: any, context: Context) => {
+    incomes: async (
+      _parent: undefined,
+      args: { tripId: string },
+      context: Context
+    ) => {
       return await context.prisma.income.findMany({
         where: { tripId: args.tripId },
         include: { Budget: { include: { Currency: true } } },
         orderBy: { createdAt: "desc" },
       });
     },
+    user: async (
+      _parent: undefined,
+      args: { email: string },
+      context: Context
+    ) => {
+      return await context.prisma.user.findUnique({
+        where: { email: args.email },
+      });
+    },
   },
   Mutation: {
-    createTrip: async (_parent: any, args: any, context: Context) => {
+    createTrip: async (_parent: undefined, args: Trip, context: Context) => {
       return await context.prisma.trip.create({
         data: {
           title: args.title,
@@ -114,7 +148,11 @@ export const resolvers = {
         },
       });
     },
-    createBudget: async (_parent: any, args: any, context: Context) => {
+    createBudget: async (
+      _parent: undefined,
+      args: Budget,
+      context: Context
+    ) => {
       return await context.prisma.budget.create({
         data: {
           title: args.title,
@@ -129,7 +167,11 @@ export const resolvers = {
         },
       });
     },
-    createIncome: async (_parent: any, args: any, context: Context) => {
+    createIncome: async (
+      _parent: undefined,
+      args: Income,
+      context: Context
+    ) => {
       return await context.prisma.income.create({
         data: {
           amount: args.amount,
@@ -140,7 +182,11 @@ export const resolvers = {
         include: {},
       });
     },
-    createExpense: async (_parent: any, args: any, context: Context) => {
+    createExpense: async (
+      _parent: undefined,
+      args: Expense,
+      context: Context
+    ) => {
       return await context.prisma.expense.create({
         data: {
           category: args.category,
@@ -151,28 +197,54 @@ export const resolvers = {
         },
       });
     },
-    deleteTrip: async (_parent: any, args: any, context: Context) => {
+    createAuth: async (_parent: undefined, args: User, context: Context) => {
+      return await context.prisma.user.upsert({
+        where: { email: args.email },
+        update: {},
+        create: {
+          email: args.email,
+          name: args.name || "",
+        },
+      });
+    },
+    deleteTrip: async (
+      _parent: undefined,
+      args: { id: string },
+      context: Context
+    ) => {
       return await context.prisma.trip.delete({
         where: {
           id: args.id,
         },
       });
     },
-    deleteBudget: async (_parent: any, args: any, context: Context) => {
+    deleteBudget: async (
+      _parent: undefined,
+      args: { id: string },
+      context: Context
+    ) => {
       return await context.prisma.budget.delete({
         where: {
           id: args.id,
         },
       });
     },
-    deleteIncome: async (_parent: any, args: any, context: Context) => {
+    deleteIncome: async (
+      _parent: undefined,
+      args: { id: string },
+      context: Context
+    ) => {
       return await context.prisma.income.delete({
         where: {
           id: args.id,
         },
       });
     },
-    deleteExpense: async (_parent: any, args: any, context: Context) => {
+    deleteExpense: async (
+      _parent: undefined,
+      args: { id: string },
+      context: Context
+    ) => {
       return await context.prisma.expense.delete({
         where: {
           id: args.id,

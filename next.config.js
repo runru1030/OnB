@@ -15,8 +15,12 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [
-      { hostname: "*", protocol: "http" },
-      { hostname: "*", protocol: "https" },
+      {
+        protocol: "https",
+        hostname: "opendata.mofa.go.kr",
+        port: "8444",
+        pathname: "/fileDownload/images/country_images/flags/**",
+      },
     ],
   },
   experimental: {
