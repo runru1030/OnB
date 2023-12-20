@@ -25,6 +25,6 @@ module.exports = {
     "no-console": ["error", { allow: ["warn", "error"] }],
     "react/prop-types": "off",
     "jsx-a11y/no-autofocus": "off",
-    "no-unused-vars": off,
+    "no-unused-vars": "off",
   },
 };

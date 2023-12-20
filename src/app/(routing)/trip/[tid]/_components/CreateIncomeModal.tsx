@@ -148,7 +148,7 @@ const IcomeInputContent = () => {
     deal_bas_r: 0,
   });
 
-  useEffect(() => {
+useEffect(() => {
     if (!currencyUnit) return;
     getExchangeData(currencyUnit).then((data) => {
       if (data) {

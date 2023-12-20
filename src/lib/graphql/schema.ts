@@ -60,6 +60,11 @@ export const typeDefs = `#graphql
     totalBudgetIncomesKRW:Float
     totalBudgetExpenseKRW:Float
   }
+  type User{
+    id:ID!
+    name:String
+    email:String!
+  }
   type Query {
 	  trip(id: ID!): TripJoined 
     trips:[Trip]
@@ -67,6 +72,7 @@ export const typeDefs = `#graphql
     currencies:[Currency]
     expenses:[Expense]
     incomes:[Income]
+    user(email: String!):User
   }	
   type Mutation {
     createTrip (
@@ -85,6 +91,8 @@ export const typeDefs = `#graphql
 
     createExpense(category:String, amount:Int, createdAt:Date, budgetId:ID, tripId:ID):Expense
     deleteExpense(id:ID!):Expense
+
+    createAuth(email:String! name:String):User
    
   }
 

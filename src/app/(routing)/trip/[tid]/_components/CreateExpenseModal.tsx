@@ -5,25 +5,18 @@ import Button from "@components/Button";
 import { Input } from "@components/Input";
 import StepModal from "@components/Modal/StepModal";
 import { CREATE_EXPENSE } from "@lib/graphql/mutations";
-import AirplaneTicketTwoToneIcon from "@mui/icons-material/AirplaneTicketTwoTone";
-import BedTwoToneIcon from "@mui/icons-material/BedTwoTone";
-import DirectionsBusFilledTwoToneIcon from "@mui/icons-material/DirectionsBusFilledTwoTone";
-import FastfoodTwoToneIcon from "@mui/icons-material/FastfoodTwoTone";
-import LocalMallTwoToneIcon from "@mui/icons-material/LocalMallTwoTone";
 import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
-import TollTwoToneIcon from "@mui/icons-material/TollTwoTone";
 import clsx from "clsx";
 import { useAtom, useAtomValue } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Calendar } from "react-date-range";
-import BudgetBox from "./BudgetBox";
-import { tripAtom, tripStore } from "./TripProvider";
 import { EXPNSE_CATEGORY } from "../_constants";
-import { Category } from "@mui/icons-material";
+import BudgetBox from "./BudgetBox";
 import CategoryTag from "./CategoryTag";
+import { tripAtom, tripStore } from "./TripProvider";
 const budgetAtom = atomWithReset({
   id: "",
   Currency: { id: "", name: "", countryId: "", amountUnit: 1 },
@@ -208,6 +201,7 @@ const ExpenseInputContent = () => {
           <div className="flex border border-grey-50 rounded-md">
             {Object.keys(EXPNSE_CATEGORY).map((category) => (
               <Button
+                key={category}
                 className={clsx(
                   expenseData.category === category
                     ? "bg-grey-light-300 text-blue"

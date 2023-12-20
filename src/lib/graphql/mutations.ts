@@ -108,6 +108,15 @@ export const CREATE_EXPENSE = gql`
     }
   }
 `;
+export const CREATE_AUTH = gql`
+  mutation CreateAuth($email: String!, $name: String) {
+    createAuth(email: $email, name: $name) {
+      id
+      email
+      name
+    }
+  }
+`;
 export const DELETE_BUDGET = gql`
   mutation DeleteBudget($id: ID!) {
     deleteBudget(id: $id) {

@@ -111,7 +111,7 @@ const BudgetModal = () => {
             <div className="flex flex-col gap-2">
               {(budget?.incomes || budget?.expenses) && (
                 <IncomeExpenseList
-                  dataList={[...budget?.incomes, ...budget.expenses]}
+                  dataList={[...budget.incomes, ...budget.expenses]}
                 />
               )}
             </div>
