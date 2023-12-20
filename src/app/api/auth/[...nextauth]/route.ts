@@ -19,6 +19,8 @@ const handler = NextAuth({
   ],
   callbacks: {
     async signIn({ user }) {
+      console.log(user);
+      
       await getClient().mutate({
         mutation: CREATE_AUTH,
         variables: { ...user },
