@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx prisma generate && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "npx prisma generate"
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",
@@ -33,6 +33,7 @@
     "next": "^14.0.4",
     "next-auth": "^4.24.5",
     "postcss": "^8.4.32",
+    "prisma": "^5.7.1",
     "react": "^18.2.0",
     "react-date-range": "^1.4.0",
     "react-dom": "^18.2.0",
