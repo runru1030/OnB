@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "prisma generate --schema=./src/lib/prisma/schema.prisma && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "npx prisma generate"
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",
