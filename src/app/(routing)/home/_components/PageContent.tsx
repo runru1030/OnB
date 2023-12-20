@@ -5,7 +5,10 @@ import { MyTripQueryData } from "../_types";
 import CreateTripModal from "./CreateTripModal";
 import TripBox from "./TripBox";
 import MyInfoModal from "./MyInfoModal";
-const PageContent = ({ myTrips }: { myTrips: MyTripQueryData[] }) => {
+import { useAtomValue } from "jotai";
+import { myTripStore, myTripsAtom } from "./MyTripProvider";
+const PageContent = () => {
+  const myTrips = useAtomValue(myTripsAtom, { store: myTripStore });
   const nonePassedTrips = useMemo(
     () =>
       myTrips?.filter(
