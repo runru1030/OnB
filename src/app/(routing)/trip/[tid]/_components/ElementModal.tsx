@@ -29,7 +29,7 @@ const ElementModal = ({
       <Modal.Content
         {...props}
         className={clsx(
-          `!p-0 rounded-xl -translate-x-full w-max shadow-normal`,
+          `!p-0 rounded-xl w-max shadow-normal`,
           className
         )}
         style={{

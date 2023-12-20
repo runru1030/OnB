@@ -1,23 +1,49 @@
-import { Expense, Income } from "@prisma/client";
-import ElementModal, { useElementModal } from "./ElementModal";
 import { useMutation } from "@apollo/client";
-import { DELETE_EXPENSE, DELETE_INCOME } from "@lib/graphql/mutations";
-import { useRouter } from "next/navigation";
-import clsx from "clsx";
 import { dateformatter } from "@app/utils";
 import Button from "@components/Button";
+import { DELETE_EXPENSE, DELETE_INCOME } from "@lib/graphql/mutations";
+import clsx from "clsx";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
+import { ExpenseQueryData, IncomeQueryData } from "../detail/_types";
+import CategoryTag from "./CategoryTag";
+import ElementModal, { useElementModal } from "./ElementModal";
 
+type DetailType = "Expense" | "Income";
+type DataType = (IncomeQueryData | ExpenseQueryData) & {
+  type: DetailType;
+};
 interface IncomeExpenseListProps {
-  datas: (Income | Expense)[];
-  curencyUnit: string;
+  dataList: (IncomeQueryData | ExpenseQueryData)[];
 }
-const IncomeExpenseList = ({ datas, curencyUnit }: IncomeExpenseListProps) => {
+const IncomeExpenseList = ({ dataList }: IncomeExpenseListProps) => {
   const router = useRouter();
   const {
     elementData,
     setElementData,
     setOpen: setOpenElementModal,
   } = useElementModal();
+  const dataByCreatedAt = useMemo(() => {
+    let dataObj = {} as {
+      [key: string]: DataType[];
+    };
+    dataList.forEach((el) => {
+      const date = new Date(el.createdAt);
+      const key = dateformatter(date);
+      const li = {
+        ...el,
+        type: (el.hasOwnProperty("category")
+          ? "Expense"
+          : "Income") as DetailType,
+      };
+      if (dataObj.hasOwnProperty(key)) {
+        dataObj[key].push(li);
+      } else {
+        dataObj[key] = [li];
+      }
+    });
+    return dataObj;
+  }, [dataList]);
 
   const [deleteIncome] = useMutation(DELETE_INCOME, {
     variables: { id: elementData?.id },
@@ -34,40 +60,60 @@ const IncomeExpenseList = ({ datas, curencyUnit }: IncomeExpenseListProps) => {
     },
   });
   return (
-    <div>
-      {datas.map((data) => (
-        <ElementModal.Trigger
-          key={data.id}
-          className={clsx(
-            "w-full flex gap-1 py-2 justify-between !px-0",
-            elementData?.id == data.id && "opacity-50",
-            data.hasOwnProperty("exchangeRate") ? "text-blue" : "text-red"
-          )}
-          onClick={() => setElementData(data)}
-        >
-          <div className="flex gap-1 text-lg">
-            <span>{data.hasOwnProperty("exchangeRate") ? "+" : "-"}</span>
-            {data.amount.toLocaleString()}
-            <span>{curencyUnit}</span>
-          </div>
-          <span className="text-grey-200 font-light tracking-wide">
-            {dateformatter(new Date(data.createdAt))}
+    <>
+      {Object.keys(dataByCreatedAt).map((date: string) => (
+        <div className="flex flex-col" key={date}>
+          <span className="text-grey-200 px-4 py-2 text-sm tracking-wide border-b border-grey-50">
+            {date}
           </span>
-        </ElementModal.Trigger>
+          <div className="flex flex-col">
+            {dataByCreatedAt[date].map((li) => (
+              <ElementModal.Trigger
+                key={li.id}
+                className={clsx(
+                  "w-full flex items-center justify-between !p-4",
+                  elementData?.id == li.id && "opacity-50 bg-grey-light-300"
+                )}
+                onClick={() => setElementData(li)}
+              >
+                <span className="font-medium">{li?.Budget.title}</span>
+                <span
+                  className={clsx(
+                    li.type === "Expense" ? "text-red" : "text-blue",
+                    "flex gap-4 items-center text-lg font-medium",
+                    elementData?.id == li.id && "opacity-0"
+                  )}
+                >
+                  <span className="text-red-300">
+                    {li.type === "Expense" && (
+                      <CategoryTag
+                        category={(li as ExpenseQueryData).category}
+                      />
+                    )}
+                  </span>
+                  <span>
+                    {li.type === "Expense" ? "- " : "+ "}
+                    {li.amount} {li.Budget.currencyId}
+                  </span>
+                </span>
+              </ElementModal.Trigger>
+            ))}
+          </div>
+          <ElementModal className="-translate-x-[calc(100%+16px)] -translate-y-[50px]">
+            <Button
+              onClick={() => {
+                elementData.hasOwnProperty("exchangeRate")
+                  ? deleteIncome({ variables: elementData.id })
+                  : deleteExpense({ variables: elementData.id });
+              }}
+              className="btn-red text-sm h-[40px]"
+            >
+              삭제하기
+            </Button>
+          </ElementModal>
+        </div>
       ))}
-      <ElementModal className="-translate-y-[calc(44px)]">
-        <Button
-          onClick={() => {
-            elementData.hasOwnProperty("exchangeRate")
-              ? deleteIncome({ variables: elementData.id })
-              : deleteExpense({ variables: elementData.id });
-          }}
-          className="btn-red text-sm h-[44px]"
-        >
-          삭제하기
-        </Button>
-      </ElementModal>
-    </div>
+    </>
   );
 };
 export default IncomeExpenseList;
