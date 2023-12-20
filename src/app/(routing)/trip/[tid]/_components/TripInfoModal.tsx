@@ -1,3 +1,4 @@
+"use client"
 import { useMutation } from "@apollo/client";
 import Button from "@components/Button";
 import Modal from "@components/Modal";

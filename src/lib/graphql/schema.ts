@@ -26,25 +26,28 @@ export const typeDefs = `#graphql
     amount:Int
     createdAt:Date
     budgetId:ID!
+    Budget:Budget
   }
   type Income{
     id:ID!
-    amount:Int
     exchangeRate:Float
-    budgetId:ID!
+    amount:Int
     createdAt:Date
+    budgetId:ID!
+    Budget:Budget
   }
   type Budget{
     id:ID!
     title:String
     type:String
+    currencyId:String
     Currency:Currency
     expenses:[Expense]
     incomes:[Income]
     totalIncomes:Int
     totalExpenses:Int
     totalIncomesKRW:Int
-    totalExpensesKRW:Int
+    totalExpensesKRW:Float
   }
   type TripJoined{
     id:ID!
@@ -54,14 +57,16 @@ export const typeDefs = `#graphql
     Country:Country
     budgets:[Budget]
     expenses:[Expense]
-    totalBudgetIncomesKRW:Int
-    totalBudgetExpenseKRW:Int
+    totalBudgetIncomesKRW:Float
+    totalBudgetExpenseKRW:Float
   }
   type Query {
 	  trip(id: ID!): TripJoined 
     trips:[Trip]
     countries:[Country]
     currencies:[Currency]
+    expenses:[Expense]
+    incomes:[Income]
   }	
   type Mutation {
     createTrip (

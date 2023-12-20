@@ -1,9 +1,10 @@
 import { Budget, Country, Currency, Expense, Income } from "@prisma/client";
+import { ExpenseQueryData, IncomeQueryData } from "../detail/_types";
 
 export interface BudgetQueryData extends Budget {
   Currency: Currency;
-  incomes: Income[];
-  expenses: Expense[];
+  incomes: IncomeQueryData[];
+  expenses: ExpenseQueryData[];
   totalIncomes: number;
   totalExpenses: number;
   totalIncomesKRW: number;

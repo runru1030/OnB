@@ -11,8 +11,14 @@ export const resolvers = {
           Country: true,
           budgets: {
             include: {
-              expenses: true,
-              incomes: { orderBy: { createdAt: "desc" } },
+              expenses: {
+                include: { Budget: true },
+                orderBy: { createdAt: "desc" },
+              },
+              incomes: {
+                include: { Budget: true },
+                orderBy: { createdAt: "desc" },
+              },
               Currency: true,
             },
             orderBy: { createdAt: "desc" },
@@ -33,7 +39,9 @@ export const resolvers = {
           (acc, curr) => acc + curr.amount,
           0
         );
-        const avgExchangeRate = totalIncomesKRW / totalIncomes;
+        const avgExchangeRate = isNaN(totalIncomesKRW / totalIncomes)
+          ? 0
+          : totalIncomesKRW / totalIncomes;
         return {
           ...budget,
           totalIncomes,
@@ -75,6 +83,20 @@ export const resolvers = {
     },
     currencies: async (_parent: any, args: any, context: Context) => {
       return await context.prisma.currency.findMany();
+    },
+    expenses: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.expense.findMany({
+        where: { tripId: args.tripId },
+        include: { Budget: { include: { Currency: true } } },
+        orderBy: { createdAt: "desc" },
+      });
+    },
+    incomes: async (_parent: any, args: any, context: Context) => {
+      return await context.prisma.income.findMany({
+        where: { tripId: args.tripId },
+        include: { Budget: { include: { Currency: true } } },
+        orderBy: { createdAt: "desc" },
+      });
     },
   },
   Mutation: {
