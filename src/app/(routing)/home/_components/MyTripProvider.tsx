@@ -13,8 +13,7 @@ export default function MyTripProvider({
   children,
   myTrips,
 }: PropsWithChildren<{ myTrips: MyTripQueryData[] }>) {
-  if (myTrips)
-    useHydrateAtoms([[myTripsAtom, myTrips]], { store: myTripStore });
+  useHydrateAtoms([[myTripsAtom, myTrips]], { store: myTripStore });
 
   const setMyTripsData = useSetAtom(myTripsAtom, { store: myTripStore });
   useEffect(() => {

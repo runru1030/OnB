@@ -1,6 +1,6 @@
 "use client";
 
-import { Provider, atom, createStore, useAtomValue, useSetAtom } from "jotai";
+import { Provider, atom, createStore, useSetAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import { PropsWithChildren, useEffect } from "react";
 import { TripQueryData } from "../_types";

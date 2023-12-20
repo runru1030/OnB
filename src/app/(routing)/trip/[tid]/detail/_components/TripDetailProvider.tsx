@@ -1,6 +1,5 @@
 "use client";
 
-import { Expense, Income } from "@prisma/client";
 import { Provider, atom, createStore, useSetAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import { PropsWithChildren, useEffect } from "react";

@@ -13,7 +13,6 @@ const stepAtom = atomWithReset(1);
 
 const StepModal = ({
   children,
-  onOpenChange,
   ...props
 }: PropsWithChildren<Omit<DialogProps, "open">>) => {
   return <Modal {...props}>{children}</Modal>;
@@ -110,7 +109,7 @@ const StepModalNextButton = ({
 }: PropsWithChildren<
   React.ComponentProps<typeof Button> & {
     requiredCondition?: { condition: boolean; description: string };
-    onNextStepHandler?: Function;
+    onNextStepHandler?: React.MouseEventHandler<HTMLButtonElement>;
   }
 >) => {
   const setStep = useSetAtom(stepAtom);

@@ -1,12 +1,13 @@
 "use client";
+import AddCircleTwoToneIcon from "@mui/icons-material/AddCircleTwoTone";
+import { useAtomValue } from "jotai";
 import LOGO from "public/assets/logo_sm.svg";
 import { useMemo } from "react";
 import { MyTripQueryData } from "../_types";
 import CreateTripModal from "./CreateTripModal";
-import TripBox from "./TripBox";
 import MyInfoModal from "./MyInfoModal";
-import { useAtomValue } from "jotai";
 import { myTripStore, myTripsAtom } from "./MyTripProvider";
+import TripBox from "./TripBox";
 const PageContent = () => {
   const myTrips = useAtomValue(myTripsAtom, { store: myTripStore });
   const nonePassedTrips = useMemo(
@@ -38,9 +39,9 @@ const PageContent = () => {
           ))}
 
           {nonePassedTrips.length === 0 && (
-            <div className="bg-grey-light-300 border border-grey-light-400 flex h-[160px] justify-center items-center rounded-2xl text-grey-300">
-              예정된 여행이 없군요! <br />
-              여행을 만들어 보세요!
+            <div className="bg-grey-light-300 border border-grey-light-400 flex flex-col h-[160px] justify-center items-center rounded-2xl text-grey-300 gap-2">
+              <div>여행을 만들어 보세요!</div>
+              <AddCircleTwoToneIcon />
             </div>
           )}
         </div>
@@ -50,8 +51,8 @@ const PageContent = () => {
             <TripBox key={trip.id} {...{ ...trip }} />
           ))}
           {passedTrips.length === 0 && (
-            <div className="bg-grey-light-300 border border-grey-light-400 flex h-[160px] justify-center items-center rounded-2xl text-grey-300">
-              아직 지난 여행이 없군요!
+            <div className="bg-grey-light-300 border border-grey-light-400 flex flex-col h-[160px] justify-center items-center rounded-2xl text-grey-300 gap-2">
+              <div>아직 지난 여행이 없군요!</div>
             </div>
           )}
         </div>

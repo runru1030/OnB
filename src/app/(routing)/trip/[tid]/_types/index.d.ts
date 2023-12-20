@@ -1,4 +1,4 @@
-import { Budget, Country, Currency, Expense, Income } from "@prisma/client";
+import { Budget, Country, Currency, Expense } from "@prisma/client";
 import { ExpenseQueryData, IncomeQueryData } from "../detail/_types";
 
 export interface BudgetQueryData extends Budget {
@@ -12,7 +12,7 @@ export interface BudgetQueryData extends Budget {
 }
 export interface TripQueryData {
   id: string;
-  title: String;
+  title: string;
   startedAt: Date;
   endedAt: Date;
   Country: Country;
