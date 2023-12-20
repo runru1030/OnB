@@ -49,6 +49,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-unused-imports": "^3.0.0",
     "jotai": "^2.6.0",
     "jotai-devtools": "^0.7.1"
   }
