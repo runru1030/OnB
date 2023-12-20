@@ -1,13 +1,28 @@
 "use client";
+import KAKAO from "@asets/kakao.svg";
+import LOGO from "@asets/logo_lg.svg";
+import NAVER from "@asets/naver.svg";
 import Button from "@components/Button";
-import { signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 const PageContent = () => {
   return (
-    <div>
-      <Button onClick={() => signIn("kakao")}>카카오 로그인</Button>
-      <Button onClick={() => signIn("naver")}>네이버 로그인</Button>
-      <Button onClick={() => signOut()}>카카오 로그아웃</Button>
+    <div className="flex flex-col w-full h-screen px-10 py-28">
+      <div className="flex-1 flex flex-col items-center pt-20 gap-10">
+        <LOGO />
+        <div className="flex flex-col gap-1 items-end">
+          <span className="font-light">on a budget :</span>
+          <span className="text-xs font-light">한정된 예산으로 알뜰하게</span>
+        </div>
+      </div>
+      <div className="flex justify-center gap-4">
+        <Button onClick={() => signIn("kakao")}>
+          <KAKAO />
+        </Button>
+        <Button onClick={() => signIn("naver")}>
+          <NAVER />
+        </Button>
+      </div>
     </div>
   );
 };

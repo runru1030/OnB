@@ -19,6 +19,8 @@ const handler = NextAuth({
   ],
   callbacks: {
     async signIn({ user }) {
+      console.log(user);
+      
       await getClient().mutate({
         mutation: CREATE_AUTH,
         variables: { ...user },
@@ -32,6 +34,7 @@ const handler = NextAuth({
           variables: { email: session.user.email },
         });
         session.user.id = data.user.id;
+        session.user.name = data.user.name;
       }
       return session;
     },

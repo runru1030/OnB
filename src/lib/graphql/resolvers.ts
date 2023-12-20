@@ -162,7 +162,7 @@ export const resolvers = {
         update: {},
         create: {
           email: args.email,
-          name: args.name,
+          name: args.name || "",
         },
       });
     },
