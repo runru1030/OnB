@@ -12,6 +12,7 @@ import { Country } from "@prisma/client";
 import clsx from "clsx";
 import { useAtom, useAtomValue } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -29,7 +30,9 @@ const CreateTripStepModal = () => {
 
   const tripData = useAtomValue(tripReqAtom);
   const resetTripData = useResetAtom(tripReqAtom);
-  const userId = "1";
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
   const [createTrip] = useMutation(CREATE_TRIP, {
     onCompleted: (res) => {
       router.refresh();
