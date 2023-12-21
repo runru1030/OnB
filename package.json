@@ -4,10 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate --schema=./src/lib/prisma/schema.prisma && next build",
+    "build": "prisma generate --schema=./src/app/lib/prisma/schema.prisma && next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "prisma generate"
+    "lint": "next lint"
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",
