@@ -4,7 +4,7 @@ import { PropsWithChildren } from "react";
 
 export const ApolloProviders = ({ children }: PropsWithChildren) => {
   const client = new ApolloClient({
-    uri: "http://localhost:3000/api/graphql",
+    uri: `${process.env.NEXT_SERVER_DOMAIN}/api/graphql`,
     cache: new InMemoryCache(),
     ssrMode: true,
   });
