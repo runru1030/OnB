@@ -8,9 +8,9 @@ import "react-date-range/dist/theme/default.css";
 import AuthProvider from "./_components/AuthProvider";
 import { use } from "react";
 import { Session, getServerSession } from "next-auth";
-import { GET } from "./api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import { GET } from "./api/auth/[...nextauth]/route";
 const pretendard = localFont({
   src: "../../public/font/PretendardVariable.woff2",
   display: "swap",

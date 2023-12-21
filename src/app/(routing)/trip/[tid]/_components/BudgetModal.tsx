@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 import Button from "@components/Button";
 import Modal from "@components/Modal";
-import { DELETE_BUDGET } from "@lib/graphql/mutations";
+import { DELETE_BUDGET } from "@app/lib/graphql/mutations";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";

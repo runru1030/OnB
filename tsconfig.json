@@ -23,8 +23,8 @@
     "paths": {
       "@app/*": ["./src/app/*"],
       "@components/*": ["./src/components/*"],
-      "@lib/*": ["./src/lib/*"],
-      "@api/*": ["./src/pages/api/*"],
+      "@lib/*": ["src/app/lib/*"],
+      "@api/*": ["./src/app/api/*"],
       "@asets/*": ["./public/assets/*"],
       "@styles/*": ["./src/styles/*"]
     }

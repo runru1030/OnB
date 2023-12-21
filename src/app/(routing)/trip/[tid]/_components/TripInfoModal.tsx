@@ -1,8 +1,8 @@
-"use client"
+"use client";
 import { useMutation } from "@apollo/client";
 import Button from "@components/Button";
 import Modal from "@components/Modal";
-import { DELETE_TRIP } from "@lib/graphql/mutations";
+import { DELETE_TRIP } from "@app/lib/graphql/mutations";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { atom, useAtom, useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";

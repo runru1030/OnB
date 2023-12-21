@@ -6,7 +6,7 @@ import TripInfoModal from "./_components/TripInfoModal";
 import TripProvider from "./_components/TripProvider";
 import { PropsWithChildren, use } from "react";
 import { getClient } from "@app/_components/ApolloClientRSC";
-import { GET_TRIP } from "@lib/graphql/queries";
+import { GET_TRIP } from "@app/lib/graphql/queries";
 import { TripQueryData } from "./_types";
 
 export default function TripLayout({

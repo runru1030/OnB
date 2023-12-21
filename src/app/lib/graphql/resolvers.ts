@@ -1,4 +1,4 @@
-import { Context } from "@api/graphql";
+import { Context } from "@app/api/graphql/route";
 import { Budget, Expense, Income, Trip, User } from "@prisma/client";
 
 export const resolvers = {
