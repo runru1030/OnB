@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { dateformatter } from "@app/utils";
 import Button from "@components/Button";
-import { DELETE_EXPENSE, DELETE_INCOME } from "@lib/graphql/mutations";
+import { DELETE_EXPENSE, DELETE_INCOME } from "@app/lib/graphql/mutations";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";

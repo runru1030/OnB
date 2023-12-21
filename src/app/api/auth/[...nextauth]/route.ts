@@ -1,6 +1,6 @@
 import { getClient } from "@app/_components/ApolloClientRSC";
-import { CREATE_AUTH } from "@lib/graphql/mutations";
-import { GET_USER } from "@lib/graphql/queries";
+import { CREATE_AUTH } from "@app/lib/graphql/mutations";
+import { GET_USER } from "@app/lib/graphql/queries";
 import NextAuth from "next-auth";
 import KakaoProvider from "next-auth/providers/kakao";
 import NaverProvider from "next-auth/providers/naver";

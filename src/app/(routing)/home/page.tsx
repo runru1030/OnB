@@ -1,5 +1,5 @@
 import { getClient } from "@app/_components/ApolloClientRSC";
-import { GET_TRIPS } from "@lib/graphql/queries";
+import { GET_TRIPS } from "@app/lib/graphql/queries";
 import { use } from "react";
 import MyTripProvider from "./_components/MyTripProvider";
 import PageContent from "./_components/PageContent";

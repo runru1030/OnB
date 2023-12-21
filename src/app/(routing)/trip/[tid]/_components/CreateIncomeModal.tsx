@@ -4,7 +4,7 @@ import { getExchangeData } from "@app/utils/currency";
 import Button from "@components/Button";
 import { Input } from "@components/Input";
 import StepModal from "@components/Modal/StepModal";
-import { CREATE_INCOME } from "@lib/graphql/mutations";
+import { CREATE_INCOME } from "@app/lib/graphql/mutations";
 import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import clsx from "clsx";
@@ -148,7 +148,7 @@ const IcomeInputContent = () => {
     deal_bas_r: 0,
   });
 
-useEffect(() => {
+  useEffect(() => {
     if (!currencyUnit) return;
     getExchangeData(currencyUnit).then((data) => {
       if (data) {
