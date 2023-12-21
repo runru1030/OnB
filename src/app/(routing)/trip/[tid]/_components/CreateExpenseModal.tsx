@@ -4,7 +4,7 @@ import { dateformatter } from "@app/utils";
 import Button from "@components/Button";
 import { Input } from "@components/Input";
 import StepModal from "@components/Modal/StepModal";
-import { CREATE_EXPENSE } from "@lib/graphql/mutations";
+import { CREATE_EXPENSE } from "@app/lib/graphql/mutations";
 import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import clsx from "clsx";
