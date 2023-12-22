@@ -42,8 +42,6 @@ export const GET_TRIP = gql`
       title
       startedAt
       endedAt
-      totalBudgetIncomesKRW
-      totalBudgetExpenseKRW
       Country {
         id
         name
@@ -54,10 +52,6 @@ export const GET_TRIP = gql`
         id
         type
         title
-        totalIncomes
-        totalExpenses
-        totalIncomesKRW
-        totalExpensesKRW
         Currency {
           id
           name
@@ -86,12 +80,6 @@ export const GET_TRIP = gql`
           }
         }
       }
-      expenses {
-        id
-        category
-        amount
-        budgetId
-      }
     }
   }
 `;
@@ -118,8 +106,8 @@ export const GET_CURRENCIES = gql`
 `;
 
 export const GET_EXPENSES = gql`
-  query Expenses {
-    expenses {
+  query Expenses($tid: ID!) {
+    expenses(tid: $tid) {
       id
       category
       amount
@@ -134,8 +122,8 @@ export const GET_EXPENSES = gql`
 `;
 
 export const GET_INCOMES = gql`
-  query Incomes {
-    incomes {
+  query Incomes($tid: ID!) {
+    incomes(tid: $tid) {
       id
       amount
       exchangeRate
@@ -154,6 +142,89 @@ export const GET_USER = gql`
       id
       email
       name
+    }
+  }
+`;
+
+export const GET_BUDGET = gql`
+  query Budget($id: ID!) {
+    budget(id: $id) {
+      id
+      type
+      title
+      Currency {
+        id
+        name
+        amountUnit
+      }
+      expenses {
+        id
+        category
+        amount
+        createdAt
+        budgetId
+        Budget {
+          title
+          currencyId
+        }
+      }
+      incomes {
+        id
+        amount
+        exchangeRate
+        createdAt
+        budgetId
+        Budget {
+          title
+          currencyId
+        }
+      }
+    }
+  }
+`;
+
+export const GET_BUDGETS = gql`
+  query Budgets($tid: ID!) {
+    budgets(tid: $tid) {
+      id
+      type
+      title
+      Currency {
+        id
+        name
+        amountUnit
+      }
+      expenses {
+        id
+        category
+        amount
+        createdAt
+        budgetId
+        Budget {
+          title
+          currencyId
+        }
+      }
+      incomes {
+        id
+        amount
+        exchangeRate
+        createdAt
+        budgetId
+        Budget {
+          title
+          currencyId
+        }
+      }
+    }
+  }
+`;
+
+export const GET_BUDGET_TOTAL = gql`
+  query BudgetTotal($tid: ID!) {
+    budgetTotal(tid: $tid) {
+      totalBudgetIncomesKRW
+      totalBudgetExpenseKRW
     }
   }
 `;
