@@ -4,10 +4,10 @@ import { use } from "react";
 import IncomeExpenseList from "../../_components/IncomeExpenseList";
 const PageContent = ({ tid }: { tid: string }) => {
   const { data: expensesQuery } = use(
-    getClient().query({ query: GET_EXPENSES, variables: { tripId: tid } })
+    getClient().query({ query: GET_EXPENSES, variables: { tid } })
   );
   const { data: incomesQuery } = use(
-    getClient().query({ query: GET_INCOMES, variables: { tripId: tid } })
+    getClient().query({ query: GET_INCOMES, variables: { tid } })
   );
 
   return (

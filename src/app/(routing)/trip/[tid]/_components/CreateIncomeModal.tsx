@@ -10,7 +10,7 @@ import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import clsx from "clsx";
 import { useAtom, useAtomValue } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import BudgetBox from "./BudgetBox";
 import { tripAtom, tripStore } from "./TripProvider";
@@ -35,7 +35,7 @@ const CreateIncomeModal = () => {
   const resetBudgetData = useResetAtom(budgetAtom);
   const resetIncomeData = useResetAtom(incomeReqAtom);
 
-  const { id } = useAtomValue(tripAtom, { store: tripStore });
+  const { tid } = useParams();
   const [createIncome] = useMutation(CREATE_INCOME, {
     onCompleted: () => {
       router.refresh();
@@ -53,7 +53,7 @@ const CreateIncomeModal = () => {
           amount: parseInt(incomeData.amount),
           exchangeRate: parseFloat(incomeData.exchangeRate),
           budgetId: budgetData.id,
-          tripId: id,
+          tripId: tid,
         },
       });
     } catch (error: unknown) {

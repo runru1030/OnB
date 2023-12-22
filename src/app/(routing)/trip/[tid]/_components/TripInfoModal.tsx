@@ -20,6 +20,7 @@ const TripInfoModal = () => {
   const [deleteBudget] = useMutation(DELETE_TRIP, {
     variables: { id: trip?.id },
     onCompleted: () => {
+      setOpenAtom(false);
       router.push("/");
       router.refresh();
     },

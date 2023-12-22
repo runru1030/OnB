@@ -1,37 +1,43 @@
-import { useMutation } from "@apollo/client";
+"use client";
+import { useMutation, useQuery } from "@apollo/client";
+import { DELETE_BUDGET } from "@app/lib/graphql/mutations";
+import { GET_BUDGET } from "@app/lib/graphql/queries";
 import Button from "@components/Button";
 import Modal from "@components/Modal";
-import { DELETE_BUDGET } from "@app/lib/graphql/mutations";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import clsx from "clsx";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { PropsWithChildren, useMemo } from "react";
-import IncomeExpenseList from "./IncomeExpenseList";
-import { tripAtom, tripStore } from "./TripProvider";
+import { BudgetQueryData } from "../../_types";
+import { getBudgetsSum } from "@app/utils";
 
+const IncomeExpenseList = dynamic(() => import("../IncomeExpenseList"));
 const modalOpenAtom = atom<boolean>(false);
-const budgetIdAtom = atom<string>("");
+const budgetAtom = atom<BudgetQueryData | undefined>(undefined);
 
-const BudgetModal = () => {
-  const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);
-  const { budgets } = useAtomValue(tripAtom, { store: tripStore });
-  const budgetId = useAtomValue(budgetIdAtom);
-
+const InternalBudgetModal = () => {
   const router = useRouter();
-  const budget = useMemo(
-    () => budgets.find((b) => b.id === budgetId),
-    [budgets, budgetId]
-  );
+
+  const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);
+  const budgetData = useAtomValue(budgetAtom);
+  const { data, loading } = useQuery(GET_BUDGET, {
+    variables: { id: budgetData?.id },
+  });
+  const budget = loading ? budgetData : data?.budget;
+  const { totalIncomes, totalIncomesKRW, totalExpenses, totalExpensesKRW } =
+    useMemo(() => getBudgetsSum(budget as BudgetQueryData), [budget]);
 
   const [deleteBudget] = useMutation(DELETE_BUDGET, {
-    variables: { id: budgetId },
+    variables: { id: budgetData?.id },
     onCompleted: () => {
       setOpenAtom(false);
       router.refresh();
     },
+    refetchQueries: [GET_BUDGET],
   });
   return (
     <Modal open={openAtom} onOpenChange={setOpenAtom}>
@@ -50,31 +56,30 @@ const BudgetModal = () => {
               <div className="text-3xl flex gap-1 justify-end items-end pb-2">
                 <span className=" font-medium">
                   {(
-                    (budget?.totalIncomes || 0) - (budget?.totalExpenses || 0)
+                    (totalIncomes || 0) - (totalExpenses || 0)
                   ).toLocaleString()}
                 </span>
                 <span>/</span>
                 <span className="text-grey-400">
-                  {budget?.totalIncomes.toLocaleString() ?? 0}
+                  {totalIncomes?.toLocaleString() ?? 0}
                 </span>
                 <span className="text-base">{budget?.Currency.id}</span>
               </div>
               <div className="flex flex-col items-end gap-1">
                 <span className="font-medium">
-                  총 예산 {budget?.totalIncomes.toLocaleString()}{" "}
-                  {budget?.Currency.id}
+                  총 예산 {totalIncomes?.toLocaleString()} {budget?.Currency.id}
                 </span>
                 <span className="text-sm">
-                  = {budget?.totalIncomesKRW.toLocaleString()} 원
+                  = {totalIncomesKRW?.toLocaleString()} 원
                 </span>
               </div>
               <div className="flex flex-col items-end gap-1">
                 <span className="font-medium">
-                  총 지출 {budget?.totalExpenses.toLocaleString()}{" "}
+                  총 지출 {totalExpenses?.toLocaleString()}{" "}
                   {budget?.Currency.id}
                 </span>
                 <span className="text-sm">
-                  = {budget?.totalExpensesKRW.toLocaleString()} 원
+                  = {totalExpensesKRW?.toLocaleString()} 원
                 </span>
               </div>
               <div className="flex justify-between items-center text-grey-300">
@@ -119,7 +124,7 @@ const BudgetModal = () => {
           <Button
             className="btn-red m-4 sticky bottom-4"
             onClick={() => {
-              deleteBudget({ variables: { id: budgetId } });
+              deleteBudget({ variables: { id: budget.id } });
             }}
           >
             예산 삭제하기
@@ -129,20 +134,20 @@ const BudgetModal = () => {
     </Modal>
   );
 };
-const BudgetModalTrigger = ({
+export const Trigger = ({
   children,
-  budgetId,
+  budget,
   ...props
 }: PropsWithChildren<
-  React.ComponentProps<typeof Button> & { budgetId: string }
+  React.ComponentProps<typeof Button> & { budget: BudgetQueryData }
 >) => {
   const setOpenAtom = useSetAtom(modalOpenAtom);
-  const setBudgetId = useSetAtom(budgetIdAtom);
+  const setBudget = useSetAtom(budgetAtom);
   return (
     <Button
       onClick={(e) => {
+        setBudget(budget);
         setOpenAtom(true);
-        setBudgetId(budgetId);
         props?.onClick?.(e);
       }}
       {...props}
@@ -151,5 +156,4 @@ const BudgetModalTrigger = ({
     </Button>
   );
 };
-BudgetModal.Trigger = BudgetModalTrigger;
-export default BudgetModal;
+export default InternalBudgetModal;
