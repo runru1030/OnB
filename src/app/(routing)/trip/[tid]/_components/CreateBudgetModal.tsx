@@ -11,8 +11,8 @@ import { Currency } from "@prisma/client";
 import clsx from "clsx";
 import { useAtom, useAtomValue } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
-import { useRouter } from "next/navigation";
-import { ChangeEvent, useMemo } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { ChangeEvent, Suspense, useMemo } from "react";
 import { tripAtom, tripStore } from "./TripProvider";
 import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
@@ -29,10 +29,11 @@ const budgetReqAtom = atomWithReset<budgetReqAtom>({
 
 const CreateBudgetModal = () => {
   const router = useRouter();
+  const { tid } = useParams();
 
   const budgetData = useAtomValue(budgetReqAtom);
   const resetTripData = useResetAtom(budgetReqAtom);
-  const { id } = useAtomValue(tripAtom, { store: tripStore });
+  
   const [createBudget] = useMutation(CREATE_BUDGET, {
     onCompleted: () => {
       router.refresh();
@@ -49,7 +50,7 @@ const CreateBudgetModal = () => {
       createBudget({
         variables: {
           ...budgetData,
-          tripId: id,
+          tripId: tid,
         },
       });
     } catch (error: unknown) {
@@ -85,7 +86,11 @@ const CreateBudgetModal = () => {
               ),
             },
             {
-              content: <SelectCurrencyContent />,
+              content: (
+                <Suspense fallback={"로딩"}>
+                  <SelectCurrencyContent />
+                </Suspense>
+              ),
               nextButton: (
                 <StepModal.StepNext onNextStepHandler={onCreateBudget}>
                   예산 만들기

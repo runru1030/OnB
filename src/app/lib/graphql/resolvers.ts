@@ -8,7 +8,7 @@ export const resolvers = {
       args: { id: string },
       context: Context
     ) => {
-      const trip = await context.prisma.trip.findUnique({
+      return await context.prisma.trip.findUnique({
         where: {
           id: args.id,
         },
@@ -17,58 +17,19 @@ export const resolvers = {
           budgets: {
             include: {
               expenses: {
-                include: { Budget: true },
+                include: { Budget: { include: { Currency: true } } },
                 orderBy: { createdAt: "desc" },
               },
               incomes: {
-                include: { Budget: true },
+                include: { Budget: { include: { Currency: true } } },
                 orderBy: { createdAt: "desc" },
               },
               Currency: true,
             },
             orderBy: { createdAt: "desc" },
           },
-          expenses: true,
         },
       });
-      const aggregationBudget = trip?.budgets.map((budget) => {
-        const totalIncomes = budget.incomes.reduce(
-          (acc, curr) => acc + curr.amount,
-          0
-        );
-        const totalIncomesKRW = budget.incomes.reduce(
-          (acc, curr) => acc + Math.ceil(curr.amount * curr.exchangeRate),
-          0
-        );
-        const totalExpenses = budget.expenses.reduce(
-          (acc, curr) => acc + curr.amount,
-          0
-        );
-        const avgExchangeRate = isNaN(totalIncomesKRW / totalIncomes)
-          ? 0
-          : totalIncomesKRW / totalIncomes;
-        return {
-          ...budget,
-          totalIncomes,
-          totalIncomesKRW,
-          totalExpenses,
-          totalExpensesKRW: totalExpenses * avgExchangeRate,
-        };
-      });
-      const totalBudgetIncomesKRW = aggregationBudget?.reduce(
-        (acc, curr) => acc + curr.totalIncomesKRW,
-        0
-      );
-      const totalBudgetExpenseKRW = aggregationBudget?.reduce(
-        (acc, curr) => acc + curr.totalExpensesKRW,
-        0
-      );
-      return {
-        ...trip,
-        budgets: aggregationBudget,
-        totalBudgetIncomesKRW,
-        totalBudgetExpenseKRW,
-      };
     },
     trips: async (
       _parent: undefined,
@@ -78,6 +39,23 @@ export const resolvers = {
       return await context.prisma.trip.findMany({
         where: {
           userId: args.userId,
+          endedAt: { gte: new Date() },
+        },
+        include: {
+          Country: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
+    },
+    passedTrips: async (
+      _parent: undefined,
+      args: { userId: string },
+      context: Context
+    ) => {
+      return await context.prisma.trip.findMany({
+        where: {
+          userId: args.userId,
+          endedAt: { lte: new Date() },
         },
         include: {
           Country: true,
@@ -103,22 +81,22 @@ export const resolvers = {
     },
     expenses: async (
       _parent: undefined,
-      args: { tripId: string },
+      args: { tid: string },
       context: Context
     ) => {
       return await context.prisma.expense.findMany({
-        where: { tripId: args.tripId },
+        where: { tripId: args.tid },
         include: { Budget: { include: { Currency: true } } },
         orderBy: { createdAt: "desc" },
       });
     },
     incomes: async (
       _parent: undefined,
-      args: { tripId: string },
+      args: { tid: string },
       context: Context
     ) => {
       return await context.prisma.income.findMany({
-        where: { tripId: args.tripId },
+        where: { tripId: args.tid },
         include: { Budget: { include: { Currency: true } } },
         orderBy: { createdAt: "desc" },
       });
@@ -131,6 +109,87 @@ export const resolvers = {
       return await context.prisma.user.findUnique({
         where: { email: args.email },
       });
+    },
+    budget: async (
+      _parent: undefined,
+      args: { id: string },
+      context: Context
+    ) => {
+      return await context.prisma.budget.findUnique({
+        where: { id: args.id },
+        include: {
+          expenses: {
+            include: { Budget: { include: { Currency: true } } },
+            orderBy: { createdAt: "desc" },
+          },
+          incomes: {
+            include: { Budget: { include: { Currency: true } } },
+            orderBy: { createdAt: "desc" },
+          },
+          Currency: true,
+        },
+      });
+    },
+    budgets: async (
+      _parent: undefined,
+      args: { tid: string },
+      context: Context
+    ) => {
+      return await context.prisma.budget.findMany({
+        where: { tripId: args.tid },
+        include: {
+          expenses: {
+            include: { Budget: { include: { Currency: true } } },
+            orderBy: { createdAt: "desc" },
+          },
+          incomes: {
+            include: { Budget: { include: { Currency: true } } },
+            orderBy: { createdAt: "desc" },
+          },
+          Currency: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
+    },
+    budgetTotal: async (
+      _parent: undefined,
+      args: { tid: string },
+      context: Context
+    ) => {
+      const [incomes, expenses] = await Promise.all([
+        context.prisma.income.findMany({
+          where: {
+            tripId: args.tid,
+          },
+          include: { Budget: { include: { Currency: true } } },
+        }),
+        context.prisma.expense.findMany({
+          where: {
+            tripId: args.tid,
+          },
+          include: { Budget: { include: { Currency: true } } },
+        }),
+      ]);
+
+      const avgExchangeRate =
+        incomes?.reduce((acc, curr) => acc + curr.exchangeRate, 0) /
+        incomes.length;
+      const totalBudgetIncomesKRW = incomes?.reduce(
+        (acc, curr) =>
+          acc +
+          Math.ceil(
+            (curr.amount * curr.exchangeRate) / curr.Budget.Currency.amountUnit
+          ),
+        0
+      );
+      const totalBudgetExpenseKRW = Math.ceil(
+        expenses?.reduce((acc, curr) => acc + curr.amount * avgExchangeRate, 0)
+      );
+
+      return {
+        totalBudgetIncomesKRW,
+        totalBudgetExpenseKRW,
+      };
     },
   },
   Mutation: {
@@ -176,6 +235,7 @@ export const resolvers = {
         data: {
           amount: args.amount,
           exchangeRate: args.exchangeRate,
+          createdAt: args.createdAt,
           budgetId: args.budgetId,
           tripId: args.tripId,
         },

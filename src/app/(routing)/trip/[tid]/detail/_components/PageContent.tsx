@@ -1,18 +1,23 @@
-"use client";
-import { useAtomValue } from "jotai";
+import { getClient } from "@app/_components/ApolloClientRSC";
+import { GET_EXPENSES, GET_INCOMES } from "@app/lib/graphql/queries";
+import { use } from "react";
 import IncomeExpenseList from "../../_components/IncomeExpenseList";
-import {
-  expensesAtom,
-  incomesAtom,
-  tripExpenseStore,
-} from "./TripDetailProvider";
-const PageContent = () => {
-  const expenses = useAtomValue(expensesAtom, { store: tripExpenseStore });
-  const incomes = useAtomValue(incomesAtom, { store: tripExpenseStore });
+const PageContent = ({ tid }: { tid: string }) => {
+  const { data: expensesQuery } = use(
+    getClient().query({ query: GET_EXPENSES, variables: { tid } })
+  );
+  const { data: incomesQuery } = use(
+    getClient().query({ query: GET_INCOMES, variables: { tid } })
+  );
 
   return (
     <div className="main-content flex flex-col px-0 gap-2">
-      <IncomeExpenseList dataList={[...expenses, ...incomes]} />
+      <IncomeExpenseList
+        dataList={[
+          ...(expensesQuery?.expenses || []),
+          ...(incomesQuery?.incomes || []),
+        ]}
+      />
     </div>
   );
 };
