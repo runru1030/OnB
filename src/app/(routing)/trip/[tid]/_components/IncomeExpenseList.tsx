@@ -1,3 +1,4 @@
+"use client";
 import { useMutation } from "@apollo/client";
 import { dateformatter } from "@app/utils";
 import Button from "@components/Button";

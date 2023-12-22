@@ -1,7 +1,9 @@
 "use client";
 
+import { useQuery } from "@apollo/client";
+import { GET_TRIP } from "@app/lib/graphql/queries";
 import { Provider, atom, createStore, useSetAtom } from "jotai";
-import { useHydrateAtoms } from "jotai/utils";
+import { useParams } from "next/navigation";
 import { PropsWithChildren, useEffect } from "react";
 import { TripQueryData } from "../_types";
 
@@ -12,25 +14,21 @@ export const tripAtom = atom<TripQueryData>({
   endedAt: new Date(),
   Country: { id: "", name: "", name_en: "", flag_img: "" },
   budgets: [],
-  expenses: [],
-  totalBudgetIncomesKRW: 0,
-  totalBudgetExpenseKRW: 0,
 });
 tripAtom.debugLabel = "tripAtom";
 
 export const tripStore = createStore();
 
-export default function TripProvider({
-  children,
-  trip,
-}: PropsWithChildren<{ trip: TripQueryData }>) {
-  useHydrateAtoms([[tripAtom, trip]], {
-    store: tripStore,
-  });
+export default function TripProvider({ children }: PropsWithChildren) {
+  const { tid } = useParams();
+  const { data } = useQuery(GET_TRIP, { variables: { id: tid } });
   const setTripData = useSetAtom(tripAtom, { store: tripStore });
 
   useEffect(() => {
-    setTripData(trip);
-  }, [trip]);
+    if (data) {
+      setTripData(data.trip);
+    }
+  }, [data]);
+
   return <Provider store={tripStore}>{children}</Provider>;
 }

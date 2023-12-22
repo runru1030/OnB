@@ -1,6 +1,6 @@
 "use client";
 import { useMutation } from "@apollo/client";
-import { dateformatter } from "@app/utils";
+import { dateformatter, getBudgetsSum } from "@app/utils";
 import Button from "@components/Button";
 import { Input } from "@components/Input";
 import StepModal from "@components/Modal/StepModal";
@@ -10,21 +10,22 @@ import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import clsx from "clsx";
 import { useAtom, useAtomValue } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
 import { Calendar } from "react-date-range";
 import { EXPNSE_CATEGORY } from "../_constants";
 import BudgetBox from "./BudgetBox";
 import CategoryTag from "./CategoryTag";
 import { tripAtom, tripStore } from "./TripProvider";
+import { ExpenseQueryData, IncomeQueryData } from "../detail/_types";
+import { BudgetQueryData } from "../_types";
 const budgetAtom = atomWithReset({
   id: "",
   Currency: { id: "", name: "", countryId: "", amountUnit: 1 },
   title: "",
   type: "CASH",
-  totalExpenses: 0,
-  totalIncomes: 0,
-  totalIncomesKRW: 0,
+  incomes: [] as IncomeQueryData[],
+  expenses: [] as ExpenseQueryData[],
 });
 const expenseReqAtom = atomWithReset({
   amount: "0",
@@ -34,13 +35,13 @@ const expenseReqAtom = atomWithReset({
 
 const CreateExpenseModal = () => {
   const router = useRouter();
+  const { tid } = useParams();
 
   const budgetData = useAtomValue(budgetAtom);
   const expenseData = useAtomValue(expenseReqAtom);
   const resetBudgetData = useResetAtom(budgetAtom);
   const resetExpenseData = useResetAtom(expenseReqAtom);
 
-  const { id } = useAtomValue(tripAtom, { store: tripStore });
   const [createExpense] = useMutation(CREATE_EXPENSE, {
     onCompleted: () => {
       router.refresh();
@@ -49,7 +50,7 @@ const CreateExpenseModal = () => {
 
   const onCreateExpense = () => {
     try {
-      if (parseInt(expenseData.amount) === 0)
+      if (parseFloat(expenseData.amount) === 0)
         throw new Error("금액을 입력해주세요!");
       if (expenseData.category === "")
         throw new Error("카테고리를 선택해주세요!");
@@ -57,9 +58,9 @@ const CreateExpenseModal = () => {
       createExpense({
         variables: {
           ...expenseData,
-          amount: parseInt(expenseData.amount),
+          amount: parseFloat(expenseData.amount),
           budgetId: budgetData.id,
-          tripId: id,
+          tripId: tid,
         },
       });
     } catch (error: unknown) {
@@ -119,24 +120,22 @@ const SelectBudgetContent = () => {
 
   return (
     <div className="flex-1 overflow-auto p-4">
-      <div className="flex flex-col gap-8">
-        <div className="flex flex-col">
-          {budgets.map((budget) => (
-            <div
-              onClick={() => {
-                setBudgetData(budget);
-              }}
-              className={clsx(
-                budget.id === budgetData?.id &&
-                  "bg-grey-light-400 [&>div>h2]:text-blue",
-                "rounded-lg duration-300 p-2"
-              )}
-              key={budget.id}
-            >
-              <BudgetBox budget={budget} />
-            </div>
-          ))}
-        </div>
+      <div className="flex flex-col gap-2">
+        {budgets.map((budget) => (
+          <div
+            onClick={() => {
+              setBudgetData(budget);
+            }}
+            className={clsx(
+              budget.id === budgetData?.id &&
+                "bg-grey-light-400 [&>div>h2]:text-blue",
+              "rounded-lg duration-300 p-2"
+            )}
+            key={budget.id}
+          >
+            <BudgetBox budget={budget} />
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -146,6 +145,10 @@ const ExpenseInputContent = () => {
   const budgetData = useAtomValue(budgetAtom);
 
   const [openCalendar, setOpenCalendar] = useState(false);
+  const { totalIncomes, totalExpenses } = useMemo(
+    () => getBudgetsSum(budgetData as BudgetQueryData),
+    [budgetData]
+  );
   return (
     <div className="flex-1 overflow-auto p-4">
       <div className="flex flex-col gap-4">
@@ -174,9 +177,9 @@ const ExpenseInputContent = () => {
               }}
               autoFocus
               placeholder={`0`}
-              className="text-2xl font-medium outline-none focus:border-b-2 border-red rounded-none w-full px-0 pr-8 text-right"
+              className="text-2xl font-medium outline-none focus:border-b-2 border-red rounded-none w-full px-0 pr-10 text-right"
               onKeyDown={(e) => {
-                if (e.key === "." || e.key === "e") e.preventDefault();
+                if (e.key === "e") e.preventDefault();
               }}
             />
             <span className="absolute right-0 top-1/2 -translate-y-1/2">
@@ -186,13 +189,13 @@ const ExpenseInputContent = () => {
           <div className="text-xl flex gap-1 justify-end py-2 items-end">
             <span className="text-red-300">
               {(
-                (budgetData?.totalIncomes || 0) -
-                (budgetData?.totalExpenses + parseInt(expenseData.amount) || 0)
+                (totalIncomes || 0) -
+                (totalExpenses + parseInt(expenseData.amount) || 0)
               ).toLocaleString()}
             </span>
             <span className="text-red-300 text-base">/</span>
             <span className="text-grey-300 text-base">
-              {budgetData?.totalIncomes.toLocaleString() ?? 0}
+              {totalIncomes.toLocaleString() ?? 0}
             </span>
             <span className="text-grey-300 text-base">
               {budgetData.Currency.id}

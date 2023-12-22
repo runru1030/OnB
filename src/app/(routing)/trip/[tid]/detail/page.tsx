@@ -1,24 +1,18 @@
-import { getClient } from "@app/_components/ApolloClientRSC";
-import { GET_EXPENSES, GET_INCOMES } from "@app/lib/graphql/queries";
-import { use } from "react";
+import { Suspense } from "react";
 import PageContent from "./_components/PageContent";
-import TripDetailProvider from "./_components/TripDetailProvider";
+import LoadingDots from "@components/LoadingDots";
 
-const Page = ({ params: { tid } }: { params: { tid: string } }) => {
-  const { data: expensesQuery } = use(
-    getClient().query({ query: GET_EXPENSES, variables: { tripId: tid } })
-  );
-  const { data: incomesQuery } = use(
-    getClient().query({ query: GET_INCOMES, variables: { tripId: tid } })
-  );
-
+const Page = ({ params }: { params: { tid: string } }) => {
   return (
-    <TripDetailProvider
-      expenses={expensesQuery?.expenses}
-      incomes={incomesQuery?.incomes}
+    <Suspense
+      fallback={
+        <div className="main-content items-center justify-center">
+          <LoadingDots />
+        </div>
+      }
     >
-      <PageContent />
-    </TripDetailProvider>
+      <PageContent {...params} />
+    </Suspense>
   );
 };
 

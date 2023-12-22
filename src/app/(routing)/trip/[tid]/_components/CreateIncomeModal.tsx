@@ -10,10 +10,12 @@ import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import clsx from "clsx";
 import { useAtom, useAtomValue } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import BudgetBox from "./BudgetBox";
 import { tripAtom, tripStore } from "./TripProvider";
+import { Calendar } from "react-date-range";
+import { dateformatter } from "@app/utils";
 
 const budgetAtom = atomWithReset({
   id: "",
@@ -25,6 +27,7 @@ const budgetAtom = atomWithReset({
 const incomeReqAtom = atomWithReset({
   amount: "0",
   exchangeRate: "0",
+  createdAt: new Date(),
 });
 
 const CreateIncomeModal = () => {
@@ -35,7 +38,7 @@ const CreateIncomeModal = () => {
   const resetBudgetData = useResetAtom(budgetAtom);
   const resetIncomeData = useResetAtom(incomeReqAtom);
 
-  const { id } = useAtomValue(tripAtom, { store: tripStore });
+  const { tid } = useParams();
   const [createIncome] = useMutation(CREATE_INCOME, {
     onCompleted: () => {
       router.refresh();
@@ -52,8 +55,9 @@ const CreateIncomeModal = () => {
         variables: {
           amount: parseInt(incomeData.amount),
           exchangeRate: parseFloat(incomeData.exchangeRate),
+          createdAt: incomeData.createdAt,
           budgetId: budgetData.id,
-          tripId: id,
+          tripId: tid,
         },
       });
     } catch (error: unknown) {
@@ -113,30 +117,29 @@ const SelectBudgetContent = () => {
 
   return (
     <div className="flex-1 overflow-auto p-4">
-      <div className="flex flex-col gap-8">
-        <div className="flex flex-col">
-          {budgets.map((budget) => (
-            <div
-              onClick={() => {
-                setBudgetData(budget);
-              }}
-              className={clsx(
-                budget.id === budgetData?.id &&
-                  "bg-grey-light-400 [&>div>h2]:text-blue",
-                "rounded-lg duration-300 p-2"
-              )}
-              key={budget.id}
-            >
-              <BudgetBox budget={budget} />
-            </div>
-          ))}
-        </div>
+      <div className="flex flex-col gap-2">
+        {budgets.map((budget) => (
+          <div
+            onClick={() => {
+              setBudgetData(budget);
+            }}
+            className={clsx(
+              budget.id === budgetData?.id &&
+                "bg-grey-light-400 [&>div>h2]:text-blue",
+              "rounded-lg duration-300 p-2"
+            )}
+            key={budget.id}
+          >
+            <BudgetBox budget={budget} />
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
 const IcomeInputContent = () => {
+  const [openCalendar, setOpenCalendar] = useState(false);
   const [incomeData, setIcomeData] = useAtom(incomeReqAtom);
   const budgetData = useAtomValue(budgetAtom);
   const {
@@ -176,56 +179,86 @@ const IcomeInputContent = () => {
             }
           </span>
         </h2>
-        <div className="flex flex-col gap-4">
-          <div className="relative h-10">
-            <Input
-              type="number"
-              value={incomeData.amount}
-              onChange={(e) => {
-                setIcomeData((p) => ({
-                  ...p,
-                  amount: e.target.value.replace(/(^0+)/, ""),
-                }));
-              }}
-              autoFocus
-              placeholder={`0`}
-              className="text-xl font-medium outline-none focus:border-b-2 border-grey-400 rounded-none w-full px-0 pr-10 text-right"
-              onKeyDown={(e) => {
-                if (e.key === "." || e.key === "e") e.preventDefault();
-              }}
-            />
-            <span className="absolute right-0 top-1/2 -translate-y-1/2">
-              {currencyUnit || "JPY"}
-            </span>
-          </div>
-          <span className="flex items-center justify-end gap-2">
-            {Math.ceil(
-              ((parseInt(incomeData.amount) || 0) *
-                (parseFloat(incomeData.exchangeRate) || 0)) /
-                amountUnit
-            ).toLocaleString()}{" "}
-            <span className="text-sm">KRW</span>
-          </span>
-          <div className="flex items-center gap-2 text-grey-400">
-            <span className="flex-1 text-right">{`${amountUnit} ${currencyUnit}`}</span>
-            <span className="text-lg">=</span>
-            <div className="relative">
+        <div className="flex flex-col">
+          <div className="flex flex-col gap-4 flex-1">
+            <div className="relative h-10">
               <Input
                 type="number"
-                value={incomeData.exchangeRate}
+                value={incomeData.amount}
                 onChange={(e) => {
                   setIcomeData((p) => ({
                     ...p,
-                    exchangeRate: e.target.value.replace(/(^0+)/, ""),
+                    amount: e.target.value.replace(/(^0+)/, ""),
                   }));
                 }}
                 autoFocus
-                placeholder={`${exchageData.deal_bas_r}`}
-                className="outline-none focus:border-b-2 border-grey-400 rounded-none px-0 pr-10 text-right w-[120px]"
+                placeholder={`0`}
+                className="text-2xl font-medium outline-none focus:border-b-2 border-grey-400 rounded-none w-full px-0 pr-10 text-right"
+                onKeyDown={(e) => {
+                  if (e.key === "e") e.preventDefault();
+                }}
               />
               <span className="absolute right-0 top-1/2 -translate-y-1/2">
-                KRW
+                {currencyUnit}
               </span>
+            </div>
+            <span className="flex items-center justify-end gap-2">
+              {Math.ceil(
+                ((parseInt(incomeData.amount) || 0) *
+                  (parseFloat(incomeData.exchangeRate) || 0)) /
+                  amountUnit
+              ).toLocaleString()}{" "}
+              <span className="text-sm">원</span>
+            </span>
+            <div className="flex items-center gap-2 text-grey-400">
+              <span className="flex-1 text-right">{`${amountUnit} ${currencyUnit}`}</span>
+              <span className="text-lg">=</span>
+              <div className="relative">
+                <Input
+                  type="number"
+                  value={currencyUnit === "KRW" ? 1 : incomeData.exchangeRate}
+                  onChange={(e) => {
+                    setIcomeData((p) => ({
+                      ...p,
+                      exchangeRate: e.target.value.replace(/(^0+)/, ""),
+                    }));
+                  }}
+                  autoFocus
+                  placeholder={`${exchageData.deal_bas_r}`}
+                  className="outline-none focus:border-b-2 border-grey-400 rounded-none px-0 pr-10 text-right w-[120px] disabled:bg-white"
+                  disabled={currencyUnit === "KRW"}
+                />
+                <span className="absolute right-0 top-1/2 -translate-y-1/2">
+                  KRW
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col mt-[8vh]">
+            <div className="flex justify-between text-grey-300">
+              <h2>일자</h2>
+              <span
+                className={clsx(
+                  "font-medium tracking-wide duration-300",
+                  openCalendar && "text-blue"
+                )}
+                onClick={() => setOpenCalendar((p) => !p)}
+              >
+                {dateformatter(new Date(incomeData.createdAt))}
+              </span>
+            </div>
+            <div
+              className={clsx(
+                openCalendar ? "h-[330px]" : "h-0",
+                "duration-300 overflow-hidden flex justify-center"
+              )}
+            >
+              <Calendar
+                date={incomeData.createdAt}
+                onChange={(date) =>
+                  setIcomeData((p) => ({ ...p, createdAt: date }))
+                }
+              />
             </div>
           </div>
         </div>
