@@ -78,6 +78,23 @@ export const resolvers = {
       return await context.prisma.trip.findMany({
         where: {
           userId: args.userId,
+          endedAt: { gte: new Date() },
+        },
+        include: {
+          Country: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
+    },
+    passedTrips: async (
+      _parent: undefined,
+      args: { userId: string },
+      context: Context
+    ) => {
+      return await context.prisma.trip.findMany({
+        where: {
+          userId: args.userId,
+          endedAt: { lte: new Date() },
         },
         include: {
           Country: true,

@@ -18,6 +18,23 @@ export const GET_TRIPS = gql`
   }
 `;
 
+export const GET_PASSED_TRIPS = gql`
+  query PassedTrips {
+    passedTrips {
+      id
+      title
+      startedAt
+      endedAt
+      countryId
+      Country {
+        id
+        name
+        name_en
+        flag_img
+      }
+    }
+  }
+`;
 export const GET_TRIP = gql`
   query Trip($id: ID!) {
     trip(id: $id) {

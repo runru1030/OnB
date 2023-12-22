@@ -68,6 +68,7 @@ export const typeDefs = `#graphql
   type Query {
 	  trip(id: ID!): TripJoined 
     trips:[Trip]
+    passedTrips:[Trip]
     countries:[Country]
     currencies:[Currency]
     expenses:[Expense]
