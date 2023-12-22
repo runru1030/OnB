@@ -23,7 +23,7 @@ export const typeDefs = `#graphql
   type Expense{
     id:ID!
     category:String
-    amount:Int
+    amount:Float
     createdAt:Date
     budgetId:ID!
     Budget:Budget
@@ -31,7 +31,7 @@ export const typeDefs = `#graphql
   type Income{
     id:ID!
     exchangeRate:Float
-    amount:Int
+    amount:Float
     createdAt:Date
     budgetId:ID!
     Budget:Budget
@@ -88,7 +88,7 @@ export const typeDefs = `#graphql
     createBudget(title:String, type:String, currencyId:String, tripId:ID):Budget
     deleteBudget(id:ID!):Budget
 
-    createIncome(amount:Int, exchangeRate:Float, budgetId:ID, tripId:ID):Income
+    createIncome(amount:Int, exchangeRate:Float, createdAt:Date, budgetId:ID, tripId:ID):Income
     deleteIncome(id:ID!):Income
 
     createExpense(category:String, amount:Int, createdAt:Date, budgetId:ID, tripId:ID):Expense

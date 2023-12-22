@@ -50,7 +50,7 @@ const CreateExpenseModal = () => {
 
   const onCreateExpense = () => {
     try {
-      if (parseInt(expenseData.amount) === 0)
+      if (parseFloat(expenseData.amount) === 0)
         throw new Error("금액을 입력해주세요!");
       if (expenseData.category === "")
         throw new Error("카테고리를 선택해주세요!");
@@ -58,7 +58,7 @@ const CreateExpenseModal = () => {
       createExpense({
         variables: {
           ...expenseData,
-          amount: parseInt(expenseData.amount),
+          amount: parseFloat(expenseData.amount),
           budgetId: budgetData.id,
           tripId: tid,
         },
@@ -120,24 +120,22 @@ const SelectBudgetContent = () => {
 
   return (
     <div className="flex-1 overflow-auto p-4">
-      <div className="flex flex-col gap-8">
-        <div className="flex flex-col">
-          {budgets.map((budget) => (
-            <div
-              onClick={() => {
-                setBudgetData(budget);
-              }}
-              className={clsx(
-                budget.id === budgetData?.id &&
-                  "bg-grey-light-400 [&>div>h2]:text-blue",
-                "rounded-lg duration-300 p-2"
-              )}
-              key={budget.id}
-            >
-              <BudgetBox budget={budget} />
-            </div>
-          ))}
-        </div>
+      <div className="flex flex-col gap-2">
+        {budgets.map((budget) => (
+          <div
+            onClick={() => {
+              setBudgetData(budget);
+            }}
+            className={clsx(
+              budget.id === budgetData?.id &&
+                "bg-grey-light-400 [&>div>h2]:text-blue",
+              "rounded-lg duration-300 p-2"
+            )}
+            key={budget.id}
+          >
+            <BudgetBox budget={budget} />
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -179,9 +177,9 @@ const ExpenseInputContent = () => {
               }}
               autoFocus
               placeholder={`0`}
-              className="text-2xl font-medium outline-none focus:border-b-2 border-red rounded-none w-full px-0 pr-8 text-right"
+              className="text-2xl font-medium outline-none focus:border-b-2 border-red rounded-none w-full px-0 pr-10 text-right"
               onKeyDown={(e) => {
-                if (e.key === "." || e.key === "e") e.preventDefault();
+                if (e.key === "e") e.preventDefault();
               }}
             />
             <span className="absolute right-0 top-1/2 -translate-y-1/2">

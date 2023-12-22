@@ -235,6 +235,7 @@ export const resolvers = {
         data: {
           amount: args.amount,
           exchangeRate: args.exchangeRate,
+          createdAt: args.createdAt,
           budgetId: args.budgetId,
           tripId: args.tripId,
         },

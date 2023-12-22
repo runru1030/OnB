@@ -66,18 +66,21 @@ export const CREATE_INCOME = gql`
   mutation CreateIncome(
     $amount: Int
     $exchangeRate: Float
+    $createdAt: Date
     $budgetId: ID
     $tripId: ID
   ) {
     createIncome(
       amount: $amount
       exchangeRate: $exchangeRate
+      createdAt: $createdAt
       budgetId: $budgetId
       tripId: $tripId
     ) {
       id
       amount
       exchangeRate
+      createdAt
       budgetId
     }
   }
