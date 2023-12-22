@@ -15,7 +15,10 @@ const pretendard = localFont({
   src: "../../public/font/PretendardVariable.woff2",
   display: "swap",
 });
-
+export const metadata = {
+  title: "OnB",
+  description: "On a Budget : 여행 경비 관리 웹 서비스",
+};
 export default function RootLayout({
   children,
 }: {
@@ -29,6 +32,9 @@ export default function RootLayout({
   }
   return (
     <html lang="en" className={pretendard.className}>
+      <head>
+        <link rel="shortcut icon" href="/favicon.ico" />
+      </head>
       <body>
         <ApolloProviders>
           <AuthProvider>
