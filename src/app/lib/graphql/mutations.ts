@@ -64,7 +64,7 @@ export const CREATE_BUDGET = gql`
 
 export const CREATE_INCOME = gql`
   mutation CreateIncome(
-    $amount: Int
+    $amount: Float
     $exchangeRate: Float
     $createdAt: Date
     $budgetId: ID
@@ -88,7 +88,7 @@ export const CREATE_INCOME = gql`
 
 export const CREATE_EXPENSE = gql`
   mutation CreateExpense(
-    $amount: Int
+    $amount: Float
     $category: String
     $createdAt: Date
     $budgetId: ID
