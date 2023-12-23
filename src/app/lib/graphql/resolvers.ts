@@ -1,4 +1,5 @@
 import { Context } from "@app/api/graphql/route";
+import { getSumOfBudget } from "@app/utils";
 import { Budget, Expense, Income, Trip, User } from "@prisma/client";
 
 export const resolvers = {
@@ -156,40 +157,30 @@ export const resolvers = {
       args: { tid: string },
       context: Context
     ) => {
-      const [incomes, expenses] = await Promise.all([
-        context.prisma.income.findMany({
-          where: {
-            tripId: args.tid,
+      const budgets = await context.prisma.budget.findMany({
+        where: { tripId: args.tid },
+        include: {
+          expenses: {
+            include: { Budget: { include: { Currency: true } } },
+            orderBy: { createdAt: "desc" },
           },
-          include: { Budget: { include: { Currency: true } } },
-        }),
-        context.prisma.expense.findMany({
-          where: {
-            tripId: args.tid,
+          incomes: {
+            include: { Budget: { include: { Currency: true } } },
+            orderBy: { createdAt: "desc" },
           },
-          include: { Budget: { include: { Currency: true } } },
-        }),
-      ]);
+          Currency: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
 
-      const avgExchangeRate =
-        incomes?.reduce((acc, curr) => acc + curr.exchangeRate, 0) /
-        incomes.length;
-      const totalBudgetIncomesKRW = incomes?.reduce(
-        (acc, curr) =>
-          acc +
-          Math.ceil(
-            (curr.amount * curr.exchangeRate) / curr.Budget.Currency.amountUnit
-          ),
-        0
-      );
-      const totalBudgetExpenseKRW = Math.ceil(
-        expenses?.reduce((acc, curr) => acc + curr.amount * avgExchangeRate, 0)
-      );
-
-      return {
-        totalBudgetIncomesKRW,
-        totalBudgetExpenseKRW,
-      };
+      let totalBudgetIncomesKRW = 0;
+      let totalBudgetExpenseKRW = 0;
+      budgets.forEach((budget) => {
+        const { totalExpensesKRW, totalIncomesKRW } = getSumOfBudget(budget);
+        totalBudgetExpenseKRW += totalExpensesKRW;
+        totalBudgetIncomesKRW += totalIncomesKRW;
+      });
+      return { totalBudgetIncomesKRW, totalBudgetExpenseKRW };
     },
   },
   Mutation: {

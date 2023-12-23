@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import { ExpenseQueryData, IncomeQueryData } from "../detail/_types";
 import CategoryTag from "./CategoryTag";
 import ElementModal, { useElementModal } from "./ElementModal";
+import { GET_TRIP } from "@app/lib/graphql/queries";
 
 type DetailType = "Expense" | "Income";
 type DataType = (IncomeQueryData | ExpenseQueryData) & {
@@ -53,6 +54,7 @@ const IncomeExpenseList = ({ dataList }: IncomeExpenseListProps) => {
       setOpenElementModal(false);
       router.refresh();
     },
+    refetchQueries: [GET_TRIP],
   });
   const [deleteExpense] = useMutation(DELETE_EXPENSE, {
     variables: { id: selectedElement.id },
@@ -60,6 +62,7 @@ const IncomeExpenseList = ({ dataList }: IncomeExpenseListProps) => {
       setOpenElementModal(false);
       router.refresh();
     },
+    refetchQueries: [GET_TRIP],
   });
   return (
     <>
@@ -95,7 +98,7 @@ const IncomeExpenseList = ({ dataList }: IncomeExpenseListProps) => {
                   </span>
                   <span>
                     {li.type === "Expense" ? "- " : "+ "}
-                    {li.amount} {li.Budget.currencyId}
+                    {li.amount.toLocaleString()} {li.Budget.currencyId}
                   </span>
                 </span>
               </ElementModal.Trigger>

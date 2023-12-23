@@ -1,6 +1,6 @@
 "use client";
 import { useMutation } from "@apollo/client";
-import { dateformatter, getBudgetsSum } from "@app/utils";
+import { dateformatter, getSumOfBudget } from "@app/utils";
 import Button from "@components/Button";
 import { Input } from "@components/Input";
 import StepModal from "@components/Modal/StepModal";
@@ -19,6 +19,7 @@ import CategoryTag from "./CategoryTag";
 import { tripAtom, tripStore } from "./TripProvider";
 import { ExpenseQueryData, IncomeQueryData } from "../detail/_types";
 import { BudgetQueryData } from "../_types";
+import { GET_TRIP } from "@app/lib/graphql/queries";
 const budgetAtom = atomWithReset({
   id: "",
   Currency: { id: "", name: "", countryId: "", amountUnit: 1 },
@@ -46,6 +47,7 @@ const CreateExpenseModal = () => {
     onCompleted: () => {
       router.refresh();
     },
+    refetchQueries: [GET_TRIP],
   });
 
   const onCreateExpense = () => {
@@ -146,7 +148,7 @@ const ExpenseInputContent = () => {
 
   const [openCalendar, setOpenCalendar] = useState(false);
   const { totalIncomes, totalExpenses } = useMemo(
-    () => getBudgetsSum(budgetData as BudgetQueryData),
+    () => getSumOfBudget(budgetData as BudgetQueryData),
     [budgetData]
   );
   return (
