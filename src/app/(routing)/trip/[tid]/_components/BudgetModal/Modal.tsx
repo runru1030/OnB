@@ -13,7 +13,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { PropsWithChildren, useMemo } from "react";
 import { BudgetQueryData } from "../../_types";
-import { getBudgetsSum } from "@app/utils";
+import { getSumOfBudget } from "@app/utils";
 
 const IncomeExpenseList = dynamic(() => import("../IncomeExpenseList"));
 const modalOpenAtom = atom<boolean>(false);
@@ -29,7 +29,7 @@ const InternalBudgetModal = () => {
   });
   const budget = loading ? budgetData : data?.budget;
   const { totalIncomes, totalIncomesKRW, totalExpenses, totalExpensesKRW } =
-    useMemo(() => getBudgetsSum(budget as BudgetQueryData), [budget]);
+    useMemo(() => getSumOfBudget(budget as BudgetQueryData), [budget]);
 
   const [deleteBudget] = useMutation(DELETE_BUDGET, {
     variables: { id: budgetData?.id },

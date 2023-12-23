@@ -3,13 +3,13 @@ import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import { BudgetQueryData } from "../_types";
 import { useMemo } from "react";
-import { getBudgetsSum } from "@app/utils";
+import { getSumOfBudget } from "@app/utils";
 interface BudgetBoxProps {
   budget: BudgetQueryData;
 }
 const BudgetBox = ({ budget }: BudgetBoxProps) => {
   const { totalIncomes, totalExpenses } = useMemo(
-    () => getBudgetsSum(budget),
+    () => getSumOfBudget(budget),
     [budget]
   );
   return (
