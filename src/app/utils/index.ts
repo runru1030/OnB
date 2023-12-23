@@ -3,7 +3,7 @@ import { BudgetQueryData } from "@app/(routing)/trip/[tid]/_types";
 export const dateformatter = (date: Date) =>
   `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
 
-export const getBudgetsSum = (budget: BudgetQueryData) => {
+export const getSumOfBudget = (budget: BudgetQueryData) => {
   const totalExpenses = budget?.expenses?.reduce(
     (acc, curr) => acc + curr.amount,
     0
@@ -15,16 +15,14 @@ export const getBudgetsSum = (budget: BudgetQueryData) => {
     totalIncomes: budget?.incomes?.reduce((acc, curr) => acc + curr.amount, 0),
     totalIncomesKRW: budget?.incomes.reduce(
       (acc, curr) =>
-        acc +
-        Math.ceil(
-          (curr.amount * curr.exchangeRate) / budget.Currency.amountUnit
-        ),
+        acc + (curr.amount * curr.exchangeRate) / budget.Currency.amountUnit,
       0
     ),
     totalExpenses: budget?.expenses?.reduce(
       (acc, curr) => acc + curr.amount,
       0
     ),
-    totalExpensesKRW: totalExpenses * avgExchangeRate,
+    totalExpensesKRW:
+      totalExpenses * (isNaN(avgExchangeRate) ? 1 : avgExchangeRate),
   };
 };

@@ -16,6 +16,7 @@ import BudgetBox from "./BudgetBox";
 import { tripAtom, tripStore } from "./TripProvider";
 import { Calendar } from "react-date-range";
 import { dateformatter } from "@app/utils";
+import { GET_TRIP } from "@app/lib/graphql/queries";
 
 const budgetAtom = atomWithReset({
   id: "",
@@ -26,7 +27,7 @@ const budgetAtom = atomWithReset({
 });
 const incomeReqAtom = atomWithReset({
   amount: "0",
-  exchangeRate: "0",
+  exchangeRate: "1",
   createdAt: new Date(),
 });
 
@@ -43,6 +44,7 @@ const CreateIncomeModal = () => {
     onCompleted: () => {
       router.refresh();
     },
+    refetchQueries: [GET_TRIP],
   });
 
   const onCreateIncome = () => {
@@ -216,7 +218,7 @@ const IcomeInputContent = () => {
               <div className="relative">
                 <Input
                   type="number"
-                  value={currencyUnit === "KRW" ? 1 : incomeData.exchangeRate}
+                  value={incomeData.exchangeRate}
                   onChange={(e) => {
                     setIcomeData((p) => ({
                       ...p,

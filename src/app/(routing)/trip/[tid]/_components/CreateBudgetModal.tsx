@@ -5,7 +5,7 @@ import Button from "@components/Button";
 import { Input } from "@components/Input";
 import StepModal from "@components/Modal/StepModal";
 import { CREATE_BUDGET } from "@app/lib/graphql/mutations";
-import { GET_CURRENCIES } from "@app/lib/graphql/queries";
+import { GET_CURRENCIES, GET_TRIP } from "@app/lib/graphql/queries";
 import AddSharpIcon from "@mui/icons-material/AddSharp";
 import { Currency } from "@prisma/client";
 import clsx from "clsx";
@@ -33,11 +33,12 @@ const CreateBudgetModal = () => {
 
   const budgetData = useAtomValue(budgetReqAtom);
   const resetTripData = useResetAtom(budgetReqAtom);
-  
+
   const [createBudget] = useMutation(CREATE_BUDGET, {
     onCompleted: () => {
       router.refresh();
     },
+    refetchQueries: [GET_TRIP],
   });
 
   const onCreateBudget = () => {
