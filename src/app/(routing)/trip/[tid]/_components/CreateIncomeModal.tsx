@@ -26,6 +26,7 @@ const budgetAtom = atomWithReset({
   type: "CASH",
 });
 const incomeReqAtom = atomWithReset({
+  title: "",
   amount: "0",
   exchangeRate: "1",
   createdAt: new Date(),
@@ -110,9 +111,6 @@ const CreateIncomeModal = () => {
     </StepModal>
   );
 };
-
-export default CreateIncomeModal;
-
 const SelectBudgetContent = () => {
   const { budgets } = useAtomValue(tripAtom, { store: tripStore });
   const [budgetData, setBudgetData] = useAtom(budgetAtom);
@@ -181,7 +179,7 @@ const IcomeInputContent = () => {
             }
           </span>
         </h2>
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-4 flex-1">
             <div className="relative h-10">
               <Input
@@ -236,7 +234,23 @@ const IcomeInputContent = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col mt-[8vh]">
+          <div className="flex flex-col gap-1 mt-[2vh]">
+            <Input
+              placeholder="항목명 (선택)"
+              type="text"
+              value={incomeData.title}
+              onChange={(e) =>
+                setIcomeData((p) => ({ ...p, title: e.target.value }))
+              }
+              autoFocus
+              maxLength={10}
+              className="h-[34px] outline-none focus:border-b-2 border-grey-400 rounded-none !px-0 w-full text-right"
+            />
+            <span className="text-xs font-normal text-grey-400 text-right">
+              최대 10자
+            </span>
+          </div>
+          <div className="flex flex-col">
             <div className="flex justify-between text-grey-300">
               <h2>일자</h2>
               <span
@@ -251,7 +265,7 @@ const IcomeInputContent = () => {
             </div>
             <div
               className={clsx(
-                openCalendar ? "h-[330px]" : "h-0",
+                openCalendar ? "h-[300px]" : "h-0",
                 "duration-300 overflow-hidden flex justify-center"
               )}
             >
@@ -268,3 +282,4 @@ const IcomeInputContent = () => {
     </div>
   );
 };
+export default CreateIncomeModal;

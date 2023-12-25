@@ -180,19 +180,17 @@ export const resolvers = {
         totalBudgetExpenseKRW += totalExpensesKRW;
         totalBudgetIncomesKRW += totalIncomesKRW;
       });
-      return { totalBudgetIncomesKRW, totalBudgetExpenseKRW };
+      return {
+        totalBudgetIncomesKRW,
+        totalBudgetExpenseKRW,
+        totalBudgetCount: budgets.length,
+      };
     },
   },
   Mutation: {
     createTrip: async (_parent: undefined, args: Trip, context: Context) => {
       return await context.prisma.trip.create({
-        data: {
-          title: args.title,
-          startedAt: args.startedAt,
-          endedAt: args.endedAt,
-          countryId: args.countryId,
-          userId: args.userId,
-        },
+        data: args,
         include: {
           Country: true,
         },
@@ -204,12 +202,7 @@ export const resolvers = {
       context: Context
     ) => {
       return await context.prisma.budget.create({
-        data: {
-          title: args.title,
-          type: args.type,
-          currencyId: args.currencyId,
-          tripId: args.tripId,
-        },
+        data: args,
         include: {
           Currency: true,
           expenses: true,
@@ -223,13 +216,7 @@ export const resolvers = {
       context: Context
     ) => {
       return await context.prisma.income.create({
-        data: {
-          amount: args.amount,
-          exchangeRate: args.exchangeRate,
-          createdAt: args.createdAt,
-          budgetId: args.budgetId,
-          tripId: args.tripId,
-        },
+        data: args,
         include: {},
       });
     },
@@ -239,13 +226,7 @@ export const resolvers = {
       context: Context
     ) => {
       return await context.prisma.expense.create({
-        data: {
-          category: args.category,
-          amount: args.amount,
-          createdAt: args.createdAt,
-          budgetId: args.budgetId,
-          tripId: args.tripId,
-        },
+        data: args,
       });
     },
     createAuth: async (_parent: undefined, args: User, context: Context) => {

@@ -22,6 +22,7 @@ export const typeDefs = `#graphql
   }
   type Expense{
     id:ID!
+    title:String
     category:String
     amount:Float
     createdAt:Date
@@ -30,6 +31,7 @@ export const typeDefs = `#graphql
   }
   type Income{
     id:ID!
+    title:String
     exchangeRate:Float
     amount:Float
     createdAt:Date
@@ -62,6 +64,7 @@ export const typeDefs = `#graphql
   type BudgetAgg{
     totalBudgetIncomesKRW:Float
     totalBudgetExpenseKRW:Float
+    totalBudgetCount:Int
   }
   type Query {
 	  trip(id: ID!): TripJoined 
@@ -88,10 +91,10 @@ export const typeDefs = `#graphql
     createBudget(title:String, type:String, currencyId:String, tripId:ID):Budget
     deleteBudget(id:ID!):Budget
 
-    createIncome(amount:Float, exchangeRate:Float, createdAt:Date, budgetId:ID, tripId:ID):Income
+    createIncome(title:String, amount:Float, exchangeRate:Float, createdAt:Date, budgetId:ID, tripId:ID):Income
     deleteIncome(id:ID!):Income
 
-    createExpense(category:String, amount:Float, createdAt:Date, budgetId:ID, tripId:ID):Expense
+    createExpense(title:String, category:String, amount:Float, createdAt:Date, budgetId:ID, tripId:ID):Expense
     deleteExpense(id:ID!):Expense
 
     createAuth(email:String! name:String):User

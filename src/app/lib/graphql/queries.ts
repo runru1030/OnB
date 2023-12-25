@@ -109,6 +109,7 @@ export const GET_EXPENSES = gql`
   query Expenses($tid: ID!) {
     expenses(tid: $tid) {
       id
+      title
       category
       amount
       createdAt
@@ -125,6 +126,7 @@ export const GET_INCOMES = gql`
   query Incomes($tid: ID!) {
     incomes(tid: $tid) {
       id
+      title
       amount
       exchangeRate
       createdAt
@@ -159,6 +161,7 @@ export const GET_BUDGET = gql`
       }
       expenses {
         id
+        title
         category
         amount
         createdAt
@@ -170,6 +173,7 @@ export const GET_BUDGET = gql`
       }
       incomes {
         id
+        title
         amount
         exchangeRate
         createdAt
@@ -196,6 +200,7 @@ export const GET_BUDGETS = gql`
       }
       expenses {
         id
+        title
         category
         amount
         createdAt
@@ -207,6 +212,7 @@ export const GET_BUDGETS = gql`
       }
       incomes {
         id
+        title
         amount
         exchangeRate
         createdAt
@@ -225,6 +231,7 @@ export const GET_BUDGET_TOTAL = gql`
     budgetTotal(tid: $tid) {
       totalBudgetIncomesKRW
       totalBudgetExpenseKRW
+      totalBudgetCount
     }
   }
 `;

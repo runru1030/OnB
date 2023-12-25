@@ -18,7 +18,7 @@ const PageContent = ({ tid }: { tid: string }) => {
     <>
       {dataList.length !== 0 ? (
         <div className="main-content flex flex-col px-0 gap-2">
-          <IncomeExpenseList dataList={dataList} />
+          <IncomeExpenseList dataList={dataList} withBudgetTitle />
         </div>
       ) : (
         <div className="main-content items-center justify-center text-grey-400 bg-grey-light-300">

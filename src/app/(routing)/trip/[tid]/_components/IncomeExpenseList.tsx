@@ -10,25 +10,26 @@ import { ExpenseQueryData, IncomeQueryData } from "../detail/_types";
 import CategoryTag from "./CategoryTag";
 import ElementModal, { useElementModal } from "./ElementModal";
 import { GET_TRIP } from "@app/lib/graphql/queries";
+import { DetailDataType, DetailType } from "../_types";
 
-type DetailType = "Expense" | "Income";
-type DataType = (IncomeQueryData | ExpenseQueryData) & {
-  type: DetailType;
-};
 interface IncomeExpenseListProps {
   dataList: (IncomeQueryData | ExpenseQueryData)[];
+  withBudgetTitle?: boolean;
 }
-const IncomeExpenseList = ({ dataList }: IncomeExpenseListProps) => {
+const IncomeExpenseList = ({
+  dataList,
+  withBudgetTitle = false,
+}: IncomeExpenseListProps) => {
   const router = useRouter();
   const {
     elementData,
     setElementData,
     setOpen: setOpenElementModal,
   } = useElementModal();
-  const selectedElement = elementData as DataType;
+  const selectedElement = elementData as DetailDataType;
   const dataByCreatedAt = useMemo(() => {
     const dataObj = {} as {
-      [key: string]: DataType[];
+      [key: string]: DetailDataType[];
     };
     dataList.forEach((el) => {
       const date = new Date(el.createdAt);
@@ -81,7 +82,12 @@ const IncomeExpenseList = ({ dataList }: IncomeExpenseListProps) => {
                 )}
                 onClick={() => setElementData(li)}
               >
-                <span className="font-medium">{li?.Budget.title}</span>
+                <div className="flex gap-4 items-center">
+                  {withBudgetTitle && (
+                    <span className="font-medium">{li?.Budget.title}</span>
+                  )}
+                  <span className="text-grey-300">{li?.title}</span>
+                </div>
                 <span
                   className={clsx(
                     li.type === "Expense" ? "text-red" : "text-blue",

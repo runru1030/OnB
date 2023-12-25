@@ -1,16 +1,24 @@
 import { getClient } from "@app/_components/ApolloClientRSC";
 import { GET_BUDGET_TOTAL } from "@app/lib/graphql/queries";
 import { use } from "react";
+import CreateIncomeModal from "./CreateIncomeModal";
+import CreateExpenseModal from "./CreateExpenseModal";
 
 const BudgetAggregation = ({ tid }: { tid: string }) => {
   const { data } = use(
     getClient().query({ query: GET_BUDGET_TOTAL, variables: { tid } })
   );
-  const { totalBudgetIncomesKRW, totalBudgetExpenseKRW } =
+  const { totalBudgetIncomesKRW, totalBudgetExpenseKRW, totalBudgetCount } =
     data?.budgetTotal ?? 0;
 
   return (
     <>
+      {totalBudgetCount !== 0 && (
+        <div className="flex gap-4">
+          <CreateIncomeModal />
+          <CreateExpenseModal />
+        </div>
+      )}
       <div className="flex justify-between items-center">
         <span>총 예산</span>
         <span className="font-medium">
