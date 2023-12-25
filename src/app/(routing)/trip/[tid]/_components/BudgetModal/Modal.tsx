@@ -55,36 +55,45 @@ const InternalBudgetModal = () => {
         <div className="flex flex-col h-[calc(100%-60px)] overflow-auto">
           <div className="flex-1">
             <div className="p-4 flex flex-col gap-4">
-              <div className="text-3xl flex gap-1 justify-end items-end pb-2">
-                <span className=" font-medium">
-                  {(
-                    (totalIncomes || 0) - (totalExpenses || 0)
-                  ).toLocaleString()}
-                </span>
-                <span>/</span>
-                <span className="text-grey-400">
-                  {totalIncomes?.toLocaleString() ?? 0}
-                </span>
-                <span className="text-lg pl-1">{budgetData?.Currency.id}</span>
-              </div>
-              <div className="flex flex-col items-end gap-1">
-                <span>
-                  총 예산 {totalIncomes?.toLocaleString()}{" "}
-                  {budgetData?.Currency.id}
-                </span>
-                <span className="text-sm">
-                  = {totalIncomesKRW?.toLocaleString()} 원
+              <div className="flex flex-col pb-2">
+                <div className="text-3xl flex gap-1 justify-end items-end">
+                  <span className=" font-medium">
+                    {(
+                      (totalIncomes || 0) - (totalExpenses || 0)
+                    ).toLocaleString()}
+                  </span>
+                  <span>/</span>
+                  <span className="text-grey-400">
+                    {totalIncomes?.toLocaleString() ?? 0}
+                  </span>
+                  <span className="text-lg pl-1">
+                    {budgetData?.Currency.id}
+                  </span>
+                </div>
+                <span className="text-right text-sm text-grey-200">
+                  잔여 예산 / 총 예산
                 </span>
               </div>
-              <div className="flex flex-col items-end gap-1">
-                <span>
-                  총 지출 {totalExpenses?.toLocaleString()}{" "}
-                  {budgetData?.Currency.id}
+              <div className="flex flex-col items-end">
+                <span className="text-xl text-red font-medium">
+                  - {totalExpenses?.toLocaleString()}{" "}
+                  <span className="text-base">{budgetData?.Currency.id}</span>
                 </span>
-                <span className="text-sm">
+                <span className="text-base text-red-300">
                   = {totalExpensesKRW?.toLocaleString()} 원
                 </span>
               </div>
+              <div className="flex flex-col items-end text-sm text-grey-300">
+                <span>총 예산</span>
+                <span>= {totalIncomesKRW?.toLocaleString()} 원</span>
+              </div>
+              <div className="flex flex-col items-end text-sm text-grey-300">
+                <span>잔여 예산</span>
+                <span>
+                  = {(totalIncomesKRW - totalExpensesKRW)?.toLocaleString()} 원
+                </span>
+              </div>
+
               <div className="flex justify-between items-center text-grey-300">
                 <h2 className="">예산 종류</h2>
                 <div className="flex gap-4">
