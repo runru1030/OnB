@@ -50,13 +50,14 @@ const CreateIncomeModal = () => {
 
   const onCreateIncome = () => {
     try {
-      if (parseInt(incomeData.amount) === 0)
+      if (parseFloat(incomeData.amount) === 0)
         throw new Error("금액을 입력해주세요!");
       if (parseFloat(incomeData.exchangeRate) === 0)
         throw new Error("환율을 입력해주세요!");
       createIncome({
         variables: {
-          amount: parseInt(incomeData.amount),
+          ...incomeData,
+          amount: parseFloat(incomeData.amount),
           exchangeRate: parseFloat(incomeData.exchangeRate),
           createdAt: incomeData.createdAt,
           budgetId: budgetData.id,

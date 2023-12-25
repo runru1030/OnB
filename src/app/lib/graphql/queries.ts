@@ -65,7 +65,11 @@ export const GET_TRIP = gql`
           budgetId
           Budget {
             title
-            currencyId
+            type
+            Currency {
+              id
+              amountUnit
+            }
           }
         }
         incomes {
@@ -76,7 +80,11 @@ export const GET_TRIP = gql`
           budgetId
           Budget {
             title
-            currencyId
+            type
+            Currency {
+              id
+              amountUnit
+            }
           }
         }
       }
@@ -116,7 +124,11 @@ export const GET_EXPENSES = gql`
       budgetId
       Budget {
         title
-        currencyId
+        type
+        Currency {
+          id
+          amountUnit
+        }
       }
     }
   }
@@ -133,7 +145,11 @@ export const GET_INCOMES = gql`
       budgetId
       Budget {
         title
-        currencyId
+        type
+        Currency {
+          id
+          amountUnit
+        }
       }
     }
   }
@@ -168,7 +184,11 @@ export const GET_BUDGET = gql`
         budgetId
         Budget {
           title
-          currencyId
+          type
+          Currency {
+            id
+            amountUnit
+          }
         }
       }
       incomes {
@@ -180,7 +200,11 @@ export const GET_BUDGET = gql`
         budgetId
         Budget {
           title
-          currencyId
+          type
+          Currency {
+            id
+            amountUnit
+          }
         }
       }
     }
@@ -207,7 +231,10 @@ export const GET_BUDGETS = gql`
         budgetId
         Budget {
           title
-          currencyId
+          Currency {
+            id
+            amountUnit
+          }
         }
       }
       incomes {
@@ -219,7 +246,11 @@ export const GET_BUDGETS = gql`
         budgetId
         Budget {
           title
-          currencyId
+          type
+          Currency {
+            id
+            amountUnit
+          }
         }
       }
     }

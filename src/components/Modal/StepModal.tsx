@@ -11,10 +11,7 @@ import React, { PropsWithChildren, createElement } from "react";
 
 const stepAtom = atomWithReset(1);
 
-const StepModal = ({
-  children,
-  ...props
-}: PropsWithChildren<Omit<DialogProps, "open">>) => {
+const StepModal = ({ children, ...props }: PropsWithChildren<DialogProps>) => {
   return <Modal {...props}>{children}</Modal>;
 };
 const StepModalContent = ({
