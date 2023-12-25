@@ -159,6 +159,7 @@ export const GET_BUDGET = gql`
       }
       expenses {
         id
+        title
         category
         amount
         createdAt
@@ -170,6 +171,7 @@ export const GET_BUDGET = gql`
       }
       incomes {
         id
+        title
         amount
         exchangeRate
         createdAt
@@ -196,6 +198,7 @@ export const GET_BUDGETS = gql`
       }
       expenses {
         id
+        title
         category
         amount
         createdAt
@@ -207,6 +210,7 @@ export const GET_BUDGETS = gql`
       }
       incomes {
         id
+        title
         amount
         exchangeRate
         createdAt
