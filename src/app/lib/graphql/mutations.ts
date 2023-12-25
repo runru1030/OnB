@@ -115,6 +115,63 @@ export const CREATE_EXPENSE = gql`
     }
   }
 `;
+
+export const UPDATE_INCOME = gql`
+  mutation UpdateIncome(
+    $id: ID!
+    $title: String
+    $amount: Float
+    $exchangeRate: Float
+    $createdAt: Date
+    $budgetId: ID
+    $tripId: ID
+  ) {
+    updateIncome(
+      id: $id
+      title: $title
+      amount: $amount
+      exchangeRate: $exchangeRate
+      createdAt: $createdAt
+      budgetId: $budgetId
+      tripId: $tripId
+    ) {
+      id
+      title
+      amount
+      exchangeRate
+      createdAt
+      budgetId
+    }
+  }
+`;
+export const UPDATE_EXPENSE = gql`
+  mutation UpdateExpense(
+    $id: ID!
+    $title: String
+    $amount: Float
+    $category: String
+    $createdAt: Date
+    $budgetId: ID
+    $tripId: ID
+  ) {
+    updateExpense(
+      id: $id
+      title: $title
+      amount: $amount
+      category: $category
+      createdAt: $createdAt
+      budgetId: $budgetId
+      tripId: $tripId
+    ) {
+      id
+      title
+      amount
+      category
+      createdAt
+      budgetId
+    }
+  }
+`;
 export const CREATE_AUTH = gql`
   mutation CreateAuth($email: String!, $name: String) {
     createAuth(email: $email, name: $name) {

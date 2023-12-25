@@ -56,6 +56,7 @@ const CreateIncomeModal = () => {
         throw new Error("환율을 입력해주세요!");
       createIncome({
         variables: {
+          ...incomeData,
           amount: parseInt(incomeData.amount),
           exchangeRate: parseFloat(incomeData.exchangeRate),
           createdAt: incomeData.createdAt,

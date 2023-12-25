@@ -220,6 +220,26 @@ export const resolvers = {
         include: {},
       });
     },
+    updateIncome: async (
+      _parent: undefined,
+      args: Income,
+      context: Context
+    ) => {
+      return await context.prisma.income.update({
+        where: { id: args.id },
+        data: args,
+      });
+    },
+    updateExpense: async (
+      _parent: undefined,
+      args: Expense,
+      context: Context
+    ) => {
+      return await context.prisma.expense.update({
+        where: { id: args.id },
+        data: args,
+      });
+    },
     createExpense: async (
       _parent: undefined,
       args: Expense,
