@@ -62,6 +62,7 @@ export const typeDefs = `#graphql
   type BudgetAgg{
     totalBudgetIncomesKRW:Float
     totalBudgetExpenseKRW:Float
+    totalBudgetCount:Int
   }
   type Query {
 	  trip(id: ID!): TripJoined 

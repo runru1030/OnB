@@ -180,7 +180,11 @@ export const resolvers = {
         totalBudgetExpenseKRW += totalExpensesKRW;
         totalBudgetIncomesKRW += totalIncomesKRW;
       });
-      return { totalBudgetIncomesKRW, totalBudgetExpenseKRW };
+      return {
+        totalBudgetIncomesKRW,
+        totalBudgetExpenseKRW,
+        totalBudgetCount: budgets.length,
+      };
     },
   },
   Mutation: {

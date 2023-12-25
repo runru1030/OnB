@@ -225,6 +225,7 @@ export const GET_BUDGET_TOTAL = gql`
     budgetTotal(tid: $tid) {
       totalBudgetIncomesKRW
       totalBudgetExpenseKRW
+      totalBudgetCount
     }
   }
 `;
