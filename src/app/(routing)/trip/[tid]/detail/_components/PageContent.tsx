@@ -5,14 +5,15 @@ import IncomeExpenseList from "../../_components/IncomeExpenseList";
 const PageContent = ({ tid }: { tid: string }) => {
   const [{ data: incomesQuery }, { data: expensesQuery }] = use(
     Promise.all([
-      getClient().query({ query: GET_EXPENSES, variables: { tid } }),
       getClient().query({ query: GET_INCOMES, variables: { tid } }),
+      getClient().query({ query: GET_EXPENSES, variables: { tid } }),
     ])
   );
   const dataList = [
     ...(expensesQuery?.expenses || []),
     ...(incomesQuery?.incomes || []),
   ];
+
   return (
     <>
       {dataList.length !== 0 ? (
