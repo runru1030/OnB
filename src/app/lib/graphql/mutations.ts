@@ -64,6 +64,7 @@ export const CREATE_BUDGET = gql`
 
 export const CREATE_INCOME = gql`
   mutation CreateIncome(
+    $title: String
     $amount: Float
     $exchangeRate: Float
     $createdAt: Date
@@ -71,6 +72,7 @@ export const CREATE_INCOME = gql`
     $tripId: ID
   ) {
     createIncome(
+      title: $title
       amount: $amount
       exchangeRate: $exchangeRate
       createdAt: $createdAt
@@ -78,6 +80,7 @@ export const CREATE_INCOME = gql`
       tripId: $tripId
     ) {
       id
+      title
       amount
       exchangeRate
       createdAt
@@ -88,6 +91,7 @@ export const CREATE_INCOME = gql`
 
 export const CREATE_EXPENSE = gql`
   mutation CreateExpense(
+    $title: String
     $amount: Float
     $category: String
     $createdAt: Date
@@ -95,6 +99,7 @@ export const CREATE_EXPENSE = gql`
     $tripId: ID
   ) {
     createExpense(
+      title: $title
       amount: $amount
       category: $category
       createdAt: $createdAt
@@ -102,6 +107,7 @@ export const CREATE_EXPENSE = gql`
       tripId: $tripId
     ) {
       id
+      title
       amount
       category
       createdAt

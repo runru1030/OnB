@@ -75,6 +75,7 @@ model Budget {
 
 model Expense {
   id        String   @id @default(uuid())
+  title     String   @default("기타")
   category  String
   amount    Int
   tripId    String
@@ -90,6 +91,7 @@ model Expense {
 
 model Income {
   id           String   @id @default(uuid())
+  title        String   @default("기타")
   amount       Int
   tripId       String
   budgetId     String

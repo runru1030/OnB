@@ -14,3 +14,8 @@ export interface TripQueryData {
   Country: Country;
   budgets: BudgetQueryData[];
 }
+
+export type DetailType = "Expense" | "Income";
+export type DetailDataType = (IncomeQueryData | ExpenseQueryData) & {
+  type: DetailType;
+};

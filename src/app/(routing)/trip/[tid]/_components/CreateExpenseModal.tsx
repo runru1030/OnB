@@ -29,6 +29,7 @@ const budgetAtom = atomWithReset({
   expenses: [] as ExpenseQueryData[],
 });
 const expenseReqAtom = atomWithReset({
+  title: "",
   amount: "0",
   category: "ETC",
   createdAt: new Date(),
@@ -220,6 +221,22 @@ const ExpenseInputContent = () => {
                 <CategoryTag category={category} withDescription />
               </Button>
             ))}
+          </div>
+          <div className="flex flex-col gap-1">
+            <Input
+              placeholder="항목명 (선택)"
+              type="text"
+              value={expenseData.title}
+              onChange={(e) =>
+                setExpenseData((p) => ({ ...p, title: e.target.value }))
+              }
+              autoFocus
+              maxLength={10}
+              className="h-[34px] outline-none focus:border-b-2 border-grey-400 rounded-none !px-0 w-full text-right"
+            />
+            <span className="text-xs font-normal text-grey-400 text-right">
+              최대 10자
+            </span>
           </div>
           <div className="flex flex-col">
             <div className="flex justify-between text-grey-300">
