@@ -109,6 +109,7 @@ export const GET_EXPENSES = gql`
   query Expenses($tid: ID!) {
     expenses(tid: $tid) {
       id
+      title
       category
       amount
       createdAt
@@ -125,6 +126,7 @@ export const GET_INCOMES = gql`
   query Incomes($tid: ID!) {
     incomes(tid: $tid) {
       id
+      title
       amount
       exchangeRate
       createdAt
