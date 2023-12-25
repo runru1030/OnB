@@ -1,16 +1,11 @@
 "use client";
-import { useMutation } from "@apollo/client";
 import { dateformatter } from "@app/utils";
-import Button from "@components/Button";
-import { DELETE_EXPENSE, DELETE_INCOME } from "@app/lib/graphql/mutations";
 import clsx from "clsx";
-import { useRouter } from "next/navigation";
 import { useMemo } from "react";
+import { DetailDataType, DetailType } from "../_types";
 import { ExpenseQueryData, IncomeQueryData } from "../detail/_types";
 import CategoryTag from "./CategoryTag";
-import ElementModal, { useElementModal } from "./ElementModal";
-import { GET_TRIP } from "@app/lib/graphql/queries";
-import { DetailDataType, DetailType } from "../_types";
+import DetailModal from "./DetailModal";
 
 interface IncomeExpenseListProps {
   dataList: (IncomeQueryData | ExpenseQueryData)[];
@@ -20,13 +15,6 @@ const IncomeExpenseList = ({
   dataList,
   withBudgetTitle = false,
 }: IncomeExpenseListProps) => {
-  const router = useRouter();
-  const {
-    elementData,
-    setElementData,
-    setOpen: setOpenElementModal,
-  } = useElementModal();
-  const selectedElement = elementData as DetailDataType;
   const dataByCreatedAt = useMemo(() => {
     const dataObj = {} as {
       [key: string]: DetailDataType[];
@@ -49,22 +37,6 @@ const IncomeExpenseList = ({
     return dataObj;
   }, [dataList]);
 
-  const [deleteIncome] = useMutation(DELETE_INCOME, {
-    variables: { id: selectedElement.id },
-    onCompleted: () => {
-      setOpenElementModal(false);
-      router.refresh();
-    },
-    refetchQueries: [GET_TRIP],
-  });
-  const [deleteExpense] = useMutation(DELETE_EXPENSE, {
-    variables: { id: selectedElement.id },
-    onCompleted: () => {
-      setOpenElementModal(false);
-      router.refresh();
-    },
-    refetchQueries: [GET_TRIP],
-  });
   return (
     <>
       {Object.keys(dataByCreatedAt).map((date: string) => (
@@ -74,13 +46,12 @@ const IncomeExpenseList = ({
           </span>
           <div className="flex flex-col">
             {dataByCreatedAt[date].map((li) => (
-              <ElementModal.Trigger
+              <DetailModal.Trigger
                 key={li.id}
                 className={clsx(
-                  "w-full flex items-center justify-between !p-4",
-                  selectedElement?.id == li.id && "opacity-50 bg-grey-light-300"
+                  "w-full flex items-center justify-between !p-4"
                 )}
-                onClick={() => setElementData(li)}
+                detail={li}
               >
                 <div className="flex gap-4 items-center">
                   {withBudgetTitle && (
@@ -91,8 +62,7 @@ const IncomeExpenseList = ({
                 <span
                   className={clsx(
                     li.type === "Expense" ? "text-red" : "text-blue",
-                    "flex gap-4 items-center text-lg font-medium",
-                    selectedElement?.id == li.id && "opacity-0"
+                    "flex gap-4 items-center text-lg font-medium"
                   )}
                 >
                   <span className="text-red-300">
@@ -107,23 +77,12 @@ const IncomeExpenseList = ({
                     {li.amount.toLocaleString()} {li.Budget.currencyId}
                   </span>
                 </span>
-              </ElementModal.Trigger>
+              </DetailModal.Trigger>
             ))}
           </div>
-          <ElementModal className="-translate-x-[calc(100%+16px)] -translate-y-[50px]">
-            <Button
-              onClick={() => {
-                selectedElement.type === "Income"
-                  ? deleteIncome({ variables: { id: selectedElement.id } })
-                  : deleteExpense({ variables: { id: selectedElement.id } });
-              }}
-              className="btn-red text-sm h-[40px]"
-            >
-              삭제하기
-            </Button>
-          </ElementModal>
         </div>
       ))}
+      <DetailModal />
     </>
   );
 };
