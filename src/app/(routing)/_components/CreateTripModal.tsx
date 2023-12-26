@@ -1,26 +1,26 @@
 "use client";
 import { useMutation } from "@apollo/client";
 import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import { CREATE_TRIP } from "@app/lib/graphql/mutations";
+import { GET_COUNTRIES } from "@app/lib/graphql/queries";
 import Button from "@components/Button";
+import CountryFlag from "@components/CountryFlag";
 import { Input } from "@components/Input";
 import StepModal from "@components/Modal/StepModal";
 import useDateSelect from "@components/hooks/useDateSelect";
-import { CREATE_TRIP } from "@app/lib/graphql/mutations";
-import { GET_COUNTRIES } from "@app/lib/graphql/queries";
 import AddSharpIcon from "@mui/icons-material/AddSharp";
+import KeyboardArrowDownSharpIcon from "@mui/icons-material/KeyboardArrowDownSharp";
+import SearchSharpIcon from "@mui/icons-material/SearchSharp";
+import { debounce } from "@mui/material";
 import { Country } from "@prisma/client";
 import clsx from "clsx";
 import { useAtom, useAtomValue } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { DateRange } from "react-date-range";
 import { CONTINENT } from "../trip/[tid]/_constants";
-import KeyboardArrowDownSharpIcon from "@mui/icons-material/KeyboardArrowDownSharp";
-import { debounce } from "@mui/material";
-import SearchSharpIcon from "@mui/icons-material/SearchSharp";
 
 const tripReqAtom = atomWithReset({
   title: "",
@@ -263,23 +263,16 @@ const SelectCountryContent = () => {
                     )}
                   >
                     {country.name}
-                    <div
-                      className={clsx(
-                        tripData.countryId === country.id &&
-                          "border-2 border-blue",
-                        "w-11 h-11 rounded-full bg-grey-0 flex items-center justify-center border-blue duration-300"
-                      )}
-                    >
-                      {country.flag_img && (
-                        <Image
-                          src={country.flag_img}
-                          width={28}
-                          height={100}
-                          alt="국기"
-                          className="rounded-sm shadow-normal"
-                        />
-                      )}
-                    </div>
+                    <CountryFlag
+                      country={country}
+                      roundSize="sm"
+                      size={40}
+                      className={
+                        tripData.countryId === country.id
+                          ? "border-2 border-blue duration-300"
+                          : "border-blue duration-300"
+                      }
+                    />
                   </div>
                 ))}
               </div>
@@ -309,22 +302,16 @@ const SelectCountryContent = () => {
               )}
             >
               {country.name}
-              <div
-                className={clsx(
-                  tripData.countryId === country.id && "border-2 border-blue",
-                  "w-11 h-11 rounded-full bg-grey-0 flex items-center justify-center border-blue duration-300"
-                )}
-              >
-                {country.flag_img && (
-                  <Image
-                    src={country.flag_img}
-                    width={28}
-                    height={100}
-                    alt="국기"
-                    className="rounded-sm shadow-normal"
-                  />
-                )}
-              </div>
+              <CountryFlag
+                country={country}
+                roundSize="sm"
+                size={40}
+                className={
+                  tripData.countryId === country.id
+                    ? "border-2 border-blue duration-300"
+                    : "border-blue duration-300"
+                }
+              />
             </div>
           ))}
         </div>
