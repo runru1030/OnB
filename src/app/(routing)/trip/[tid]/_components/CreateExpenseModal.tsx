@@ -1,10 +1,11 @@
 "use client";
 import { useMutation } from "@apollo/client";
+import { expense } from "@app/lib/graphql/mutations";
+import { GET_TRIP } from "@app/lib/graphql/queries";
 import { dateformatter, getSumOfBudget } from "@app/utils";
 import Button from "@components/Button";
 import { Input } from "@components/Input";
 import StepModal from "@components/Modal/StepModal";
-import { CREATE_EXPENSE } from "@app/lib/graphql/mutations";
 import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import clsx from "clsx";
@@ -14,12 +15,11 @@ import { useParams, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Calendar } from "react-date-range";
 import { EXPNSE_CATEGORY } from "../_constants";
+import { BudgetQueryData } from "../_types";
+import { ExpenseQueryData, IncomeQueryData } from "../detail/_types";
 import BudgetBox from "./BudgetBox";
 import CategoryTag from "./CategoryTag";
 import { tripAtom, tripStore } from "./TripProvider";
-import { ExpenseQueryData, IncomeQueryData } from "../detail/_types";
-import { BudgetQueryData } from "../_types";
-import { GET_TRIP } from "@app/lib/graphql/queries";
 const budgetAtom = atomWithReset({
   id: "",
   Currency: { id: "", name: "", amountUnit: 1 },
@@ -44,7 +44,7 @@ const CreateExpenseModal = () => {
   const resetBudgetData = useResetAtom(budgetAtom);
   const resetExpenseData = useResetAtom(expenseReqAtom);
 
-  const [createExpense] = useMutation(CREATE_EXPENSE, {
+  const [createExpense] = useMutation(expense.CREATE_EXPENSE, {
     onCompleted: () => {
       router.refresh();
     },

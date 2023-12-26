@@ -1,7 +1,7 @@
 "use client";
 import { useMutation } from "@apollo/client";
 import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { CREATE_TRIP } from "@app/lib/graphql/mutations";
+import { trip } from "@app/lib/graphql/mutations";
 import { GET_COUNTRIES } from "@app/lib/graphql/queries";
 import Button from "@components/Button";
 import CountryFlag from "@components/CountryFlag";
@@ -31,18 +31,15 @@ const tripReqAtom = atomWithReset({
 
 const CreateTripStepModal = () => {
   const router = useRouter();
-
   const tripData = useAtomValue(tripReqAtom);
   const resetTripData = useResetAtom(tripReqAtom);
   const { data: session } = useSession();
   const userId = session?.user?.id;
-
-  const [createTrip] = useMutation(CREATE_TRIP, {
+  const [createTrip] = useMutation(trip.CREATE_TRIP, {
     onCompleted: () => {
       router.refresh();
     },
   });
-
   const onCreateTrip = () => {
     try {
       if (tripData.title.trim() === "")

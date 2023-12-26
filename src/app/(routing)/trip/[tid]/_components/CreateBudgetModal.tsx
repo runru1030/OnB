@@ -1,7 +1,7 @@
 "use client";
 import { useMutation } from "@apollo/client";
 import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { CREATE_BUDGET } from "@app/lib/graphql/mutations";
+import { budget } from "@app/lib/graphql/mutations";
 import { GET_CURRENCIES, GET_TRIP } from "@app/lib/graphql/queries";
 import Button from "@components/Button";
 import CountryFlag from "@components/CountryFlag";
@@ -40,7 +40,7 @@ const CreateBudgetModal = () => {
   const budgetData = useAtomValue(budgetReqAtom);
   const resetTripData = useResetAtom(budgetReqAtom);
 
-  const [createBudget] = useMutation(CREATE_BUDGET, {
+  const [createBudget] = useMutation(budget.CREATE_BUDGET, {
     onCompleted: () => {
       router.refresh();
     },
