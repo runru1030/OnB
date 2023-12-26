@@ -209,7 +209,7 @@ const SelectCurrencyContent = () => {
     <div className="flex-1 overflow-auto p-4">
       <div className="flex flex-col gap-4">
         <h2 className="text-xl font-medium">
-          화페 단위를 선택해주세요{" "}
+          통화 단위를 선택해주세요{" "}
           <span className="text-xs font-normal text-grey-400">단일 선택</span>
         </h2>
         <div className="flex w-full relative">

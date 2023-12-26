@@ -117,7 +117,7 @@ const InternalBudgetModal = () => {
                 </div>
               </div>
               <div className="flex justify-between items-center text-grey-300">
-                <h2 className="">화폐</h2>
+                <h2 className="">통화</h2>
                 <div className="flex gap-4">
                   <span className="font-medium">{budgetData?.Currency.id}</span>
                   <span>{budgetData?.Currency.name}</span>
