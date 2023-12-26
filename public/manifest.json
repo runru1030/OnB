@@ -18,5 +18,15 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "color_schemes": {
+    "dark": {
+      "theme_color": "#fff",
+      "background_color": "#fff"
+    },
+    "light": {
+      "theme_color": "#fff",
+      "background_color": "#fff"
+    }
+  }
 }
