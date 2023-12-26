@@ -1,5 +1,7 @@
+/* eslint-disable */
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const withPWA = require("next-pwa");
+const config = {
   compiler: {
     styledComponents: true,
     removeConsole: process.env.NODE_ENV === "production",
@@ -36,4 +38,9 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+const nextConfig = withPWA({
+  dest: "public",
+  runtimeCaching: [],
+})(config);
+
+module.exports = config;
