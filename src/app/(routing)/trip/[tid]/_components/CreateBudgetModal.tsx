@@ -4,21 +4,24 @@ import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { CREATE_BUDGET } from "@app/lib/graphql/mutations";
 import { GET_CURRENCIES, GET_TRIP } from "@app/lib/graphql/queries";
 import Button from "@components/Button";
+import CountryFlag from "@components/CountryFlag";
 import { Input } from "@components/Input";
 import StepModal from "@components/Modal/StepModal";
 import AddSharpIcon from "@mui/icons-material/AddSharp";
 import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
+import SearchSharpIcon from "@mui/icons-material/SearchSharp";
+import { debounce } from "@mui/material";
 import { Country, Currency } from "@prisma/client";
 import clsx from "clsx";
 import { useAtom, useAtomValue } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import { useParams, useRouter } from "next/navigation";
-import { ChangeEvent, Suspense, useState } from "react";
-import { tripAtom, tripStore } from "./TripProvider";
-import { CurrencyQueryData } from "../_types";
+import { ChangeEvent, Suspense, useCallback, useState } from "react";
 import currencyCountry from "../_constants/currencyCountry";
-import CountryFlag from "@components/CountryFlag";
+import { CurrencyQueryData } from "../_types";
+import { tripAtom, tripStore } from "./TripProvider";
+
 interface budgetReqAtom {
   title: string;
   currencyId: string;
@@ -173,7 +176,7 @@ const TitleInputContent = () => {
 };
 
 const SelectCurrencyContent = () => {
-  useQuery(GET_CURRENCIES, {
+  const { data: currenciesQueryData } = useQuery(GET_CURRENCIES, {
     onCompleted: ({ currencies }) => {
       const defaultCurrency = currencies?.find(
         (curr: CurrencyQueryData) => curr.id === Country.currencyId
@@ -187,6 +190,22 @@ const SelectCurrencyContent = () => {
   const [budgetData, setBudgetData] = useAtom(budgetReqAtom);
   const { Country } = useAtomValue(tripAtom, { store: tripStore });
 
+  const [searchData, setSearchData] = useState("");
+  const [searchedCurrencies, setSearchedCurrencies] = useState<
+    CurrencyQueryData[]
+  >([]);
+  const onSearchCurrency = useCallback(
+    debounce((s) => {
+      setSearchedCurrencies(
+        currenciesQueryData?.currencies.filter(
+          (curr: CurrencyQueryData) =>
+            curr.id.includes(s) || curr.name.includes(s)
+        )
+      );
+    }, 1000),
+    [currencies]
+  );
+
   return (
     <div className="flex-1 overflow-auto p-4">
       <div className="flex flex-col gap-4">
@@ -194,8 +213,56 @@ const SelectCurrencyContent = () => {
           화페 단위를 선택해주세요{" "}
           <span className="text-xs font-normal text-grey-400">단일 선택</span>
         </h2>
-        <div className="flex flex-wrap gap-3 justify-between">
+        <div className="flex w-full relative">
+          <SearchSharpIcon className="absolute top-1/2 -translate-y-1/2 left-2 text-lg text-grey-400" />
+          <Input
+            type="text"
+            placeholder="통화명 또는 통화 코드"
+            value={searchData}
+            onChange={(e) => {
+              setSearchData(e.target.value);
+              onSearchCurrency(e.target.value);
+            }}
+            className="w-full bg-grey-light-300 !pl-8"
+          />
+        </div>
+        <div
+          className={clsx(
+            "flex flex-wrap gap-3 justify-between",
+            searchData === "" ? "visible" : "hidden"
+          )}
+        >
           {currencies.map((currency, idx: number) => (
+            <CurrencyBox
+              key={currency.id + idx}
+              currency={currency}
+              country={
+                currency?.countries?.find(
+                  (c) => c.id === currencyCountry[currency.id]
+                ) as Country
+              }
+              className={
+                budgetData.currencyId === currency.id
+                  ? "text-blue !border-blue border-2"
+                  : ""
+              }
+              onClick={() => {
+                setBudgetData((p) => ({
+                  ...p,
+                  currencyId:
+                    budgetData.currencyId === currency.id ? "" : currency.id,
+                }));
+              }}
+            />
+          ))}
+        </div>{" "}
+        <div
+          className={clsx(
+            "flex flex-wrap gap-3 justify-between",
+            searchData !== "" ? "visible" : "hidden"
+          )}
+        >
+          {searchedCurrencies.map((currency, idx: number) => (
             <CurrencyBox
               key={currency.id + idx}
               currency={currency}

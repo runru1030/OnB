@@ -44,7 +44,7 @@ export default {
   MDL: "MD",
   MVR: "MV",
   MNT: "MN",
-  USD: "PR",
+  USD: "US",
   MMK: "MM",
   VUV: "VU",
   BHD: "BH",
