@@ -302,7 +302,7 @@ const CurrencyBox = ({
     <div
       {...props}
       className={clsx(
-        "flex flex-col gap-1 rounded-2xl border p-4 border-grey-50 justify-center items-center w-[170px] duration-300",
+        "flex flex-col gap-1 rounded-2xl border p-4 border-grey-50 justify-center items-center w-[170px] max-w-[48%] duration-300",
         props.className
       )}
     >
