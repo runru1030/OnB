@@ -22,7 +22,7 @@ import { BudgetQueryData } from "../_types";
 import { GET_TRIP } from "@app/lib/graphql/queries";
 const budgetAtom = atomWithReset({
   id: "",
-  Currency: { id: "", name: "", countryId: "", amountUnit: 1 },
+  Currency: { id: "", name: "", amountUnit: 1 },
   title: "",
   type: "CASH",
   incomes: [] as IncomeQueryData[],
@@ -194,7 +194,7 @@ const ExpenseInputContent = () => {
             <span className="text-red-300">
               {(
                 (totalIncomes || 0) -
-                (totalExpenses + parseInt(expenseData.amount) || 0)
+                (totalExpenses + parseFloat(expenseData.amount) || 0)
               ).toLocaleString()}
             </span>
             <span className="text-red-300 text-base">/</span>

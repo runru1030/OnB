@@ -18,24 +18,24 @@ model User {
 }
 
 model Country {
-  id         String     @id @default(uuid())
+  id         String   @id @default(uuid())
   name       String
   name_en    String
-  flag_img   String?    @db.VarChar(500)
-  continent  String     @default("")
-  currencies Currency[]
+  flag_img   String?  @db.VarChar(500)
+  continent  String   @default("")
+  currencyId String
+  Currency   Currency @relation(fields: [currencyId], references: [id])
   trips      Trip[]
+
+  @@index([currencyId], map: "Country_currencyId_fkey")
 }
 
 model Currency {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   name       String
-  countryId  String
-  amountUnit Int      @default(1)
+  amountUnit Int       @default(1)
   budgets    Budget[]
-  Country    Country  @relation(fields: [countryId], references: [id])
-
-  @@index([countryId], map: "Currency_countryId_fkey")
+  countries  Country[]
 }
 
 model Trip {
@@ -76,13 +76,13 @@ model Budget {
 
 model Expense {
   id        String   @id @default(uuid())
-  title     String   @default("기타")
   category  String
-  amount    Int
+  amount    Float
   tripId    String
   budgetId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  title     String   @default("기타")
   Budget    Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
   Trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
 
@@ -92,13 +92,13 @@ model Expense {
 
 model Income {
   id           String   @id @default(uuid())
-  title        String   @default("기타")
-  amount       Int
+  amount       Float
   tripId       String
   budgetId     String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   exchangeRate Float
+  title        String   @default("기타")
   Budget       Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
   Trip         Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
 
