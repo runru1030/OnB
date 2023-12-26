@@ -1,4 +1,5 @@
 import { gql } from "apollo-server-micro";
+import { DocumentNode } from "graphql";
 
 const CREATE_BUDGET = gql`
   mutation CreateBudget(
@@ -148,4 +149,4 @@ export default {
   GET_BUDGET_TOTAL,
   CREATE_BUDGET,
   DELETE_BUDGET,
-};
+} as { [key: string]: DocumentNode };

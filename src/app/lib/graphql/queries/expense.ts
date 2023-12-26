@@ -1,4 +1,5 @@
 import { gql } from "apollo-server-micro";
+import { DocumentNode } from "graphql";
 
 const CREATE_EXPENSE = gql`
   mutation CreateExpense(
@@ -82,4 +83,9 @@ const GET_EXPENSES = gql`
     }
   }
 `;
-export default { GET_EXPENSES, CREATE_EXPENSE, UPDATE_EXPENSE, DELETE_EXPENSE };
+export default {
+  GET_EXPENSES,
+  CREATE_EXPENSE,
+  UPDATE_EXPENSE,
+  DELETE_EXPENSE,
+} as { [key: string]: DocumentNode };

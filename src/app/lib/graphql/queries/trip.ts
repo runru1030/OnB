@@ -1,4 +1,5 @@
 import { gql } from "apollo-server-micro";
+import { DocumentNode } from "graphql";
 
 const CREATE_TRIP = gql`
   mutation CreateTrip(
@@ -139,4 +140,4 @@ export default {
   GET_PASSED_TRIPS,
   CREATE_TRIP,
   DELETE_TRIP,
-};
+} as { [key: string]: DocumentNode };
