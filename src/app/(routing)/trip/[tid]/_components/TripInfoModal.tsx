@@ -67,7 +67,7 @@ const TripInfoModal = () => {
             </div>
           </div>
           <Button
-            className="btn-red text-sm m-4"
+            className="btn-red text-sm m-4 mb-6"
             onClick={() => {
               deleteBudget({ variables: { id: tripData?.id } });
             }}

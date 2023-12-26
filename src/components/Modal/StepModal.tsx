@@ -126,7 +126,7 @@ const StepModalNextButton = ({
         onNextStepHandler?.(e);
         props.onClick?.(e);
       }}
-      className={clsx("btn-blue m-4", props.className)}
+      className={clsx("btn-blue m-4 mb-6", props.className)}
     >
       {children}
     </Button>

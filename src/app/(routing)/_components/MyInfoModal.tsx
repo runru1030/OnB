@@ -38,7 +38,7 @@ const MyInfoModal = () => {
             </div>
           </div>
           <Button
-            className="btn-red-border text-sm m-4"
+            className="btn-red-border text-sm m-4 mb-6"
             onClick={() => signOut()}
           >
             로그아웃

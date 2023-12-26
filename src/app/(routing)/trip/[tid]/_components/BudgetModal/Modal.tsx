@@ -133,7 +133,7 @@ const InternalBudgetModal = () => {
             </div>
           </div>
           <Button
-            className="btn-red m-4 sticky bottom-4"
+            className="btn-red m-4 mb-6 sticky bottom-4"
             onClick={() => {
               deleteBudget({ variables: { id: budgetData?.id } });
             }}
