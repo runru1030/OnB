@@ -1,8 +1,7 @@
 "use client";
 import { useMutation } from "@apollo/client";
 import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { CREATE_BUDGET } from "@app/lib/graphql/mutations";
-import { GET_CURRENCIES, GET_TRIP } from "@app/lib/graphql/queries";
+import { currency, trip, budget } from "@app/lib/graphql/queries";
 import Button from "@components/Button";
 import CountryFlag from "@components/CountryFlag";
 import { Input } from "@components/Input";
@@ -40,11 +39,11 @@ const CreateBudgetModal = () => {
   const budgetData = useAtomValue(budgetReqAtom);
   const resetTripData = useResetAtom(budgetReqAtom);
 
-  const [createBudget] = useMutation(CREATE_BUDGET, {
+  const [createBudget] = useMutation(budget.CREATE_BUDGET, {
     onCompleted: () => {
       router.refresh();
     },
-    refetchQueries: [GET_TRIP],
+    refetchQueries: [trip.GET_TRIP],
   });
 
   const onCreateBudget = () => {
@@ -176,7 +175,7 @@ const TitleInputContent = () => {
 };
 
 const SelectCurrencyContent = () => {
-  const { data: currenciesQueryData } = useQuery(GET_CURRENCIES, {
+  const { data: currenciesQueryData } = useQuery(currency.GET_CURRENCIES, {
     onCompleted: ({ currencies }) => {
       const defaultCurrency = currencies?.find(
         (curr: CurrencyQueryData) => curr.id === Country.currencyId

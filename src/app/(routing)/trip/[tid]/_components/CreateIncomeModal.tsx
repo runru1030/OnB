@@ -1,10 +1,12 @@
 "use client";
 import { useMutation } from "@apollo/client";
+import { income } from "@app/lib/graphql/queries";
+import { trip } from "@app/lib/graphql/queries";
+import { dateformatter } from "@app/utils";
 import { getExchangeData } from "@app/utils/currency";
 import Button from "@components/Button";
 import { Input } from "@components/Input";
 import StepModal from "@components/Modal/StepModal";
-import { CREATE_INCOME } from "@app/lib/graphql/mutations";
 import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import clsx from "clsx";
@@ -12,11 +14,9 @@ import { useAtom, useAtomValue } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Calendar } from "react-date-range";
 import BudgetBox from "./BudgetBox";
 import { tripAtom, tripStore } from "./TripProvider";
-import { Calendar } from "react-date-range";
-import { dateformatter } from "@app/utils";
-import { GET_TRIP } from "@app/lib/graphql/queries";
 
 const budgetAtom = atomWithReset({
   id: "",
@@ -41,11 +41,11 @@ const CreateIncomeModal = () => {
   const resetIncomeData = useResetAtom(incomeReqAtom);
 
   const { tid } = useParams();
-  const [createIncome] = useMutation(CREATE_INCOME, {
+  const [createIncome] = useMutation(income.CREATE_INCOME, {
     onCompleted: () => {
       router.refresh();
     },
-    refetchQueries: [GET_TRIP],
+    refetchQueries: [trip.GET_TRIP],
   });
 
   const onCreateIncome = () => {

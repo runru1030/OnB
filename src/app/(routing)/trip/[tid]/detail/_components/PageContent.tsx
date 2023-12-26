@@ -1,12 +1,15 @@
 import { getClient } from "@app/_components/ApolloClientRSC";
-import { GET_EXPENSES, GET_INCOMES } from "@app/lib/graphql/queries";
+import {
+  expense,
+  income
+} from "@app/lib/graphql/queries";
 import { use } from "react";
 import IncomeExpenseList from "../../_components/IncomeExpenseList";
 const PageContent = ({ tid }: { tid: string }) => {
   const [{ data: incomesQuery }, { data: expensesQuery }] = use(
     Promise.all([
-      getClient().query({ query: GET_INCOMES, variables: { tid } }),
-      getClient().query({ query: GET_EXPENSES, variables: { tid } }),
+      getClient().query({ query: income.GET_INCOMES, variables: { tid } }),
+      getClient().query({ query: expense.GET_EXPENSES, variables: { tid } }),
     ])
   );
   const dataList = [

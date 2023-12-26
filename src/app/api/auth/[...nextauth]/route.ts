@@ -1,6 +1,5 @@
 import { getClient } from "@app/_components/ApolloClientRSC";
-import { CREATE_AUTH } from "@app/lib/graphql/mutations";
-import { GET_USER } from "@app/lib/graphql/queries";
+import { auth } from "@app/lib/graphql/queries";
 import NextAuth from "next-auth";
 import KakaoProvider from "next-auth/providers/kakao";
 import NaverProvider from "next-auth/providers/naver";
@@ -20,7 +19,7 @@ const handler = NextAuth({
   callbacks: {
     async signIn({ user }) {
       await getClient().mutate({
-        mutation: CREATE_AUTH,
+        mutation: auth.CREATE_AUTH,
         variables: { ...user },
       });
       return true;
@@ -28,7 +27,7 @@ const handler = NextAuth({
     async session({ session }) {
       if (session.user) {
         const { data } = await getClient().query({
-          query: GET_USER,
+          query: auth.GET_USER,
           variables: { email: session.user.email },
         });
         session.user.id = data.user.id;

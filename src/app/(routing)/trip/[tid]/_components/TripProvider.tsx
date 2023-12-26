@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
-import { GET_TRIP } from "@app/lib/graphql/queries";
+import { trip } from "@app/lib/graphql/queries";
 import { Provider, atom, createStore, useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
 import { PropsWithChildren, useEffect } from "react";
@@ -28,7 +28,7 @@ export const tripStore = createStore();
 
 export default function TripProvider({ children }: PropsWithChildren) {
   const { tid } = useParams();
-  const { data } = useQuery(GET_TRIP, { variables: { id: tid } });
+  const { data } = useQuery(trip.GET_TRIP, { variables: { id: tid } });
   const setTripData = useSetAtom(tripAtom, { store: tripStore });
 
   useEffect(() => {

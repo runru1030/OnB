@@ -1,12 +1,12 @@
 import { getClient } from "@app/_components/ApolloClientRSC";
-import { GET_BUDGET_TOTAL } from "@app/lib/graphql/queries";
+import { budget } from "@app/lib/graphql/queries";
 import { use } from "react";
-import CreateIncomeModal from "./CreateIncomeModal";
 import CreateExpenseModal from "./CreateExpenseModal";
+import CreateIncomeModal from "./CreateIncomeModal";
 
 const BudgetAggregation = ({ tid }: { tid: string }) => {
   const { data } = use(
-    getClient().query({ query: GET_BUDGET_TOTAL, variables: { tid } })
+    getClient().query({ query: budget.GET_BUDGET_TOTAL, variables: { tid } })
   );
   const { totalBudgetIncomesKRW, totalBudgetExpenseKRW, totalBudgetCount } =
     data?.budgetTotal ?? 0;
