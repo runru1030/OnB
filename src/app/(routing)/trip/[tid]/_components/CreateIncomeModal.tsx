@@ -1,7 +1,7 @@
 "use client";
 import { useMutation } from "@apollo/client";
-import { income } from "@app/lib/graphql/mutations";
-import { GET_TRIP } from "@app/lib/graphql/queries";
+import { income } from "@app/lib/graphql/queries";
+import { trip } from "@app/lib/graphql/queries";
 import { dateformatter } from "@app/utils";
 import { getExchangeData } from "@app/utils/currency";
 import Button from "@components/Button";
@@ -45,7 +45,7 @@ const CreateIncomeModal = () => {
     onCompleted: () => {
       router.refresh();
     },
-    refetchQueries: [GET_TRIP],
+    refetchQueries: [trip.GET_TRIP],
   });
 
   const onCreateIncome = () => {

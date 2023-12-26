@@ -62,4 +62,24 @@ const DELETE_EXPENSE = gql`
     }
   }
 `;
-export default { CREATE_EXPENSE, UPDATE_EXPENSE, DELETE_EXPENSE };
+const GET_EXPENSES = gql`
+  query Expenses($tid: ID!) {
+    expenses(tid: $tid) {
+      id
+      title
+      category
+      amount
+      createdAt
+      budgetId
+      Budget {
+        title
+        type
+        Currency {
+          id
+          amountUnit
+        }
+      }
+    }
+  }
+`;
+export default { GET_EXPENSES, CREATE_EXPENSE, UPDATE_EXPENSE, DELETE_EXPENSE };

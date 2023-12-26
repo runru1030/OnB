@@ -2,7 +2,7 @@ import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { PrismaClient } from "@prisma/client";
 import { prisma } from "@app/lib/prisma/db";
-import { typeDefs } from "@app/lib/graphql/schema";
+import { typeDefs } from "@app/lib/graphql/schemas";
 import { resolvers } from "@app/lib/graphql/resolvers";
 
 export type Context = {

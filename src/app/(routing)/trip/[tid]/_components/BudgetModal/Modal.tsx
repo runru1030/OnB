@@ -1,7 +1,6 @@
 "use client";
 import { useMutation, useQuery } from "@apollo/client";
-import { DELETE_BUDGET } from "@app/lib/graphql/mutations";
-import { GET_BUDGET } from "@app/lib/graphql/queries";
+import { budget } from "@app/lib/graphql/queries";
 import { getSumOfBudget } from "@app/utils";
 import Button from "@components/Button";
 import Modal from "@components/Modal";
@@ -26,20 +25,20 @@ const InternalBudgetModal = () => {
   const [budgetData, setBudgetData] = useAtom(budgetAtom);
   const { totalIncomes, totalIncomesKRW, totalExpenses, totalExpensesKRW } =
     useMemo(() => getSumOfBudget(budgetData as BudgetQueryData), [budgetData]);
-  useQuery(GET_BUDGET, {
+  useQuery(budget.GET_BUDGET, {
     variables: { id: budgetData?.id },
     onCompleted: (data) => {
       setBudgetData(data.budget);
     },
   });
 
-  const [deleteBudget] = useMutation(DELETE_BUDGET, {
+  const [deleteBudget] = useMutation(budget.DELETE_BUDGET, {
     variables: { id: budgetData?.id },
     onCompleted: () => {
       setOpenAtom(false);
       router.refresh();
     },
-    refetchQueries: [GET_BUDGET],
+    refetchQueries: [budget.GET_BUDGET],
   });
   return (
     <Modal open={openAtom} onOpenChange={setOpenAtom}>

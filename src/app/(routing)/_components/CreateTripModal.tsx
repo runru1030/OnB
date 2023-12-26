@@ -1,8 +1,7 @@
 "use client";
 import { useMutation } from "@apollo/client";
 import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { trip } from "@app/lib/graphql/mutations";
-import { GET_COUNTRIES } from "@app/lib/graphql/queries";
+import { trip, country } from "@app/lib/graphql/queries";
 import Button from "@components/Button";
 import CountryFlag from "@components/CountryFlag";
 import { Input } from "@components/Input";
@@ -152,7 +151,7 @@ const SelectCountryContent = () => {
     useState<OpenStateByContinent>({});
   const [countryByContinent, setCountryByContinent] =
     useState<CountryByContinent>({});
-  const { data: countriesQueryData } = useQuery(GET_COUNTRIES, {
+  const { data: countriesQueryData } = useQuery(country.GET_COUNTRIES, {
     onCompleted: ({ countries }: { countries: Country[] }) => {
       const groupByData = countries.reduce(
         (acc: CountryByContinent, country) => {

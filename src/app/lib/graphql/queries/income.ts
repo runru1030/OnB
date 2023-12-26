@@ -62,4 +62,24 @@ const DELETE_INCOME = gql`
     }
   }
 `;
-export default { CREATE_INCOME, UPDATE_INCOME, DELETE_INCOME };
+const GET_INCOMES = gql`
+  query Incomes($tid: ID!) {
+    incomes(tid: $tid) {
+      id
+      title
+      amount
+      exchangeRate
+      createdAt
+      budgetId
+      Budget {
+        title
+        type
+        Currency {
+          id
+          amountUnit
+        }
+      }
+    }
+  }
+`;
+export default { GET_INCOMES, CREATE_INCOME, UPDATE_INCOME, DELETE_INCOME };

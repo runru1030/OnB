@@ -1,7 +1,6 @@
 "use client";
 import { useMutation } from "@apollo/client";
-import { expense } from "@app/lib/graphql/mutations";
-import { GET_TRIP } from "@app/lib/graphql/queries";
+import { expense, trip } from "@app/lib/graphql/queries";
 import { dateformatter, getSumOfBudget } from "@app/utils";
 import Button from "@components/Button";
 import { Input } from "@components/Input";
@@ -48,7 +47,7 @@ const CreateExpenseModal = () => {
     onCompleted: () => {
       router.refresh();
     },
-    refetchQueries: [GET_TRIP],
+    refetchQueries: [trip.GET_TRIP],
   });
 
   const onCreateExpense = () => {

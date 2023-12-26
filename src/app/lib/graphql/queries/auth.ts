@@ -9,4 +9,14 @@ const CREATE_AUTH = gql`
     }
   }
 `;
-export default { CREATE_AUTH };
+const GET_USER = gql`
+  query User($email: String!) {
+    user(email: $email) {
+      id
+      email
+      name
+    }
+  }
+`;
+
+export default { GET_USER, CREATE_AUTH };
