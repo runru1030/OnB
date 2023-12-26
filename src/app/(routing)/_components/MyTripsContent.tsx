@@ -1,6 +1,6 @@
 import { getClient } from "@app/_components/ApolloClientRSC";
 import { GET } from "@app/api/auth/[...nextauth]/route";
-import { GET_TRIPS } from "@app/lib/graphql/queries";
+import { trip } from "@app/lib/graphql/queries";
 import AddCircleTwoToneIcon from "@mui/icons-material/AddCircleTwoTone";
 import { Session, getServerSession } from "next-auth";
 import { use } from "react";
@@ -11,7 +11,7 @@ const MyTripsContent = () => {
   const session = use(getServerSession(GET)) as Session;
   const { data } = use(
     getClient().query({
-      query: GET_TRIPS,
+      query: trip.GET_TRIPS,
       variables: { userId: session?.user.id },
     })
   );

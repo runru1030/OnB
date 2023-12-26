@@ -1,11 +1,6 @@
 "use client";
 import { useMutation } from "@apollo/client";
-import {
-  DELETE_EXPENSE,
-  DELETE_INCOME,
-  UPDATE_EXPENSE,
-  UPDATE_INCOME,
-} from "@app/lib/graphql/mutations";
+import { expense, income } from "@app/lib/graphql/queries";
 import { dateformatter } from "@app/utils";
 import Button from "@components/Button";
 import { Input } from "@components/Input";
@@ -33,14 +28,14 @@ const InternalDetailModal = () => {
   const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);
   const detailData = useAtomValue(detailAtom);
 
-  const [deleteIncome] = useMutation(DELETE_INCOME, {
+  const [deleteIncome] = useMutation(income.DELETE_INCOME, {
     variables: { id: detailData?.id },
     onCompleted: () => {
       setOpenAtom(false);
       router.refresh();
     },
   });
-  const [deleteExpense] = useMutation(DELETE_EXPENSE, {
+  const [deleteExpense] = useMutation(expense.DELETE_EXPENSE, {
     variables: { id: detailData?.id },
     onCompleted: () => {
       setOpenAtom(false);
@@ -119,7 +114,7 @@ const IcomeInputContent = () => {
     detailData?.Budget as BudgetQueryData
   ).Currency;
 
-  const [updateIncome] = useMutation(UPDATE_INCOME, {
+  const [updateIncome] = useMutation(income.UPDATE_INCOME, {
     onCompleted: () => {
       router.refresh();
       setOpenAtom(false);
@@ -280,7 +275,7 @@ const ExpenseInputContent = () => {
   });
   const { id: currencyUnit } = (detailData?.Budget as BudgetQueryData).Currency;
 
-  const [updateExpense] = useMutation(UPDATE_EXPENSE, {
+  const [updateExpense] = useMutation(expense.UPDATE_EXPENSE, {
     onCompleted: () => {
       router.refresh();
       setOpenAtom(false);

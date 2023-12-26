@@ -1,5 +1,5 @@
 import { getClient } from "@app/_components/ApolloClientRSC";
-import { GET_BUDGETS } from "@app/lib/graphql/queries";
+import { budget } from "@app/lib/graphql/queries";
 import { use } from "react";
 import { BudgetQueryData } from "../_types";
 import BudgetBox from "./BudgetBox";
@@ -8,7 +8,7 @@ import CreateBudgetModal from "./CreateBudgetModal";
 
 const BudgetsContent = ({ tid }: { tid: string }) => {
   const { data } = use(
-    getClient().query({ query: GET_BUDGETS, variables: { tid } })
+    getClient().query({ query: budget.GET_BUDGETS, variables: { tid } })
   );
 
   return (
