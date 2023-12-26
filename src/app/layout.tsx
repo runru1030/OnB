@@ -44,6 +44,11 @@ export default function RootLayout({
   }
   return (
     <html lang="en" className={pretendard.className}>
+      <head>
+        <link rel="apple-touch-icon" href="/assets/logo_sm.png" />
+        <meta name="apple-mobile-web-app-title" content="OnB" />
+        <link rel="manifest" href="/manifest.json" />
+      </head>
       <body>
         <ApolloProviders>
           <AuthProvider>
