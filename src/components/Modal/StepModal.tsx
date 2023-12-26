@@ -7,7 +7,7 @@ import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import clsx from "clsx";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { atomWithReset } from "jotai/utils";
-import React, { PropsWithChildren, createElement } from "react";
+import React, { PropsWithChildren, createElement, useEffect } from "react";
 
 const stepAtom = atomWithReset(1);
 
@@ -47,6 +47,11 @@ const StepModalStepSection = ({
   }[];
 }>) => {
   const step = useAtomValue(stepAtom);
+
+  useEffect(() => {
+    document.getElementById(`step-${step}`)?.focus();
+  }, [step]);
+
   return (
     <>
       {stepContentList.map((stepContent, idx) =>

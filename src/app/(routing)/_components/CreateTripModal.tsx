@@ -15,8 +15,12 @@ import { atomWithReset, useResetAtom } from "jotai/utils";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { DateRange } from "react-date-range";
+import { CONTINENT } from "../trip/[tid]/_constants";
+import KeyboardArrowDownSharpIcon from "@mui/icons-material/KeyboardArrowDownSharp";
+import { debounce } from "@mui/material";
+import SearchSharpIcon from "@mui/icons-material/SearchSharp";
 
 const tripReqAtom = atomWithReset({
   title: "",
@@ -139,9 +143,58 @@ const TitleInputContent = () => {
     </div>
   );
 };
+
+interface CountryByContinent {
+  [key: string]: { countries: Country[]; open: boolean };
+}
+interface OpenStateByContinent {
+  [key: string]: boolean;
+}
 const SelectCountryContent = () => {
-  const { data: countriesQuery } = useQuery(GET_COUNTRIES);
+  const [openStateByContinent, setOpenStateByContinent] =
+    useState<OpenStateByContinent>({});
+  const [countryByContinent, setCountryByContinent] =
+    useState<CountryByContinent>({});
+  const { data: countriesQueryData } = useQuery(GET_COUNTRIES, {
+    onCompleted: ({ countries }: { countries: Country[] }) => {
+      const groupByData = countries.reduce(
+        (acc: CountryByContinent, country) => {
+          if (!acc[country.continent]) {
+            acc[country.continent] = { countries: [], open: false };
+          }
+          acc[country.continent].countries.push(country);
+          return acc;
+        },
+        {}
+      );
+      const openByContinent = Object.keys(groupByData).reduce(
+        (acc: { [key: string]: boolean }, continent) => {
+          acc[continent] = false;
+          return acc;
+        },
+        {}
+      );
+
+      setCountryByContinent(groupByData);
+      setOpenStateByContinent(openByContinent);
+    },
+  });
   const [tripData, setTripData] = useAtom(tripReqAtom);
+
+  const [searchData, setSearchData] = useState("");
+  const [searchedCountries, setSearchedCountries] = useState<Country[]>([]);
+  const onSearchCountry = useCallback(
+    debounce((s) => {
+      setSearchedCountries(
+        countriesQueryData.countries.filter(
+          (c: Country) =>
+            c.id.includes(s) || c.name.includes(s) || c.name_en.includes(s)
+        )
+      );
+    }, 1000),
+    [countriesQueryData]
+  );
+
   return (
     <div className="flex-1 overflow-auto p-4">
       <div className="flex flex-col gap-4">
@@ -149,32 +202,129 @@ const SelectCountryContent = () => {
           여행 국가를 선택해주세요{" "}
           <span className="text-xs font-normal text-grey-400">단일 선택</span>
         </h2>
-        <div className="flex flex-col gap-2 ">
-          {countriesQuery?.countries?.map((country: Country) => (
+        <div className="flex w-full relative">
+          <SearchSharpIcon className="absolute top-1/2 -translate-y-1/2 left-2 text-lg text-grey-400" />
+          <Input
+            type="text"
+            placeholder="국가명 또는 국가 코드"
+            value={searchData}
+            onChange={(e) => {
+              setSearchData(e.target.value);
+              onSearchCountry(e.target.value);
+            }}
+            className="w-full bg-grey-light-300 !pl-8"
+          />
+        </div>
+        <div
+          className={clsx(
+            "flex flex-col gap-3",
+            searchData === "" ? "visible" : "hidden"
+          )}
+        >
+          {Object.keys(CONTINENT).map((continent) => (
+            <div key={continent}>
+              <div
+                onClick={() => {
+                  setOpenStateByContinent((p) => ({
+                    ...p,
+                    [continent]: !p[continent],
+                  }));
+                }}
+                className="px-2 py-3 text-lg flex justify-between font-medium"
+              >
+                {CONTINENT[continent]}
+                <KeyboardArrowDownSharpIcon
+                  className={clsx(
+                    openStateByContinent[continent] ? "rotate-0" : "rotate-180",
+                    "duration-300 text-grey-300"
+                  )}
+                />
+              </div>
+              <div
+                className={clsx(
+                  openStateByContinent[continent] ? "visible" : "hidden",
+                  "flex flex-col gap-1"
+                )}
+              >
+                {countryByContinent[continent]?.countries.map((country) => (
+                  <div
+                    key={country.id}
+                    onClick={() => {
+                      setTripData((p) => ({
+                        ...p,
+                        countryId:
+                          tripData.countryId === country.id ? "" : country.id,
+                      }));
+                    }}
+                    className={clsx(
+                      tripData.countryId === country.id &&
+                        "text-blue font-medium",
+                      "px-2 py-1 rounded-lg flex justify-between items-center duration-300"
+                    )}
+                  >
+                    {country.name}
+                    <div
+                      className={clsx(
+                        tripData.countryId === country.id &&
+                          "border-2 border-blue",
+                        "w-11 h-11 rounded-full bg-grey-0 flex items-center justify-center border-blue duration-300"
+                      )}
+                    >
+                      {country.flag_img && (
+                        <Image
+                          src={country.flag_img}
+                          width={28}
+                          height={100}
+                          alt="국기"
+                          className="rounded-sm shadow-normal"
+                        />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div
+          className={clsx(
+            "flex flex-col gap-3",
+            searchData !== "" ? "visible" : "hidden"
+          )}
+        >
+          {searchedCountries.map((country) => (
             <div
               key={country.id}
               onClick={() => {
-                if (tripData.countryId === country.id) {
-                  setTripData((p) => ({ ...p, countryId: "" }));
-                } else {
-                  setTripData((p) => ({ ...p, countryId: country.id }));
-                }
+                setTripData((p) => ({
+                  ...p,
+                  countryId:
+                    tripData.countryId === country.id ? "" : country.id,
+                }));
               }}
               className={clsx(
-                tripData.countryId === country.id &&
-                  "bg-grey-light-400 duration-300 text-blue",
-                "p-1.5 rounded-lg flex justify-between"
+                tripData.countryId === country.id && "text-blue font-medium",
+                "px-2 py-1 rounded-lg flex justify-between items-center duration-300"
               )}
             >
               {country.name}
-              {country.flag_img && (
-                <Image
-                  src={country.flag_img}
-                  width={40}
-                  height={100}
-                  alt="국기"
-                />
-              )}
+              <div
+                className={clsx(
+                  tripData.countryId === country.id && "border-2 border-blue",
+                  "w-11 h-11 rounded-full bg-grey-0 flex items-center justify-center border-blue duration-300"
+                )}
+              >
+                {country.flag_img && (
+                  <Image
+                    src={country.flag_img}
+                    width={28}
+                    height={100}
+                    alt="국기"
+                    className="rounded-sm shadow-normal"
+                  />
+                )}
+              </div>
             </div>
           ))}
         </div>
