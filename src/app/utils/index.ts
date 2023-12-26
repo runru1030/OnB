@@ -1,8 +1,14 @@
 import { BudgetQueryData } from "@app/(routing)/trip/[tid]/_types";
 
 export const dateformatter = (date: Date) =>
-  `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
+  `${date.getFullYear()}.${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}.${date.getDate().toString().padStart(2, "0")}`;
 
+export const dateformatterWithUnit = (date: Date) =>
+  `${date.getFullYear()}년 ${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}월 ${date.getDate().toString().padStart(2, "0")}일`;
 export const getSumOfBudget = (budget: BudgetQueryData) => {
   const totalExpenses = budget?.expenses?.reduce(
     (acc, curr) => acc + curr.amount,

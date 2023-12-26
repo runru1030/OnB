@@ -194,7 +194,7 @@ const ExpenseInputContent = () => {
             <span className="text-red-300">
               {(
                 (totalIncomes || 0) -
-                (totalExpenses + parseInt(expenseData.amount) || 0)
+                (totalExpenses + parseFloat(expenseData.amount) || 0)
               ).toLocaleString()}
             </span>
             <span className="text-red-300 text-base">/</span>
