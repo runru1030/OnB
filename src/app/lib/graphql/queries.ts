@@ -98,6 +98,7 @@ export const GET_COUNTRIES = gql`
       name
       name_en
       flag_img
+      continent
     }
   }
 `;

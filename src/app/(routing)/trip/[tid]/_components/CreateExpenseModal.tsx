@@ -179,6 +179,7 @@ const ExpenseInputContent = () => {
                 }));
               }}
               autoFocus
+              id="step-2"
               placeholder={`0`}
               className="text-2xl font-medium outline-none focus:border-b-2 border-red rounded-none w-full px-0 pr-10 text-right"
               onKeyDown={(e) => {
@@ -230,7 +231,6 @@ const ExpenseInputContent = () => {
               onChange={(e) =>
                 setExpenseData((p) => ({ ...p, title: e.target.value }))
               }
-              autoFocus
               maxLength={10}
               className="h-[34px] outline-none focus:border-b-2 border-grey-400 rounded-none !px-0 w-full text-right"
             />

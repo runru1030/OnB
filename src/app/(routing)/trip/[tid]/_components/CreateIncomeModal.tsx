@@ -193,6 +193,7 @@ const IcomeInputContent = () => {
                   }));
                 }}
                 autoFocus
+                id="step-2"
                 placeholder={`0`}
                 className="text-2xl font-medium outline-none focus:border-b-2 border-grey-400 rounded-none w-full px-0 pr-10 text-right"
                 onKeyDown={(e) => {
@@ -224,7 +225,6 @@ const IcomeInputContent = () => {
                       exchangeRate: e.target.value.replace(/(^0+)/, ""),
                     }));
                   }}
-                  autoFocus
                   placeholder={`${exchageData.deal_bas_r}`}
                   className="outline-none focus:border-b-2 border-grey-400 rounded-none px-0 pr-10 text-right w-[120px] disabled:bg-white"
                   disabled={currencyUnit === "KRW"}
@@ -243,7 +243,6 @@ const IcomeInputContent = () => {
               onChange={(e) =>
                 setIcomeData((p) => ({ ...p, title: e.target.value }))
               }
-              autoFocus
               maxLength={10}
               className="h-[34px] outline-none focus:border-b-2 border-grey-400 rounded-none !px-0 w-full text-right"
             />

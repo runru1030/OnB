@@ -22,6 +22,7 @@ model Country {
   name       String
   name_en    String
   flag_img   String?    @db.VarChar(500)
+  continent  String     @default("")
   currencies Currency[]
   trips      Trip[]
 }
