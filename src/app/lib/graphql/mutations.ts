@@ -25,6 +25,7 @@ export const CREATE_TRIP = gql`
         name
         name_en
         flag_img
+        currencyId
       }
     }
   }
