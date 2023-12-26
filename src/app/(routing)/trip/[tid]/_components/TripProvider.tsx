@@ -12,7 +12,14 @@ export const tripAtom = atom<TripQueryData>({
   title: "",
   startedAt: new Date(),
   endedAt: new Date(),
-  Country: { id: "", name: "", name_en: "", flag_img: "", continent: "" },
+  Country: {
+    id: "",
+    name: "",
+    name_en: "",
+    flag_img: "",
+    continent: "",
+    currencyId: "",
+  },
   budgets: [],
 });
 tripAtom.debugLabel = "tripAtom";

@@ -20,7 +20,7 @@ import { GET_TRIP } from "@app/lib/graphql/queries";
 
 const budgetAtom = atomWithReset({
   id: "",
-  Currency: { id: "", name: "", countryId: "", amountUnit: 1 },
+  Currency: { id: "", name: "", amountUnit: 1 },
   title: "",
   currencyId: "",
   type: "CASH",

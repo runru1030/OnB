@@ -13,6 +13,7 @@ export const GET_TRIPS = gql`
         name
         name_en
         flag_img
+        currencyId
       }
     }
   }
@@ -31,6 +32,7 @@ export const GET_PASSED_TRIPS = gql`
         name
         name_en
         flag_img
+        currencyId
       }
     }
   }
@@ -47,6 +49,7 @@ export const GET_TRIP = gql`
         name
         name_en
         flag_img
+        currencyId
       }
       budgets {
         id
@@ -99,6 +102,7 @@ export const GET_COUNTRIES = gql`
       name_en
       flag_img
       continent
+      currencyId
     }
   }
 `;
@@ -108,8 +112,14 @@ export const GET_CURRENCIES = gql`
     currencies {
       id
       name
-      countryId
       amountUnit
+      countries {
+        id
+        name
+        name_en
+        flag_img
+        continent
+      }
     }
   }
 `;

@@ -6,6 +6,7 @@ export const typeDefs = `#graphql
     name_en:String
     flag_img:String
     continent:String
+    currencyId:ID
   }
   type Trip{
     id:ID!
@@ -19,7 +20,7 @@ export const typeDefs = `#graphql
     id:ID!
     name:String
     amountUnit:Int
-    countryId:String
+    countries:[Country]
   }
   type Expense{
     id:ID!

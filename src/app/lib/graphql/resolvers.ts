@@ -78,7 +78,9 @@ export const resolvers = {
       args: undefined,
       context: Context
     ) => {
-      return await context.prisma.currency.findMany();
+      return await context.prisma.currency.findMany({
+        include: { countries: true },
+      });
     },
     expenses: async (
       _parent: undefined,
