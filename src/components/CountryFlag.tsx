@@ -16,8 +16,9 @@ const CountryFlag = ({
 }: CountryFlagProps) => {
   return (
     <div
+      style={{ width: `${size}px`, height: `${size}px` }}
       className={clsx(
-        `flex h-[${size}px] w-[${size}px] min-w-[${size}px] items-center justify-center bg-grey-0 rounded-full`,
+        `flex items-center justify-center bg-grey-0 rounded-full`,
         className
       )}
     >
