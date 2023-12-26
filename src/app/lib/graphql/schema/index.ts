@@ -8,6 +8,12 @@ export const typeDefs = `#graphql
     continent:String
     currencyId:ID
   }
+  type Currency{
+    id:ID!
+    name:String
+    amountUnit:Int
+    countries:[Country]
+  }
   type Trip{
     id:ID!
     title:String
@@ -15,12 +21,6 @@ export const typeDefs = `#graphql
     endedAt:Date
     countryId:String
     Country:Country
-  }
-  type Currency{
-    id:ID!
-    name:String
-    amountUnit:Int
-    countries:[Country]
   }
   type Expense{
     id:ID!
@@ -49,6 +49,11 @@ export const typeDefs = `#graphql
     expenses:[Expense]
     incomes:[Income]
   }
+  type User{
+    id:ID!
+    name:String
+    email:String!
+  }
   type TripJoined{
     id:ID!
     title:String
@@ -57,11 +62,6 @@ export const typeDefs = `#graphql
     Country:Country
     budgets:[Budget]
     expenses:[Expense]
-  }
-  type User{
-    id:ID!
-    name:String
-    email:String!
   }
   type BudgetAgg{
     totalBudgetIncomesKRW:Float
@@ -82,12 +82,7 @@ export const typeDefs = `#graphql
     user(email: String!):User
   }	
   type Mutation {
-    createTrip (
-    title:String,
-    startedAt:Date,
-    endedAt:Date,
-    countryId:String, 
-    userId:ID) : Trip
+    createTrip (title:String,startedAt:Date,endedAt:Date,countryId:String, userId:ID) : Trip
     deleteTrip(id:ID!):Trip
 
     createBudget(title:String, type:String, currencyId:String, tripId:ID):Budget
