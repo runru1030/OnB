@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-import { DocumentNode } from "graphql";
 
 const CREATE_BUDGET = gql`
   mutation CreateBudget(
@@ -143,10 +142,33 @@ const GET_BUDGET_TOTAL = gql`
   }
 `;
 
+const UPDATE_BUDGET = gql`
+  mutation UpdateBudget($id: ID!, $title: String, $type: String) {
+    updateBudget(id: $id, title: $title, type: $type) {
+      id
+      title
+      type
+      Currency {
+        id
+        name
+        amountUnit
+      }
+      expenses {
+        amount
+      }
+      incomes {
+        amount
+        exchangeRate
+      }
+    }
+  }
+`;
+
 export default {
   GET_BUDGET,
   GET_BUDGETS,
   GET_BUDGET_TOTAL,
   CREATE_BUDGET,
   DELETE_BUDGET,
-} as { [key: string]: DocumentNode };
+  UPDATE_BUDGET,
+} 

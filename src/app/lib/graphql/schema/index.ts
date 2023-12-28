@@ -86,6 +86,7 @@ export const typeDefs = `#graphql
     deleteTrip(id:ID!):Trip
 
     createBudget(title:String, type:String, currencyId:String, tripId:ID):Budget
+    updateBudget(id:ID!, title:String, type:String):Budget
     deleteBudget(id:ID!):Budget
 
     createIncome(title:String, amount:Float, exchangeRate:Float, createdAt:Date, budgetId:ID, tripId:ID):Income

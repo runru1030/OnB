@@ -96,6 +96,21 @@ export default {
         },
       });
     },
+    updateBudget: async (
+      _parent: undefined,
+      args: Budget,
+      context: Context
+    ) => {
+      return await context.prisma.budget.update({
+        where: { id: args.id },
+        data: args,
+        include: {
+          Currency: true,
+          expenses: true,
+          incomes: true,
+        },
+      });
+    },
     deleteBudget: async (
       _parent: undefined,
       args: { id: string },
