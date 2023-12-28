@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-import { DocumentNode } from "graphql";
 
 const GET_CURRENCIES = gql`
   query Currencies {
@@ -17,4 +16,4 @@ const GET_CURRENCIES = gql`
     }
   }
 `;
-export default { GET_CURRENCIES } as { [key: string]: DocumentNode };
+export default { GET_CURRENCIES } 
