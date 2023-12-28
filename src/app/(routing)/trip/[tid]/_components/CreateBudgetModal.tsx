@@ -202,7 +202,7 @@ const SelectCurrencyContent = () => {
         )
       );
     }, 1000),
-    [currencies]
+    [currenciesQueryData]
   );
 
   return (

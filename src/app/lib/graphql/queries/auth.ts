@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-import { DocumentNode } from "graphql";
 
 const CREATE_AUTH = gql`
   mutation CreateAuth($email: String!, $name: String) {
@@ -20,4 +19,4 @@ const GET_USER = gql`
   }
 `;
 
-export default { GET_USER, CREATE_AUTH } as { [key: string]: DocumentNode };
+export default { GET_USER, CREATE_AUTH } 
