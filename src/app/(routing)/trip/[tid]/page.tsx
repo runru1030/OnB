@@ -26,11 +26,13 @@ const Page = ({ params: { tid } }: { params: { tid: string } }) => {
         >
           <BudgetsContent tid={tid} />
         </Suspense>
-        <div className="fixed bottom-0 left-0 flex flex-col bg-grey-light-300 rounded-t-2xl w-full p-6 gap-3 shadow-normal">
-          <Suspense fallback={<div className="h-[100px]"></div>}>
-            <BudgetAggregation tid={tid} />
-          </Suspense>
-        </div>
+        <Suspense
+          fallback={
+            <div className="h-[100px]fixed bottom-0 left-0 bg-grey-light-300 rounded-t-2xl w-full p-6 shadow-normal"></div>
+          }
+        >
+          <BudgetAggregation tid={tid} />
+        </Suspense>
       </div>
     </TripProvider>
   );

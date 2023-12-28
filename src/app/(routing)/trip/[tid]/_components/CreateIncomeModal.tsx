@@ -1,7 +1,6 @@
 "use client";
 import { useMutation } from "@apollo/client";
-import { income } from "@app/lib/graphql/queries";
-import { trip } from "@app/lib/graphql/queries";
+import { income, trip } from "@app/lib/graphql/queries";
 import { dateformatter } from "@app/utils";
 import { getExchangeData } from "@app/utils/currency";
 import Button from "@components/Button";
@@ -10,11 +9,12 @@ import StepModal from "@components/Modal/StepModal";
 import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import clsx from "clsx";
-import { useAtom, useAtomValue } from "jotai";
+import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import { Calendar } from "react-date-range";
+import { BudgetQueryData } from "../_types";
 import BudgetBox from "./BudgetBox";
 import { tripAtom, tripStore } from "./TripProvider";
 
@@ -31,10 +31,12 @@ const incomeReqAtom = atomWithReset({
   exchangeRate: "1",
   createdAt: new Date(),
 });
+const modalOpenAtom = atom<boolean>(false);
 
 const CreateIncomeModal = () => {
   const router = useRouter();
 
+  const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);
   const budgetData = useAtomValue(budgetAtom);
   const incomeData = useAtomValue(incomeReqAtom);
   const resetBudgetData = useResetAtom(budgetAtom);
@@ -72,9 +74,11 @@ const CreateIncomeModal = () => {
     }
   };
   return (
-    <StepModal>
+    <StepModal open={openAtom} onOpenChange={setOpenAtom}>
       <StepModal.Trigger>
-        <Button className="btn-blue w-full">예산 채우기</Button>
+        <Button className="btn-grey-border bg-white w-full shadow-normal">
+          예산 채우기
+        </Button>
       </StepModal.Trigger>
       <StepModal.Content
         onCloseAutoFocus={() => {
@@ -84,29 +88,32 @@ const CreateIncomeModal = () => {
       >
         <StepModal.Title>예산 채우기</StepModal.Title>
         <StepModal.StepSection
-          stepContentList={[
-            {
-              content: <SelectBudgetContent />,
-              nextButton: (
-                <StepModal.StepNext
-                  requiredCondition={{
-                    condition: !budgetData,
-                    description: "채울 예산을 선택해주세요!",
-                  }}
-                >
-                  다음
-                </StepModal.StepNext>
-              ),
-            },
-            {
-              content: <IcomeInputContent />,
-              nextButton: (
-                <StepModal.StepNext onNextStepHandler={onCreateIncome}>
-                  예산 채우기
-                </StepModal.StepNext>
-              ),
-            },
-          ]}
+          stepContentList={
+            budgetData.id === ""
+              ? [
+                  {
+                    content: <SelectBudgetContent />,
+                  },
+                  {
+                    content: <IcomeInputContent />,
+                    nextButton: (
+                      <StepModal.StepNext onNextStepHandler={onCreateIncome}>
+                        예산 채우기
+                      </StepModal.StepNext>
+                    ),
+                  },
+                ]
+              : [
+                  {
+                    content: <IcomeInputContent />,
+                    nextButton: (
+                      <StepModal.StepNext onNextStepHandler={onCreateIncome}>
+                        예산 채우기
+                      </StepModal.StepNext>
+                    ),
+                  },
+                ]
+          }
         />
       </StepModal.Content>
     </StepModal>
@@ -114,21 +121,17 @@ const CreateIncomeModal = () => {
 };
 const SelectBudgetContent = () => {
   const { budgets } = useAtomValue(tripAtom, { store: tripStore });
-  const [budgetData, setBudgetData] = useAtom(budgetAtom);
+  const setBudgetData = useSetAtom(budgetAtom);
 
   return (
     <div className="flex-1 overflow-auto p-4">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
         {budgets.map((budget) => (
           <div
             onClick={() => {
               setBudgetData(budget);
             }}
-            className={clsx(
-              budget.id === budgetData?.id &&
-                "bg-grey-light-400 [&>div>h2]:text-blue",
-              "rounded-lg duration-300 p-2"
-            )}
+            className={clsx("duration-300 py-2")}
             key={budget.id}
           >
             <BudgetBox budget={budget} />
@@ -282,4 +285,27 @@ const IcomeInputContent = () => {
     </div>
   );
 };
+export const Trigger = ({
+  children,
+  budget,
+  ...props
+}: PropsWithChildren<
+  React.ComponentProps<typeof Button> & { budget: BudgetQueryData }
+>) => {
+  const setOpenAtom = useSetAtom(modalOpenAtom);
+  const setBudget = useSetAtom(budgetAtom);
+  return (
+    <Button
+      onClick={(e) => {
+        setBudget(budget);
+        setOpenAtom(true);
+        props?.onClick?.(e);
+      }}
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+};
+CreateIncomeModal.Trigger = Trigger;
 export default CreateIncomeModal;

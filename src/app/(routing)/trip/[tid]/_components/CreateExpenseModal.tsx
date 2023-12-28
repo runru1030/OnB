@@ -8,10 +8,10 @@ import StepModal from "@components/Modal/StepModal";
 import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import clsx from "clsx";
-import { useAtom, useAtomValue } from "jotai";
+import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import { useParams, useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { PropsWithChildren, useMemo, useState } from "react";
 import { Calendar } from "react-date-range";
 import { EXPNSE_CATEGORY } from "../_constants";
 import { BudgetQueryData } from "../_types";
@@ -34,10 +34,12 @@ const expenseReqAtom = atomWithReset({
   createdAt: new Date(),
 });
 
+const modalOpenAtom = atom<boolean>(false);
 const CreateExpenseModal = () => {
   const router = useRouter();
   const { tid } = useParams();
 
+  const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);
   const budgetData = useAtomValue(budgetAtom);
   const expenseData = useAtomValue(expenseReqAtom);
   const resetBudgetData = useResetAtom(budgetAtom);
@@ -73,9 +75,9 @@ const CreateExpenseModal = () => {
     }
   };
   return (
-    <StepModal>
+    <StepModal open={openAtom} onOpenChange={setOpenAtom}>
       <StepModal.Trigger>
-        <Button className="btn-red w-full">지출 기록하기</Button>
+        <Button className="btn-red w-full shadow-normal">지출하기</Button>
       </StepModal.Trigger>
       <StepModal.Content
         onCloseAutoFocus={() => {
@@ -85,29 +87,32 @@ const CreateExpenseModal = () => {
       >
         <StepModal.Title>지출 기록하기</StepModal.Title>
         <StepModal.StepSection
-          stepContentList={[
-            {
-              content: <SelectBudgetContent />,
-              nextButton: (
-                <StepModal.StepNext
-                  requiredCondition={{
-                    condition: !budgetData,
-                    description: "지출할 예산을 선택해주세요!",
-                  }}
-                >
-                  다음
-                </StepModal.StepNext>
-              ),
-            },
-            {
-              content: <ExpenseInputContent />,
-              nextButton: (
-                <StepModal.StepNext onNextStepHandler={onCreateExpense}>
-                  지출 기록하기
-                </StepModal.StepNext>
-              ),
-            },
-          ]}
+          stepContentList={
+            budgetData.id === ""
+              ? [
+                  {
+                    content: <SelectBudgetContent />,
+                  },
+                  {
+                    content: <ExpenseInputContent />,
+                    nextButton: (
+                      <StepModal.StepNext onNextStepHandler={onCreateExpense}>
+                        지출 기록하기
+                      </StepModal.StepNext>
+                    ),
+                  },
+                ]
+              : [
+                  {
+                    content: <ExpenseInputContent />,
+                    nextButton: (
+                      <StepModal.StepNext onNextStepHandler={onCreateExpense}>
+                        지출 기록하기
+                      </StepModal.StepNext>
+                    ),
+                  },
+                ]
+          }
         />
       </StepModal.Content>
     </StepModal>
@@ -269,3 +274,27 @@ const ExpenseInputContent = () => {
     </div>
   );
 };
+
+export const Trigger = ({
+  children,
+  budget,
+  ...props
+}: PropsWithChildren<
+  React.ComponentProps<typeof Button> & { budget: BudgetQueryData }
+>) => {
+  const setOpenAtom = useSetAtom(modalOpenAtom);
+  const setBudget = useSetAtom(budgetAtom);
+  return (
+    <Button
+      onClick={(e) => {
+        setBudget(budget);
+        setOpenAtom(true);
+        props?.onClick?.(e);
+      }}
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+};
+CreateExpenseModal.Trigger = Trigger;

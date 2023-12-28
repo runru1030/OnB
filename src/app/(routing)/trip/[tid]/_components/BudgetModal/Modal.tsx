@@ -13,6 +13,8 @@ import dynamic from "next/dynamic";
 import { PropsWithChildren, useMemo } from "react";
 import { BudgetQueryData } from "../../_types";
 import EditBudgetModalWithTrigger from "../EditBudgetModalWithTrigger";
+import CreateIncomeModal from "../CreateIncomeModal";
+import CreateExpenseModal from "../CreateExpenseModal";
 
 const IncomeExpenseList = dynamic(() => import("../IncomeExpenseList"));
 const modalOpenAtom = atom<boolean>(false);
@@ -122,6 +124,20 @@ const InternalBudgetModal = () => {
                 dataList={[...budgetData.incomes, ...budgetData.expenses]}
               />
             )}
+          </div>
+          <div className="flex w-full gap-4 p-4 mb-2 sticky bottom-4">
+            <CreateIncomeModal.Trigger
+              budget={budgetData as BudgetQueryData}
+              className="btn-grey-border bg-white w-full shadow-normal"
+            >
+              채우기
+            </CreateIncomeModal.Trigger>
+            <CreateExpenseModal.Trigger
+              budget={budgetData as BudgetQueryData}
+              className="btn-red w-full shadow-normal"
+            >
+              지출하기
+            </CreateExpenseModal.Trigger>
           </div>
         </div>
       </Modal.Content>
