@@ -49,7 +49,7 @@ const EditBudgetModalWithTrigger = ({
   return (
     <Modal open={openAtom} onOpenChange={setOpenAtom}>
       <Modal.Trigger>
-        <Button className="absolute top-1/2 left-4 !p-0 -translate-y-1/2 text-sm">
+        <Button className="absolute top-1/2 left-4 !p-0 -translate-y-1/2 text-sm text-grey-400">
           관리
         </Button>
       </Modal.Trigger>
