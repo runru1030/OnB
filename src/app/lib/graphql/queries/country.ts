@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-import { DocumentNode } from "graphql";
 
 const GET_COUNTRIES = gql`
   query Countries {
@@ -13,4 +12,4 @@ const GET_COUNTRIES = gql`
     }
   }
 `;
-export default { GET_COUNTRIES } as { [key: string]: DocumentNode };
+export default { GET_COUNTRIES }

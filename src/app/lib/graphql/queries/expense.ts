@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-import { DocumentNode } from "graphql";
 
 const CREATE_EXPENSE = gql`
   mutation CreateExpense(
@@ -88,4 +87,4 @@ export default {
   CREATE_EXPENSE,
   UPDATE_EXPENSE,
   DELETE_EXPENSE,
-} as { [key: string]: DocumentNode };
+};
