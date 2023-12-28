@@ -299,7 +299,6 @@ const SelectCountryContent = () => {
               {country.name}
               <CountryFlag
                 country={country}
-                roundSize="sm"
                 size={40}
                 className={
                   tripData.countryId === country.id
