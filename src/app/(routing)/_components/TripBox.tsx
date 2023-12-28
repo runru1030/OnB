@@ -13,7 +13,7 @@ const TripBox = ({
   return (
     <Link
       href={`/trip/${id}`}
-      className="border border-grey-light-400 flex flex-col h-[170px] p-4 justify-between items-center rounded-2xl"
+      className="active:shadow-normal border border-grey-light-400 flex flex-col h-[170px] p-4 justify-between items-center rounded-2xl"
     >
       <div className="font-medium">{title}</div>
       <div className="flex flex-col gap-2 items-center">

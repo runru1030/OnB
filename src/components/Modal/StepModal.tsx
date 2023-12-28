@@ -43,7 +43,7 @@ const StepModalStepSection = ({
 }: PropsWithChildren<{
   stepContentList: {
     content: React.ReactElement;
-    nextButton: React.ReactElement;
+    nextButton?: React.ReactElement;
   }[];
 }>) => {
   const step = useAtomValue(stepAtom);
