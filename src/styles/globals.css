@@ -48,7 +48,7 @@ body {
 
 @layer base {
   *::-webkit-scrollbar {
-    width: 5px;
+    width: 0px;
   }
   *::-webkit-scrollbar-thumb {
     @apply bg-grey-0 rounded-2xl
