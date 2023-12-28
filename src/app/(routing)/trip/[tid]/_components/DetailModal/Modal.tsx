@@ -8,7 +8,6 @@ import Modal from "@components/Modal";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
-import RemoveCircleTwoToneIcon from "@mui/icons-material/RemoveCircleTwoTone";
 import clsx from "clsx";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
@@ -52,10 +51,9 @@ const InternalDetailModal = () => {
                 ? deleteIncome({ variables: { id: detailData?.id } })
                 : deleteExpense({ variables: { id: detailData?.id } });
             }}
-            className="text-red-300 text-sm absolute top-1/2 left-4 -translate-y-1/2 flex gap-1 items-center !p-0"
+            className="text-red text-sm absolute top-1/2 left-4 -translate-y-1/2 flex gap-1 items-center !p-0"
           >
-            삭제
-            <RemoveCircleTwoToneIcon sx={{ fontSize: 16 }} />
+            삭제하기
           </Button>
           <Modal.Close>
             <Button className="absolute top-1/2 right-4 !p-0 -translate-y-1/2">
