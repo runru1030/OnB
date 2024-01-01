@@ -20,21 +20,27 @@ const IncomeExpenseList = ({
     const dataObj = {} as {
       [key: string]: DetailDataType[];
     };
-    dataList.forEach((el) => {
-      const date = new Date(el.createdAt);
-      const key = dateformatter(date);
-      const li = {
-        ...el,
-        type: (Object.hasOwn(el, "category")
-          ? "Expense"
-          : "Income") as DetailType,
-      };
-      if (Object.hasOwn(dataObj, key)) {
-        dataObj[key].push(li);
-      } else {
-        dataObj[key] = [li];
-      }
-    });
+    [...dataList]
+      .sort((a, b) =>
+        new Date(a.createdAt).getTime() <= new Date(b.createdAt).getTime()
+          ? 1
+          : -1
+      )
+      .forEach((el) => {
+        const date = new Date(el.createdAt);
+        const key = dateformatter(date);
+        const li = {
+          ...el,
+          type: (Object.hasOwn(el, "category")
+            ? "Expense"
+            : "Income") as DetailType,
+        };
+        if (Object.hasOwn(dataObj, key)) {
+          dataObj[key].push(li);
+        } else {
+          dataObj[key] = [li];
+        }
+      });
     return dataObj;
   }, [dataList]);
 

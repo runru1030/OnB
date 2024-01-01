@@ -83,9 +83,13 @@ const ModalFooter = ({
   return (
     <div {...props} className="flex gap-3">
       <ModalClose>
-        <Button onClick={onClickClose}>{cancelText}</Button>
+        <Button className="btn-grey-border flex-1" onClick={onClickClose}>
+          {cancelText}
+        </Button>
       </ModalClose>
-      <Button onClick={onClickConfirm}>{confirmText}</Button>
+      <Button className="btn-blue flex-1" onClick={onClickConfirm}>
+        {confirmText}
+      </Button>
     </div>
   );
 };
