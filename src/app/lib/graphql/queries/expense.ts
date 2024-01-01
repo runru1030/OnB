@@ -77,6 +77,7 @@ const GET_EXPENSES = gql`
         Currency {
           id
           amountUnit
+          name
         }
       }
     }
