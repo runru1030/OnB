@@ -36,7 +36,11 @@ const expenseReqAtom = atomWithReset({
 });
 
 const modalOpenAtom = atom<boolean>(false);
-const CreateExpenseModal = () => {
+const CreateExpenseModal = ({
+  withoutTrigger,
+}: {
+  withoutTrigger?: boolean;
+}) => {
   const router = useRouter();
   const { tid } = useParams();
 
@@ -77,9 +81,11 @@ const CreateExpenseModal = () => {
   };
   return (
     <StepModal open={openAtom} onOpenChange={setOpenAtom}>
-      <StepModal.Trigger>
-        <Button className="btn-red w-full shadow-normal">지출하기</Button>
-      </StepModal.Trigger>
+      {!withoutTrigger && (
+        <StepModal.Trigger>
+          <Button className="btn-red w-full shadow-normal">지출하기</Button>
+        </StepModal.Trigger>
+      )}
       <StepModal.Content
         onCloseAutoFocus={() => {
           resetBudgetData();

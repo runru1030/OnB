@@ -9,9 +9,8 @@ import PaymentTwoToneIcon from "@mui/icons-material/PaymentTwoTone";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useState } from "react";
-import { BudgetQueryData } from "../_types";
-import { useModal } from "./BudgetModal/Modal";
+import { ChangeEvent, useEffect, useState } from "react";
+import { BudgetQueryData } from "../../_types";
 
 const EditBudgetModalWithTrigger = ({
   budget,
@@ -20,9 +19,13 @@ const EditBudgetModalWithTrigger = ({
 }) => {
   const router = useRouter();
 
-  const { close: closeBudgetModal } = useModal();
   const [openAtom, setOpenAtom] = useState(false);
   const [newBudgetData, setNewBudgetData] = useState({ ...budget });
+
+  useEffect(() => {
+    setNewBudgetData({ ...budget });
+  }, [budget]);
+
   const onChangeValueHandler = (
     e: ChangeEvent | React.MouseEvent<HTMLButtonElement | MouseEvent>
   ) => {
@@ -40,22 +43,18 @@ const EditBudgetModalWithTrigger = ({
   const [deleteBudget] = useMutation(budgetQuery.DELETE_BUDGET, {
     variables: { id: newBudgetData?.id },
     onCompleted: () => {
-      closeBudgetModal();
       setOpenAtom(false);
-      router.refresh();
+      router.back();
     },
-    refetchQueries: [budgetQuery.GET_BUDGET],
   });
+
   return (
     <Modal open={openAtom} onOpenChange={setOpenAtom}>
       <Modal.Trigger>
-        <Button className="absolute top-1/2 left-4 !p-0 -translate-y-1/2 text-sm text-grey-400">
-          관리
-        </Button>
+        <Button className="!p-0 text-sm text-grey-300">관리</Button>
       </Modal.Trigger>
       <Modal.Content className="w-full top-[52px] bottom-0 translate-y-0 !p-0 rounded-b-none">
-        <Modal.Title className="p-4">
-          {budget?.title}
+        <Modal.Title className="h-[60px]">
           <Modal.Close>
             <Button className="absolute top-1/2 right-4 !p-0 -translate-y-1/2">
               <CloseSharpIcon />
@@ -71,8 +70,6 @@ const EditBudgetModalWithTrigger = ({
                 type="text"
                 value={newBudgetData.title}
                 onChange={onChangeValueHandler}
-                required
-                autoFocus
                 maxLength={10}
                 className="h-[42px] text-2xl outline-none border-b focus:border-b-2 border-grey-400 rounded-none !px-0 w-full"
               />

@@ -1,9 +1,9 @@
 import { getClient } from "@app/_components/ApolloClientRSC";
 import { budget } from "@app/lib/graphql/queries";
+import Link from "next/link";
 import { use } from "react";
 import { BudgetQueryData } from "../_types";
 import BudgetBox from "./BudgetBox";
-import BudgetModal from "./BudgetModal";
 import CreateBudgetModal from "./CreateBudgetModal";
 
 const BudgetsContent = ({ tid }: { tid: string }) => {
@@ -12,13 +12,12 @@ const BudgetsContent = ({ tid }: { tid: string }) => {
   );
 
   return (
-    <div className="flex-1 flex flex-col gap-4 overflow-auto">
+    <div className="flex-1 flex flex-col gap-6 overflow-auto">
       {(data?.budgets as BudgetQueryData[]).map((budget) => (
-        <BudgetModal.Trigger key={budget?.id} budget={budget} className="!px-0">
+        <Link href={`/trip/${tid}/${budget.id}`} key={budget.id}>
           <BudgetBox budget={budget} />
-        </BudgetModal.Trigger>
+        </Link>
       ))}
-      <BudgetModal />
       <CreateBudgetModal />
     </div>
   );
