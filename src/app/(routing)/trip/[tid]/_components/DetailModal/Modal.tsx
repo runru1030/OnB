@@ -108,9 +108,11 @@ const IcomeInputContent = () => {
     amount: detailData?.amount.toString(),
     exchangeRate: (detailData as IncomeQueryData)?.exchangeRate.toString(),
   });
-  const { id: currencyUnit, amountUnit } = (
-    detailData?.Budget as BudgetQueryData
-  ).Currency;
+  const {
+    id: currencyUnit,
+    amountUnit,
+    name: currencyName,
+  } = (detailData?.Budget as BudgetQueryData).Currency;
 
   const [updateIncome] = useMutation(income.UPDATE_INCOME, {
     onCompleted: () => {
@@ -169,26 +171,33 @@ const IcomeInputContent = () => {
                 autoFocus
                 placeholder={`0`}
                 className="text-2xl font-medium outline-none focus:border-b-2 border-grey-400 rounded-none w-full px-0 pr-10 text-right"
+                style={{
+                  paddingRight: `${
+                    (currencyName.split(" ").at(-1)?.length || 0) * 14 + 4
+                  }px`,
+                }}
                 onKeyDown={(e) => {
                   if (e.key === "e") e.preventDefault();
                 }}
               />
               <span className="absolute right-0 top-1/2 -translate-y-1/2">
-                {currencyUnit}
+                {currencyName.split(" ").at(-1)}
               </span>
             </div>
-            <span className="flex items-center justify-end gap-2">
+            <span className="flex items-center justify-end gap-1">
               {Math.ceil(
                 ((parseInt(newIncomeData?.amount as string) || 0) *
                   (parseFloat(newIncomeData?.exchangeRate) || 0)) /
                   amountUnit
-              ).toLocaleString()}{" "}
+              ).toLocaleString()}
               <span className="text-sm">원</span>
             </span>
             <div className="flex items-center gap-2 text-grey-400">
-              <span className="flex-1 text-right">{`${amountUnit} ${currencyUnit}`}</span>
+              <span className="flex-1 text-right">{`${amountUnit} ${currencyName
+                .split(" ")
+                .at(-1)}`}</span>
               <span className="text-lg">=</span>
-              <div className="relative">
+              <div className="relative h-[26px]">
                 <Input
                   type="number"
                   value={newIncomeData?.exchangeRate}
@@ -199,11 +208,11 @@ const IcomeInputContent = () => {
                     }));
                   }}
                   placeholder={newIncomeData?.exchangeRate}
-                  className="outline-none focus:border-b-2 border-grey-400 rounded-none px-0 pr-10 text-right w-[120px] disabled:bg-white"
+                  className="outline-none focus:border-b-2 border-grey-400 rounded-none !p-0 !pr-4 text-right w-[60px] disabled:bg-white"
                   disabled={currencyUnit === "KRW"}
                 />
-                <span className="absolute right-0 top-1/2 -translate-y-1/2">
-                  KRW
+                <span className="absolute right-0 top-[calc(50%-1px)] -translate-y-1/2">
+                  원
                 </span>
               </div>
             </div>
@@ -271,7 +280,9 @@ const ExpenseInputContent = () => {
     ...(detailData as ExpenseQueryData),
     amount: detailData?.amount.toString() as string,
   });
-  const { id: currencyUnit } = (detailData?.Budget as BudgetQueryData).Currency;
+  const { id: currencyUnit, name: currencyName } = (
+    detailData?.Budget as BudgetQueryData
+  ).Currency;
 
   const [updateExpense] = useMutation(expense.UPDATE_EXPENSE, {
     onCompleted: () => {
@@ -325,13 +336,18 @@ const ExpenseInputContent = () => {
               }}
               autoFocus
               placeholder={`0`}
-              className="text-2xl font-medium outline-none focus:border-b-2 border-red rounded-none w-full px-0 pr-10 text-right"
+              className="text-2xl font-medium outline-none focus:border-b-2 border-red rounded-none w-full px-0 pr-10 text-right placeholder:text-red-300"
+              style={{
+                paddingRight: `${
+                  (currencyName.split(" ").at(-1)?.length || 0) * 14 + 4
+                }px`,
+              }}
               onKeyDown={(e) => {
                 if (e.key === "e") e.preventDefault();
               }}
             />
             <span className="absolute right-0 top-1/2 -translate-y-1/2">
-              {currencyUnit}
+              {currencyName.split(" ").at(-1)}
             </span>
           </div>
           <div className="flex border border-grey-50 rounded-md">

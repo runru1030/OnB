@@ -27,7 +27,7 @@ const budgetAtom = atomWithReset({
 });
 const incomeReqAtom = atomWithReset({
   title: "",
-  amount: "0",
+  amount: "",
   exchangeRate: "1",
   createdAt: new Date(),
 });
@@ -88,32 +88,19 @@ const CreateIncomeModal = () => {
       >
         <StepModal.Title>예산 채우기</StepModal.Title>
         <StepModal.StepSection
-          stepContentList={
-            budgetData.id === ""
-              ? [
-                  {
-                    content: <SelectBudgetContent />,
-                  },
-                  {
-                    content: <IcomeInputContent />,
-                    nextButton: (
-                      <StepModal.StepNext onNextStepHandler={onCreateIncome}>
-                        예산 채우기
-                      </StepModal.StepNext>
-                    ),
-                  },
-                ]
-              : [
-                  {
-                    content: <IcomeInputContent />,
-                    nextButton: (
-                      <StepModal.StepNext onNextStepHandler={onCreateIncome}>
-                        예산 채우기
-                      </StepModal.StepNext>
-                    ),
-                  },
-                ]
-          }
+          stepContentList={[
+            {
+              content: <SelectBudgetContent />,
+            },
+            {
+              content: <IcomeInputContent />,
+              nextButton: (
+                <StepModal.StepNext onNextStepHandler={onCreateIncome}>
+                  예산 채우기
+                </StepModal.StepNext>
+              ),
+            },
+          ]}
         />
       </StepModal.Content>
     </StepModal>
@@ -147,14 +134,13 @@ const IcomeInputContent = () => {
   const [incomeData, setIcomeData] = useAtom(incomeReqAtom);
   const budgetData = useAtomValue(budgetAtom);
   const {
-    Currency: { id: currencyUnit, amountUnit },
+    Currency: { id: currencyUnit, amountUnit, name: currencyName },
   } = budgetData;
   const [exchageData, setExchageData] = useState({
     cur_unit: "",
     cur_nm: "",
     deal_bas_r: 0,
   });
-
   useEffect(() => {
     if (!currencyUnit) return;
     getExchangeData(currencyUnit).then((data) => {
@@ -186,39 +172,49 @@ const IcomeInputContent = () => {
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-4 flex-1">
             <div className="relative h-10">
-              <Input
-                type="number"
-                value={incomeData.amount}
-                onChange={(e) => {
-                  setIcomeData((p) => ({
-                    ...p,
-                    amount: e.target.value.replace(/(^0+)/, ""),
-                  }));
-                }}
-                autoFocus
-                id="step-2"
-                placeholder={`0`}
-                className="text-2xl font-medium outline-none focus:border-b-2 border-grey-400 rounded-none w-full px-0 pr-10 text-right"
-                onKeyDown={(e) => {
-                  if (e.key === "e") e.preventDefault();
-                }}
-              />
+              {
+                <Input
+                  type="number"
+                  value={incomeData.amount}
+                  onChange={(e) => {
+                    setIcomeData((p) => ({
+                      ...p,
+                      amount: e.target.value.replace(/(^0+)/, ""),
+                    }));
+                  }}
+                  autoFocus
+                  placeholder={`0`}
+                  className={clsx(
+                    "text-2xl font-medium outline-none focus:border-b-2 border-grey-400 rounded-none w-full px-0 text-right"
+                  )}
+                  style={{
+                    paddingRight: `${
+                      (currencyName.split(" ").at(-1)?.length || 0) * 14 + 4
+                    }px`,
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "e") e.preventDefault();
+                  }}
+                />
+              }
               <span className="absolute right-0 top-1/2 -translate-y-1/2">
-                {currencyUnit}
+                {currencyName.split(" ").at(-1)}
               </span>
             </div>
-            <span className="flex items-center justify-end gap-2">
+            <span className="flex items-center justify-end gap-1 text-grey-400">
               {Math.ceil(
                 ((parseInt(incomeData.amount) || 0) *
                   (parseFloat(incomeData.exchangeRate) || 0)) /
                   amountUnit
               ).toLocaleString()}{" "}
-              <span className="text-sm">원</span>
+              <span className="text-sm"> 원</span>
             </span>
             <div className="flex items-center gap-2 text-grey-400">
-              <span className="flex-1 text-right">{`${amountUnit} ${currencyUnit}`}</span>
+              <span className="flex-1 text-right">{`${amountUnit} ${currencyName
+                .split(" ")
+                .at(-1)}`}</span>
               <span className="text-lg">=</span>
-              <div className="relative">
+              <div className="relative h-[26px]">
                 <Input
                   type="number"
                   value={incomeData.exchangeRate}
@@ -229,11 +225,11 @@ const IcomeInputContent = () => {
                     }));
                   }}
                   placeholder={`${exchageData.deal_bas_r}`}
-                  className="outline-none focus:border-b-2 border-grey-400 rounded-none px-0 pr-10 text-right w-[120px] disabled:bg-white"
+                  className="outline-none focus:border-b-2 border-grey-400 rounded-none !p-0 !pr-4 text-right w-[60px] disabled:bg-white"
                   disabled={currencyUnit === "KRW"}
                 />
-                <span className="absolute right-0 top-1/2 -translate-y-1/2">
-                  KRW
+                <span className="absolute right-0 top-[calc(50%-1px)] -translate-y-1/2">
+                  원
                 </span>
               </div>
             </div>

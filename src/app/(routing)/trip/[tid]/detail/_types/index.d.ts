@@ -1,8 +1,9 @@
-import { Budget, Expense, Income } from "@prisma/client";
+import { Expense, Income } from "@prisma/client";
+import { BudgetQueryData } from "../../_types";
 
 export interface IncomeQueryData extends Income {
-  Budget: Budget;
+  Budget: BudgetQueryData;
 }
 export interface ExpenseQueryData extends Expense {
-  Budget: Budget;
+  Budget: BudgetQueryData;
 }
