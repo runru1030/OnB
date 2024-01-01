@@ -5,7 +5,7 @@ export default {
   GMD: "GM",
   GTQ: "GT",
   XCD: "AI",
-  EUR: "FI",
+  EUR: "EU",
   GNF: "GN",
   XOF: "TG",
   NAD: "NA",

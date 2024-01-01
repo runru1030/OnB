@@ -24,8 +24,8 @@ const BudgetBox = ({ budget }: BudgetBoxProps) => {
           <span className="text-grey-300">
             {totalIncomes.toLocaleString() ?? 0}
           </span>
-          <span className="pl-1">{budget.Currency.id}</span>
         </div>
+        <span className="w-11 font-medium text-center text-lg">{budget.Currency.id}</span>
         <span className="text-sm text-grey-300">
           {
             {

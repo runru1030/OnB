@@ -1,4 +1,5 @@
 import { Resolvers } from "@apollo/client";
+import { BudgetQueryData } from "@app/(routing)/trip/[tid]/_types";
 import { Context } from "@app/api/graphql/route";
 import { getSumOfBudget } from "@app/utils";
 import { Budget } from "@prisma/client";
@@ -70,7 +71,9 @@ export default {
       let totalBudgetIncomesKRW = 0;
       let totalBudgetExpenseKRW = 0;
       budgets.forEach((budget) => {
-        const { totalExpensesKRW, totalIncomesKRW } = getSumOfBudget(budget);
+        const { totalExpensesKRW, totalIncomesKRW } = getSumOfBudget(
+          budget as BudgetQueryData
+        );
         totalBudgetExpenseKRW += totalExpensesKRW;
         totalBudgetIncomesKRW += totalIncomesKRW;
       });
