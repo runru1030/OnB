@@ -33,7 +33,11 @@ const incomeReqAtom = atomWithReset({
 });
 const modalOpenAtom = atom<boolean>(false);
 
-const CreateIncomeModal = () => {
+const CreateIncomeModal = ({
+  withoutTrigger = false,
+}: {
+  withoutTrigger?: boolean;
+}) => {
   const router = useRouter();
 
   const [openAtom, setOpenAtom] = useAtom(modalOpenAtom);
@@ -75,11 +79,13 @@ const CreateIncomeModal = () => {
   };
   return (
     <StepModal open={openAtom} onOpenChange={setOpenAtom}>
-      <StepModal.Trigger>
-        <Button className="btn-grey-border bg-white w-full shadow-normal">
-          예산 채우기
-        </Button>
-      </StepModal.Trigger>
+      {!withoutTrigger && (
+        <StepModal.Trigger>
+          <Button className="btn-grey-border bg-white w-full shadow-normal">
+            예산 채우기
+          </Button>
+        </StepModal.Trigger>
+      )}
       <StepModal.Content
         onCloseAutoFocus={() => {
           resetBudgetData();
