@@ -77,6 +77,7 @@ const GET_INCOMES = gql`
         Currency {
           id
           amountUnit
+          name
         }
       }
     }
