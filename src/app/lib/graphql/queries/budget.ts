@@ -63,6 +63,7 @@ const GET_BUDGET = gql`
           Currency {
             id
             amountUnit
+            name
           }
         }
       }
@@ -79,6 +80,7 @@ const GET_BUDGET = gql`
           Currency {
             id
             amountUnit
+            name
           }
         }
       }
@@ -109,6 +111,7 @@ const GET_BUDGETS = gql`
           Currency {
             id
             amountUnit
+            name
           }
         }
       }
@@ -125,6 +128,7 @@ const GET_BUDGETS = gql`
           Currency {
             id
             amountUnit
+            name
           }
         }
       }

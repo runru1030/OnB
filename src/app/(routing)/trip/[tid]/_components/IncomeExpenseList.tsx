@@ -6,6 +6,7 @@ import { DetailDataType, DetailType } from "../_types";
 import { ExpenseQueryData, IncomeQueryData } from "../detail/_types";
 import CategoryTag from "./CategoryTag";
 import DetailModal from "./DetailModal";
+import currencySymbol from "../_constants/currencySymbol";
 
 interface IncomeExpenseListProps {
   dataList: (IncomeQueryData | ExpenseQueryData)[];
@@ -74,7 +75,8 @@ const IncomeExpenseList = ({
                   </span>
                   <span>
                     {li.type === "Expense" ? "- " : "+ "}
-                    {li.amount.toLocaleString()} {li.Budget.currencyId}
+                    {currencySymbol[li.Budget.Currency.id]}{" "}
+                    {li.amount.toLocaleString()}
                   </span>
                 </span>
               </DetailModal.Trigger>

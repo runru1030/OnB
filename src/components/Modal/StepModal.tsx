@@ -5,7 +5,7 @@ import Modal from "@components/Modal";
 import ArrowBackIosNewSharpIcon from "@mui/icons-material/ArrowBackIosNewSharp";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import clsx from "clsx";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { atomWithReset } from "jotai/utils";
 import React, { PropsWithChildren, createElement, useEffect } from "react";
 
@@ -44,14 +44,20 @@ const StepModalStepSection = ({
   stepContentList: {
     content: React.ReactElement;
     nextButton?: React.ReactElement;
+    toNext?: boolean;
   }[];
 }>) => {
-  const step = useAtomValue(stepAtom);
+  const [step, setStep] = useAtom(stepAtom);
 
   useEffect(() => {
     document.getElementById(`step-${step}`)?.focus();
   }, [step]);
 
+  useEffect(() => {
+    stepContentList.slice(step - 1).forEach((step, idx) => {
+      if (step.toNext) setStep(idx + 2);
+    });
+  }, [step, stepContentList]);
   return (
     <>
       {stepContentList.map((stepContent, idx) =>
@@ -80,13 +86,15 @@ const StepModalStepSection = ({
 const StepModalTitle = ({
   children,
   className,
+  withoutBackbutton = false,
 }: PropsWithChildren<{
   className?: string;
+  withoutBackbutton?: boolean;
 }>) => {
   const [step, setStep] = useAtom(stepAtom);
   return (
     <Modal.Title className={clsx("p-4", className)}>
-      {step > 1 && (
+      {!withoutBackbutton && step > 1 && (
         <Button
           className="absolute top-1/2 left-4 !p-0 -translate-y-1/2"
           onClick={() => setStep((p) => p - 1)}

@@ -14,6 +14,7 @@ import { useParams, useRouter } from "next/navigation";
 import { PropsWithChildren, useMemo, useState } from "react";
 import { Calendar } from "react-date-range";
 import { EXPNSE_CATEGORY } from "../_constants";
+import currencySymbol from "../_constants/currencySymbol";
 import { BudgetQueryData } from "../_types";
 import { ExpenseQueryData, IncomeQueryData } from "../detail/_types";
 import BudgetBox from "./BudgetBox";
@@ -29,7 +30,7 @@ const budgetAtom = atomWithReset({
 });
 const expenseReqAtom = atomWithReset({
   title: "",
-  amount: "0",
+  amount: "",
   category: "ETC",
   createdAt: new Date(),
 });
@@ -87,32 +88,20 @@ const CreateExpenseModal = () => {
       >
         <StepModal.Title>지출 기록하기</StepModal.Title>
         <StepModal.StepSection
-          stepContentList={
-            budgetData.id === ""
-              ? [
-                  {
-                    content: <SelectBudgetContent />,
-                  },
-                  {
-                    content: <ExpenseInputContent />,
-                    nextButton: (
-                      <StepModal.StepNext onNextStepHandler={onCreateExpense}>
-                        지출 기록하기
-                      </StepModal.StepNext>
-                    ),
-                  },
-                ]
-              : [
-                  {
-                    content: <ExpenseInputContent />,
-                    nextButton: (
-                      <StepModal.StepNext onNextStepHandler={onCreateExpense}>
-                        지출 기록하기
-                      </StepModal.StepNext>
-                    ),
-                  },
-                ]
-          }
+          stepContentList={[
+            {
+              content: <SelectBudgetContent />,
+              toNext: budgetData.id !== "",
+            },
+            {
+              content: <ExpenseInputContent />,
+              nextButton: (
+                <StepModal.StepNext onNextStepHandler={onCreateExpense}>
+                  지출 기록하기
+                </StepModal.StepNext>
+              ),
+            },
+          ]}
         />
       </StepModal.Content>
     </StepModal>
@@ -123,7 +112,7 @@ export default CreateExpenseModal;
 
 const SelectBudgetContent = () => {
   const { budgets } = useAtomValue(tripAtom, { store: tripStore });
-  const [budgetData, setBudgetData] = useAtom(budgetAtom);
+  const setBudgetData = useSetAtom(budgetAtom);
 
   return (
     <div className="flex-1 overflow-auto p-4">
@@ -133,11 +122,7 @@ const SelectBudgetContent = () => {
             onClick={() => {
               setBudgetData(budget);
             }}
-            className={clsx(
-              budget.id === budgetData?.id &&
-                "bg-grey-light-400 [&>div>h2]:text-blue",
-              "rounded-lg duration-300 p-2"
-            )}
+            className={clsx("duration-300 py-2")}
             key={budget.id}
           >
             <BudgetBox budget={budget} />
@@ -185,16 +170,26 @@ const ExpenseInputContent = () => {
               autoFocus
               id="step-2"
               placeholder={`0`}
-              className="text-2xl font-medium outline-none focus:border-b-2 border-red rounded-none w-full px-0 pr-10 text-right"
+              className="text-2xl font-medium outline-none focus:border-b-2 border-red rounded-none w-full px-0 pr-10 text-right placeholder:text-red-300"
+              style={{
+                paddingRight: `${
+                  (budgetData.Currency.name.split(" ").at(-1)?.length || 0) *
+                    14 +
+                  4
+                }px`,
+              }}
               onKeyDown={(e) => {
                 if (e.key === "e") e.preventDefault();
               }}
             />
             <span className="absolute right-0 top-1/2 -translate-y-1/2">
-              {budgetData.Currency.id}
+              {budgetData.Currency.name.split(" ").at(-1)}
             </span>
           </div>
           <div className="text-xl flex gap-1 justify-end py-2 items-end">
+            <span className="text-red-300">
+              {currencySymbol[budgetData.Currency.id]}
+            </span>
             <span className="text-red-300">
               {(
                 (totalIncomes || 0) -
@@ -204,9 +199,6 @@ const ExpenseInputContent = () => {
             <span className="text-red-300 text-base">/</span>
             <span className="text-grey-300 text-base">
               {totalIncomes.toLocaleString() ?? 0}
-            </span>
-            <span className="text-grey-300 text-base">
-              {budgetData.Currency.id}
             </span>
           </div>
           <div className="flex border border-grey-50 rounded-md">

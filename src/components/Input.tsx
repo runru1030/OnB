@@ -1,3 +1,4 @@
+import { onFocusSetCursorPosition } from "@app/utils";
 import clsx from "clsx";
 import React, { forwardRef } from "react";
 
@@ -13,6 +14,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           className
         )}
         ref={inputRef}
+        onFocus={onFocusSetCursorPosition}
       />
     );
   }
