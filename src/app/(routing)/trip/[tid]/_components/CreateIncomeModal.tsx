@@ -86,11 +86,12 @@ const CreateIncomeModal = () => {
           resetIncomeData();
         }}
       >
-        <StepModal.Title>예산 채우기</StepModal.Title>
+        <StepModal.Title withoutBackbutton>예산 채우기</StepModal.Title>
         <StepModal.StepSection
           stepContentList={[
             {
               content: <SelectBudgetContent />,
+              toNext: budgetData.id !== "",
             },
             {
               content: <IcomeInputContent />,

@@ -88,32 +88,20 @@ const CreateExpenseModal = () => {
       >
         <StepModal.Title>지출 기록하기</StepModal.Title>
         <StepModal.StepSection
-          stepContentList={
-            budgetData.id === ""
-              ? [
-                  {
-                    content: <SelectBudgetContent />,
-                  },
-                  {
-                    content: <ExpenseInputContent />,
-                    nextButton: (
-                      <StepModal.StepNext onNextStepHandler={onCreateExpense}>
-                        지출 기록하기
-                      </StepModal.StepNext>
-                    ),
-                  },
-                ]
-              : [
-                  {
-                    content: <ExpenseInputContent />,
-                    nextButton: (
-                      <StepModal.StepNext onNextStepHandler={onCreateExpense}>
-                        지출 기록하기
-                      </StepModal.StepNext>
-                    ),
-                  },
-                ]
-          }
+          stepContentList={[
+            {
+              content: <SelectBudgetContent />,
+              toNext: budgetData.id !== "",
+            },
+            {
+              content: <ExpenseInputContent />,
+              nextButton: (
+                <StepModal.StepNext onNextStepHandler={onCreateExpense}>
+                  지출 기록하기
+                </StepModal.StepNext>
+              ),
+            },
+          ]}
         />
       </StepModal.Content>
     </StepModal>
@@ -185,7 +173,9 @@ const ExpenseInputContent = () => {
               className="text-2xl font-medium outline-none focus:border-b-2 border-red rounded-none w-full px-0 pr-10 text-right placeholder:text-red-300"
               style={{
                 paddingRight: `${
-                  (budgetData.Currency.name.split(" ").at(-1)?.length || 0) * 14 + 4
+                  (budgetData.Currency.name.split(" ").at(-1)?.length || 0) *
+                    14 +
+                  4
                 }px`,
               }}
               onKeyDown={(e) => {
