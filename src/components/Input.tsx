@@ -14,7 +14,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           className
         )}
         ref={inputRef}
-        onFocus={onFocusSetCursorPosition}
+        onFocus={(e) => onFocusSetCursorPosition(e, props.type || "text")}
       />
     );
   }
