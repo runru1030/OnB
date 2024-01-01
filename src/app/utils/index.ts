@@ -1,5 +1,5 @@
 import { BudgetQueryData } from "@app/(routing)/trip/[tid]/_types";
-import { FocusEvent } from "react";
+import { FocusEvent, HTMLInputTypeAttribute } from "react";
 
 export const dateformatter = (date: Date) =>
   `${date.getFullYear()}.${(date.getMonth() + 1)
@@ -34,9 +34,10 @@ export const getSumOfBudget = (budget: BudgetQueryData) => {
   };
 };
 export const onFocusSetCursorPosition = (
-  e: FocusEvent<HTMLInputElement, Element>
+  e: FocusEvent<HTMLInputElement, Element>,
+  originType: HTMLInputTypeAttribute
 ) => {
   e.target.type = "text";
   e.target.setSelectionRange(e.target.value.length, e.target.value.length);
-  e.target.type = "number";
+  e.target.type = originType;
 };
