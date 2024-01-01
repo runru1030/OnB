@@ -1,10 +1,7 @@
 import { getClient } from "@app/_components/ApolloClientRSC";
-import {
-  expense,
-  income
-} from "@app/lib/graphql/queries";
+import { expense, income } from "@app/lib/graphql/queries";
 import { use } from "react";
-import IncomeExpenseList from "../../_components/IncomeExpenseList";
+import DetailContent from "./DetailContent";
 const PageContent = ({ tid }: { tid: string }) => {
   const [{ data: incomesQuery }, { data: expensesQuery }] = use(
     Promise.all([
@@ -20,9 +17,7 @@ const PageContent = ({ tid }: { tid: string }) => {
   return (
     <>
       {dataList.length !== 0 ? (
-        <div className="main-content flex flex-col px-0 gap-2">
-          <IncomeExpenseList dataList={dataList} withBudgetTitle />
-        </div>
+        <DetailContent dataList={dataList} />
       ) : (
         <div className="main-content items-center justify-center text-grey-400 bg-grey-light-300">
           지출 및 충전 내역이 없습니다!
