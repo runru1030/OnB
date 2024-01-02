@@ -48,7 +48,12 @@ const InternalDetailModal = () => {
           <Button
             onClick={() => {
               detailData?.type === "Income"
-                ? deleteIncome({ variables: { id: detailData?.id } })
+                ? deleteIncome({
+                    variables: {
+                      id: detailData?.id,
+                      budgetId: detailData?.budgetId,
+                    },
+                  })
                 : deleteExpense({ variables: { id: detailData?.id } });
             }}
             className="text-red text-sm absolute top-1/2 left-4 -translate-y-1/2 flex gap-1 items-center !p-0"

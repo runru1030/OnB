@@ -56,8 +56,8 @@ const UPDATE_INCOME = gql`
   }
 `;
 const DELETE_INCOME = gql`
-  mutation DeleteIncome($id: ID!) {
-    deleteIncome(id: $id) {
+  mutation DeleteIncome($id: ID!, $budgetId: ID!) {
+    deleteIncome(id: $id, budgetId: $budgetId) {
       id
     }
   }
@@ -74,6 +74,7 @@ const GET_INCOMES = gql`
       Budget {
         title
         type
+        exRateAVG
         Currency {
           id
           amountUnit

@@ -45,6 +45,7 @@ const GET_BUDGET = gql`
       id
       type
       title
+      exRateAVG
       Currency {
         id
         name
