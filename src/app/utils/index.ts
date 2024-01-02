@@ -1,4 +1,8 @@
 import { BudgetQueryData } from "@app/(routing)/trip/[tid]/_types";
+import {
+  ExpenseQueryData,
+  IncomeQueryData,
+} from "@app/(routing)/trip/[tid]/detail/_types";
 import { FocusEvent, HTMLInputTypeAttribute } from "react";
 
 export const dateformatter = (date: Date) =>
@@ -15,9 +19,6 @@ export const getSumOfBudget = (budget: BudgetQueryData) => {
     (acc, curr) => acc + curr.amount,
     0
   );
-  const avgExchangeRate =
-    budget?.incomes?.reduce((acc, curr) => acc + curr.exchangeRate, 0) /
-    budget?.incomes.length;
   return {
     totalIncomes: budget?.incomes?.reduce((acc, curr) => acc + curr.amount, 0),
     totalIncomesKRW: budget?.incomes.reduce(
@@ -29,8 +30,28 @@ export const getSumOfBudget = (budget: BudgetQueryData) => {
       (acc, curr) => acc + curr.amount,
       0
     ),
-    totalExpensesKRW:
-      totalExpenses * (isNaN(avgExchangeRate) ? 1 : avgExchangeRate),
+    totalExpensesKRW: totalExpenses * budget.exRateAVG,
+  };
+};
+export const getSumOfDetail = (
+  detailDataList: (IncomeQueryData | ExpenseQueryData)[]
+) => {
+  const totalExpensesObj = {} as { [key: string]: number };
+  let totalExpensesKRW = 0;
+  detailDataList.forEach((detail) => {
+    if (Object.hasOwn(detail, "category")) {
+      if (!totalExpensesObj[detail.Budget.Currency.id]) {
+        totalExpensesObj[detail.Budget.Currency.id] = 0;
+      }
+      totalExpensesObj[detail.Budget.Currency.id] += detail.amount;
+      totalExpensesKRW +=
+        (detail.amount * detail.Budget.exRateAVG) /
+        detail.Budget.Currency.amountUnit;
+    }
+  });
+  return {
+    totalExpensesObj,
+    totalExpensesKRW,
   };
 };
 export const onFocusSetCursorPosition = (
