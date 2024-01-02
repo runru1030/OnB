@@ -8,6 +8,7 @@ import { BudgetQueryData } from "../../_types";
 export const budgetAtom = atom<BudgetQueryData>({
   id: "",
   title: "",
+  exRateAVG: 0,
   Currency: {
     id: "",
     name: "",
