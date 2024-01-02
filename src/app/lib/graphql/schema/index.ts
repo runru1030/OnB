@@ -44,6 +44,7 @@ export const typeDefs = `#graphql
     id:ID!
     title:String
     type:String
+    exRateAVG:Float
     currencyId:String
     Currency:Currency
     expenses:[Expense]
@@ -91,7 +92,7 @@ export const typeDefs = `#graphql
 
     createIncome(title:String, amount:Float, exchangeRate:Float, createdAt:Date, budgetId:ID, tripId:ID):Income
     updateIncome(id:ID!, title:String, amount:Float, exchangeRate:Float, createdAt:Date, budgetId:ID, tripId:ID):Income
-    deleteIncome(id:ID!):Income
+    deleteIncome(id:ID!, budgetId:ID!):Income
 
     createExpense(title:String, category:String, amount:Float, createdAt:Date, budgetId:ID, tripId:ID):Expense
     updateExpense(id:ID!, title:String, amount:Float, category:String, createdAt:Date, budgetId:ID, tripId:ID):Expense
