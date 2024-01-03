@@ -27,6 +27,7 @@ const config = {
   },
   experimental: {
     serverActions: true,
+    nftTracing: true,
   },
   async rewrites() {
     return [
