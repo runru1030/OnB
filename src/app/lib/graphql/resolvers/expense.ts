@@ -35,6 +35,15 @@ export default {
         data: args,
       });
     },
+    createExpenses: async (
+      _parent: undefined,
+      args: { expenses: Expense[] },
+      context: Context
+    ) => {
+      return await context.prisma.expense.createMany({
+        data: args.expenses,
+      });
+    },
     deleteExpense: async (
       _parent: undefined,
       args: { id: string },
