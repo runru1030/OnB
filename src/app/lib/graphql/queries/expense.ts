@@ -26,6 +26,13 @@ const CREATE_EXPENSE = gql`
     }
   }
 `;
+const CREATE_EXPENSES = gql`
+  mutation CreateExpenses($expenses: [ExpenseInput]) {
+    createExpenses(expenses: $expenses) {
+      __typename
+    }
+  }
+`;
 const UPDATE_EXPENSE = gql`
   mutation UpdateExpense(
     $id: ID!
@@ -89,4 +96,5 @@ export default {
   CREATE_EXPENSE,
   UPDATE_EXPENSE,
   DELETE_EXPENSE,
+  CREATE_EXPENSES,
 };

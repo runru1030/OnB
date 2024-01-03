@@ -26,6 +26,13 @@ const CREATE_INCOME = gql`
     }
   }
 `;
+const CREATE_INCOMES = gql`
+  mutation CreateIncomes($incomes: [IncomeInput]) {
+    createIncomes(incomes: $incomes) {
+      __typename
+    }
+  }
+`;
 
 const UPDATE_INCOME = gql`
   mutation UpdateIncome(
@@ -84,4 +91,10 @@ const GET_INCOMES = gql`
     }
   }
 `;
-export default { GET_INCOMES, CREATE_INCOME, UPDATE_INCOME, DELETE_INCOME };
+export default {
+  GET_INCOMES,
+  CREATE_INCOME,
+  UPDATE_INCOME,
+  DELETE_INCOME,
+  CREATE_INCOMES,
+};

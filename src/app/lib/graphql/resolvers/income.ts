@@ -49,6 +49,46 @@ export default {
       ]);
       return callBack[1];
     },
+    createIncomes: async (
+      _parent: undefined,
+      args: { incomes: Income[] },
+      context: Context
+    ) => {
+      const [budget, incomeGroup] = await Promise.all([
+        context.prisma.budget.findUnique({
+          where: { id: args.incomes[0].budgetId },
+        }),
+        context.prisma.income.groupBy({
+          where: { budgetId: args.incomes[0].budgetId },
+          by: ["budgetId"],
+          _sum: { amount: true },
+        }),
+      ]);
+      const exRateAVG = budget?.exRateAVG || 0;
+      const sumAmount = incomeGroup[0]?._sum.amount || 0;
+
+      const arrayKRW = args.incomes.reduce(
+        (arr, curr) => arr + curr.exchangeRate * curr.amount,
+        0
+      );
+      const arrayAmount = args.incomes.reduce(
+        (arr, curr) => arr + curr.amount,
+        0
+      );
+      const callBack = await Promise.all([
+        context.prisma.budget.update({
+          where: { id: args.incomes[0].budgetId },
+          data: {
+            exRateAVG:
+              (exRateAVG * sumAmount + arrayKRW) / (sumAmount + arrayAmount),
+          },
+        }),
+        context.prisma.income.createMany({
+          data: args.incomes,
+        }),
+      ]);
+      return callBack[1];
+    },
     updateIncome: async (
       _parent: undefined,
       args: Income,
