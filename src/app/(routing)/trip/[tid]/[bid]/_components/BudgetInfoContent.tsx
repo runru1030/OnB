@@ -9,6 +9,7 @@ import CreateIncomeModal from "../../_components/CreateIncomeModal";
 import { BudgetQueryData } from "../../_types";
 import CreateExpenseModal from "../../_components/CreateExpenseModal";
 import currencySymbol from "../../_constants/currencySymbol";
+import GenerateDetails from "./GenerateDetails";
 
 const BudgetInfoContent = ({ budget }: { budget: BudgetQueryData }) => {
   const [openMore, setOpenMore] = useState(false);
@@ -62,6 +63,8 @@ const BudgetInfoContent = ({ budget }: { budget: BudgetQueryData }) => {
           지출하기
         </CreateExpenseModal.Trigger>
       </div>
+      <GenerateDetails budget={budget} />
+   
       <div className="flex flex-col">
         <div
           className="flex items-center text-grey-300"

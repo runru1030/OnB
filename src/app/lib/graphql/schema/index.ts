@@ -31,6 +31,14 @@ export const typeDefs = `#graphql
     budgetId:ID!
     Budget:Budget
   }
+  input ExpenseInput{
+    title:String
+    category:String
+    amount:Float
+    createdAt:Date
+    tripId:ID!
+    budgetId:ID!
+  }
   type Income{
     id:ID!
     title:String
@@ -39,6 +47,14 @@ export const typeDefs = `#graphql
     createdAt:Date
     budgetId:ID!
     Budget:Budget
+  }
+  input IncomeInput{
+    title:String
+    exchangeRate:Float
+    amount:Float
+    createdAt:Date
+    budgetId:ID!
+    tripId:ID!
   }
   type Budget{
     id:ID!
@@ -91,10 +107,12 @@ export const typeDefs = `#graphql
     deleteBudget(id:ID!):Budget
 
     createIncome(title:String, amount:Float, exchangeRate:Float, createdAt:Date, budgetId:ID, tripId:ID):Income
+    createIncomes(incomes:[IncomeInput]):Income
     updateIncome(id:ID!, title:String, amount:Float, exchangeRate:Float, createdAt:Date, budgetId:ID, tripId:ID):Income
     deleteIncome(id:ID!, budgetId:ID!):Income
 
     createExpense(title:String, category:String, amount:Float, createdAt:Date, budgetId:ID, tripId:ID):Expense
+    createExpenses(expenses:[ExpenseInput]):Expense
     updateExpense(id:ID!, title:String, amount:Float, category:String, createdAt:Date, budgetId:ID, tripId:ID):Expense
     deleteExpense(id:ID!):Expense
 

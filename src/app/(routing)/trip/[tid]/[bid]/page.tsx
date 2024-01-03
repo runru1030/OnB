@@ -1,9 +1,9 @@
 import { getClient } from "@app/_components/ApolloClientRSC";
 import { budget } from "@app/lib/graphql/queries";
+import Header from "@components/Header";
 import { use } from "react";
 import IncomeExpenseList from "../_components/IncomeExpenseList";
 import BudgetInfoContent from "./_components/BudgetInfoContent";
-import Header from "@components/Header";
 import EditBudgetModalWithTrigger from "./_components/EditBudgetModalWithTrigger";
 
 const Page = ({ params: { bid } }: { params: { bid: string } }) => {
@@ -15,7 +15,7 @@ const Page = ({ params: { bid } }: { params: { bid: string } }) => {
     <div>
       <Header>
         <EditBudgetModalWithTrigger budget={budgetData} />
-        <span className="text-lg font-medium">{budgetData.title}</span>
+        <span className="text-lg font-medium ">{budgetData.title}</span>
       </Header>
       <div className="flex flex-col h-[calc(100%-60px)] overflow-auto">
         <BudgetInfoContent budget={budgetData} />
