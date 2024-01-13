@@ -1,5 +1,5 @@
 "use client";
-import { dateformatter } from "@app/utils";
+import { convertUTCtoKST, dateformatter } from "@app/utils";
 import clsx from "clsx";
 import { useMemo } from "react";
 import { DetailDataType, DetailType } from "../_types";
@@ -21,7 +21,12 @@ const IncomeExpenseList = ({
       [key: string]: DetailDataType[];
     };
     [...dataList]
-      .sort((a, b) => (new Date(a.createdAt) <= new Date(b.createdAt) ? 1 : -1))
+      .sort((a, b) =>
+        convertUTCtoKST(new Date(a.createdAt)) <
+        convertUTCtoKST(new Date(b.createdAt))
+          ? 1
+          : -1
+      )
       .forEach((el) => {
         const date = new Date(el.date);
         const key = dateformatter(date);
@@ -43,7 +48,9 @@ const IncomeExpenseList = ({
   return (
     <>
       {Object.keys(dataByDate)
-        .sort((a, b) => (new Date(a) <= new Date(b) ? 1 : -1))
+        .sort((a, b) =>
+          convertUTCtoKST(new Date(a)) < convertUTCtoKST(new Date(b)) ? 1 : -1
+        )
         .map((date: string) => (
           <div className="flex flex-col" key={date}>
             <span className="text-grey-200 px-4 py-2 text-sm tracking-wide border-b border-grey-50">
