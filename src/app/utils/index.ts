@@ -4,16 +4,25 @@ import {
   IncomeQueryData,
 } from "@app/(routing)/trip/[tid]/detail/_types";
 import { FocusEvent, HTMLInputTypeAttribute } from "react";
+export const convertUTCtoKST = (date: Date) => {
+  const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
+  const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+  return new Date(utc + KR_TIME_DIFF);
+};
 
-export const dateformatter = (date: Date) =>
-  `${date.getFullYear()}.${(date.getMonth() + 1)
+export const dateformatter = (date: Date) => {
+  const KSTDate = convertUTCtoKST(date);
+  return `${KSTDate.getFullYear()}.${(KSTDate.getMonth() + 1)
     .toString()
-    .padStart(2, "0")}.${date.getDate().toString().padStart(2, "0")}`;
+    .padStart(2, "0")}.${KSTDate.getDate().toString().padStart(2, "0")}`;
+};
 
-export const dateformatterWithUnit = (date: Date) =>
-  `${date.getFullYear()}년 ${(date.getMonth() + 1)
+export const dateformatterWithUnit = (date: Date) => {
+  const KSTDate = convertUTCtoKST(date);
+  return `${KSTDate.getFullYear()}년 ${(KSTDate.getMonth() + 1)
     .toString()
-    .padStart(2, "0")}월 ${date.getDate().toString().padStart(2, "0")}일`;
+    .padStart(2, "0")}월 ${KSTDate.getDate().toString().padStart(2, "0")}일`;
+};
 export const getSumOfBudget = (budget: BudgetQueryData) => {
   const totalExpenses = budget?.expenses?.reduce(
     (acc, curr) => acc + curr.amount,
