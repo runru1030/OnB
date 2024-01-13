@@ -32,7 +32,7 @@ const expenseReqAtom = atomWithReset({
   title: "",
   amount: "",
   category: "ETC",
-  createdAt: new Date(),
+  date: new Date(),
 });
 
 const modalOpenAtom = atom<boolean>(false);
@@ -250,7 +250,7 @@ const ExpenseInputContent = () => {
                 )}
                 onClick={() => setOpenCalendar((p) => !p)}
               >
-                {dateformatter(new Date(expenseData.createdAt))}
+                {dateformatter(new Date(expenseData.date))}
               </span>
             </div>
             <div
@@ -260,10 +260,8 @@ const ExpenseInputContent = () => {
               )}
             >
               <Calendar
-                date={expenseData.createdAt}
-                onChange={(date) =>
-                  setExpenseData((p) => ({ ...p, createdAt: date }))
-                }
+                date={expenseData.date}
+                onChange={(date) => setExpenseData((p) => ({ ...p, date }))}
               />
             </div>
           </div>

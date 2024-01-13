@@ -47,9 +47,9 @@ const useDataFilter = ({
     if (!selectionDate.ALL) {
       filtered = filtered.filter(
         (data) =>
-          new Date(data.createdAt).getDate() >=
+          new Date(data.date).getDate() >=
             selectionDate.startDate.getDate() &&
-          new Date(data.createdAt).getDate() <= selectionDate.endDate.getDate()
+          new Date(data.date).getDate() <= selectionDate.endDate.getDate()
       );
     }
     if (!selectionCategories.ALL) {

@@ -81,6 +81,7 @@ model Expense {
   amount    Float
   tripId    String
   budgetId  String
+  date      DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title     String   @default("기타")
@@ -96,6 +97,7 @@ model Income {
   amount       Float
   tripId       String
   budgetId     String
+  date         DateTime @default(now())
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   exchangeRate Float

@@ -5,7 +5,7 @@ const CREATE_INCOME = gql`
     $title: String
     $amount: Float
     $exchangeRate: Float
-    $createdAt: Date
+    $date: Date
     $budgetId: ID
     $tripId: ID
   ) {
@@ -13,7 +13,7 @@ const CREATE_INCOME = gql`
       title: $title
       amount: $amount
       exchangeRate: $exchangeRate
-      createdAt: $createdAt
+      date: $date
       budgetId: $budgetId
       tripId: $tripId
     ) {
@@ -21,6 +21,7 @@ const CREATE_INCOME = gql`
       title
       amount
       exchangeRate
+      date
       createdAt
       budgetId
     }
@@ -40,7 +41,7 @@ const UPDATE_INCOME = gql`
     $title: String
     $amount: Float
     $exchangeRate: Float
-    $createdAt: Date
+    $date: Date
     $budgetId: ID
     $tripId: ID
   ) {
@@ -49,7 +50,7 @@ const UPDATE_INCOME = gql`
       title: $title
       amount: $amount
       exchangeRate: $exchangeRate
-      createdAt: $createdAt
+      date: $date
       budgetId: $budgetId
       tripId: $tripId
     ) {
@@ -57,6 +58,7 @@ const UPDATE_INCOME = gql`
       title
       amount
       exchangeRate
+      date
       createdAt
       budgetId
     }
@@ -76,6 +78,7 @@ const GET_INCOMES = gql`
       title
       amount
       exchangeRate
+      date
       createdAt
       budgetId
       Budget {

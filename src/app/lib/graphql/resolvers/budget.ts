@@ -16,11 +16,11 @@ export default {
         include: {
           expenses: {
             include: { Budget: { include: { Currency: true } } },
-            orderBy: { createdAt: "desc" },
+            orderBy: { date: "desc" },
           },
           incomes: {
             include: { Budget: { include: { Currency: true } } },
-            orderBy: { createdAt: "desc" },
+            orderBy: { date: "desc" },
           },
           Currency: true,
         },
@@ -36,11 +36,11 @@ export default {
         include: {
           expenses: {
             include: { Budget: { include: { Currency: true } } },
-            orderBy: { createdAt: "desc" },
+            orderBy: { date: "desc" },
           },
           incomes: {
             include: { Budget: { include: { Currency: true } } },
-            orderBy: { createdAt: "desc" },
+            orderBy: { date: "desc" },
           },
           Currency: true,
         },
@@ -57,11 +57,11 @@ export default {
         include: {
           expenses: {
             include: { Budget: { include: { Currency: true } } },
-            orderBy: { createdAt: "desc" },
+            orderBy: { date: "desc" },
           },
           incomes: {
             include: { Budget: { include: { Currency: true } } },
-            orderBy: { createdAt: "desc" },
+            orderBy: { date: "desc" },
           },
           Currency: true,
         },

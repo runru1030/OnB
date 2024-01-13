@@ -247,7 +247,7 @@ const IcomeInputContent = () => {
                 )}
                 onClick={() => setOpenCalendar((p) => !p)}
               >
-                {dateformatter(new Date(detailData?.createdAt || ""))}
+                {dateformatter(new Date(detailData?.date || ""))}
               </span>
             </div>
             <div
@@ -257,9 +257,9 @@ const IcomeInputContent = () => {
               )}
             >
               <Calendar
-                date={new Date(detailData?.createdAt || "")}
+                date={new Date(detailData?.date || "")}
                 onChange={(date) =>
-                  setNewIncomeData((p) => ({ ...p, createdAt: date }))
+                  setNewIncomeData((p) => ({ ...p, date: date }))
                 }
               />
             </div>
@@ -398,7 +398,7 @@ const ExpenseInputContent = () => {
                 )}
                 onClick={() => setOpenCalendar((p) => !p)}
               >
-                {dateformatter(new Date(newExpenseData.createdAt))}
+                {dateformatter(new Date(newExpenseData.date))}
               </span>
             </div>
             <div
@@ -408,9 +408,9 @@ const ExpenseInputContent = () => {
               )}
             >
               <Calendar
-                date={new Date(newExpenseData.createdAt)}
+                date={new Date(newExpenseData.date)}
                 onChange={(date) =>
-                  setNewExpenseData((p) => ({ ...p, createdAt: date }))
+                  setNewExpenseData((p) => ({ ...p, date: date }))
                 }
               />
             </div>

@@ -29,7 +29,7 @@ const incomeReqAtom = atomWithReset({
   title: "",
   amount: "",
   exchangeRate: "1",
-  createdAt: new Date(),
+  date: new Date(),
 });
 const modalOpenAtom = atom<boolean>(false);
 
@@ -65,7 +65,7 @@ const CreateIncomeModal = ({
           ...incomeData,
           amount: parseFloat(incomeData.amount),
           exchangeRate: parseFloat(incomeData.exchangeRate),
-          createdAt: incomeData.createdAt,
+          date: incomeData.date,
           budgetId: budgetData.id,
           tripId: tid,
         },
@@ -266,7 +266,7 @@ const IcomeInputContent = () => {
                 )}
                 onClick={() => setOpenCalendar((p) => !p)}
               >
-                {dateformatter(new Date(incomeData.createdAt))}
+                {dateformatter(new Date(incomeData.date))}
               </span>
             </div>
             <div
@@ -276,9 +276,9 @@ const IcomeInputContent = () => {
               )}
             >
               <Calendar
-                date={incomeData.createdAt}
+                date={incomeData.date}
                 onChange={(date) =>
-                  setIcomeData((p) => ({ ...p, createdAt: date }))
+                  setIcomeData((p) => ({ ...p, date: date }))
                 }
               />
             </div>

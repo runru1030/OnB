@@ -65,6 +65,7 @@ const GET_TRIP = gql`
           id
           category
           amount
+          date
           createdAt
           budgetId
           Budget {
@@ -80,6 +81,7 @@ const GET_TRIP = gql`
           id
           amount
           exchangeRate
+          date
           createdAt
           budgetId
           Budget {
