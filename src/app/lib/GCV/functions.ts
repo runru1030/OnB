@@ -11,46 +11,47 @@ export async function detectText(img: string, currencyId: string) {
   const dateRegex = new RegExp(
     /^\d{4}.(0[1-9]|1[012]).(0[1-9]|[12][0-9]|3[01])$/
   );
-  const convertObj = { expenses: [], incomes: [] } as {
-    [key: string]: { date: string; value: number }[];
-  };
-  let activeFlag = -1;
-  let activeType = "expenses";
-  let expenseIdx = 0;
-  let incomeIdx = 0;
+  const resultObj = [] as {
+    date: string;
+    amount: number;
+    title: string;
+    type: string;
+  }[];
   let date = "";
-  annotations?.forEach((annotation) => {
-    if (!annotation.description) return;
-    const text = annotation.description?.trim();
-    if (dateRegex.test(text)) date = text.replaceAll(".", "-");
+  let triggered = false;
+  let title = "";
+  let idx = 0;
+  let prevText = "";
+  annotations?.[0].description?.split("\n").forEach((annotation) => {
+    const text = annotation?.trim();
+    const isAmountTarget =
+      (text.includes("-") || text.includes("+")) &&
+      text.split(currencySymbol[currencyId]).length === 2;
+    const isAmountTargetZero =
+      text.split(currencySymbol[currencyId])?.[1]?.trim() === "0" &&
+      prevText.includes(currencySymbol[currencyId]) &&
+      !(prevText.includes("-") || prevText.includes("+"));
 
-    if (text === "충전") {
-      convertObj.incomes.push({ date, value: 0 });
-    }
-    if (text === "결제") {
-      convertObj.expenses.push({ date, value: 0 });
-    }
-    if (["+", "-"].includes(text)) {
-      if (text === "+") {
-        activeFlag += 1;
-        activeType = "incomes";
+    if (dateRegex.test(text)) {
+      date = text.replaceAll(".", "-");
+      triggered = true;
+    } else {
+      if (isAmountTarget || isAmountTargetZero) {
+        resultObj[idx].amount = parseFloat(
+          text.split(currencySymbol[currencyId])[1].replaceAll(",", "")
+        );
+        idx += 1;
+        triggered = false;
       }
-      if (text === "-") {
-        activeFlag += 1;
-        activeType = "expenses";
+      if (triggered) {
+        if (["충전", "결제", "친구간 송금"].includes(text)) {
+          resultObj.push({ date, title, type: text, amount: 0 });
+        } else {
+          title = text;
+        }
       }
-    } else if (activeFlag === 0) {
-      if (text === currencySymbol[currencyId]) {
-        activeFlag += 1;
-      } else activeFlag = -1;
-    } else if (activeFlag === 1) {
-      convertObj[activeType][
-        activeType === "expenses" ? expenseIdx : incomeIdx
-      ].value = parseFloat(text.replaceAll(",", ""));
-      if (activeType === "expenses") expenseIdx += 1;
-      if (activeType === "incomes") incomeIdx += 1;
-      activeFlag = -1;
     }
+    prevText = text;
   });
-  return convertObj;
+  return resultObj;
 }

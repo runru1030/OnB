@@ -12,6 +12,7 @@ import { expense, income } from "@app/lib/graphql/queries";
 import { useParams, useRouter } from "next/navigation";
 import DriveFolderUploadTwoToneIcon from "@mui/icons-material/DriveFolderUploadTwoTone";
 import LoadingDots from "@components/LoadingDots";
+import Image from "next/image";
 const GenerateDetails = ({ budget }: { budget: BudgetQueryData }) => {
   const { tid } = useParams();
   const router = useRouter();
@@ -20,14 +21,18 @@ const GenerateDetails = ({ budget }: { budget: BudgetQueryData }) => {
   const [incomes, setIncomes] = useState<
     {
       date: string;
-      value: number;
+      amount: number;
+      type: string;
+      title: string;
       selected: boolean;
     }[]
   >([]);
   const [expenses, setExpenses] = useState<
     {
       date: string;
-      value: number;
+      amount: number;
+      type: string;
+      title: string;
       selected: boolean;
     }[]
   >([]);
@@ -47,9 +52,9 @@ const GenerateDetails = ({ budget }: { budget: BudgetQueryData }) => {
       incomes
         .filter((i) => i.selected)
         .map((i) => ({
-          title: "",
+          title: i.title,
           exchangeRate: budget.exRateAVG,
-          amount: i.value,
+          amount: i.amount,
           date: new Date(i.date),
           budgetId: budget.id,
           tripId: tid,
@@ -61,9 +66,9 @@ const GenerateDetails = ({ budget }: { budget: BudgetQueryData }) => {
       expenses
         .filter((i) => i.selected)
         .map((i) => ({
-          title: "",
+          title: i.title,
           category: "ETC",
-          amount: i.value,
+          amount: i.amount,
           date: new Date(i.date),
           budgetId: budget.id,
           tripId: tid,
@@ -81,17 +86,20 @@ const GenerateDetails = ({ budget }: { budget: BudgetQueryData }) => {
           reader.result as string,
           budget.Currency.id
         );
+
         setIncomes(
-          covertData.incomes
-            .filter((income) => income.value !== 0)
+          covertData
+            .filter((d) => d.type === "충전")
+            .filter((income) => income.amount !== 0)
             .map((i) => ({
               ...i,
               selected: true,
             }))
         );
         setExpenses(
-          covertData.expenses
-            .filter((incomes) => incomes.value !== 0)
+          covertData
+            .filter((d) => d.type === "결제")
+            .filter((expense) => expense.amount !== 0)
             .map((i) => ({
               ...i,
               selected: true,
@@ -144,19 +152,19 @@ const GenerateDetails = ({ budget }: { budget: BudgetQueryData }) => {
               </div>
             )}
             {!loading && (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-6 py-2">
                 {incomes.length !== 0 && (
                   <div className="flex flex-col gap-2">
                     <span className="font-medium">충전 내역</span>
                     <div className="flex flex-col rounded-xl overflow-hidden gap-1">
                       {incomes.map((income, idx) => (
                         <div
-                          key={income.date + income.value}
+                          key={income.date + income.amount}
                           className={clsx(
                             income.selected
-                              ? "bg-blue-200 text-blue"
+                              ? "bg-blue-50 text-blue"
                               : "text-grey-100",
-                            "flex justify-between p-2  duration-300"
+                            "flex justify-between p-2 duration-300 items-center"
                           )}
                           onClick={() => {
                             const temp = [...incomes];
@@ -165,9 +173,12 @@ const GenerateDetails = ({ budget }: { budget: BudgetQueryData }) => {
                           }}
                         >
                           <span>{income.date}</span>
+                          <span className="text-xs truncate max-w-[120px]">
+                            {income.title}
+                          </span>
                           <span>
                             {currencySymbol[budget.Currency.id]}{" "}
-                            {income.value.toLocaleString()}{" "}
+                            {income.amount.toLocaleString()}{" "}
                           </span>
                         </div>
                       ))}
@@ -180,12 +191,12 @@ const GenerateDetails = ({ budget }: { budget: BudgetQueryData }) => {
                     <div className="flex flex-col rounded-xl overflow-hidden gap-1">
                       {expenses.map((expense, idx) => (
                         <div
-                          key={expense.date + expense.value}
+                          key={expense.date + expense.amount}
                           className={clsx(
                             expense.selected
-                              ? "bg-red-100 text-red "
+                              ? "bg-red-50 text-red "
                               : "text-grey-100",
-                            "flex justify-between p-2 duration-300"
+                            "flex justify-between p-2 duration-300 items-center"
                           )}
                           onClick={() => {
                             const temp = [...expenses];
@@ -194,14 +205,31 @@ const GenerateDetails = ({ budget }: { budget: BudgetQueryData }) => {
                           }}
                         >
                           <span>{expense.date}</span>
+                          <span className="text-xs truncate max-w-[120px]">
+                            {expense.title}
+                          </span>
                           <span>
                             {currencySymbol[budget.Currency.id]}{" "}
-                            {expense.value.toLocaleString()}{" "}
+                            {expense.amount.toLocaleString()}{" "}
                           </span>
                         </div>
                       ))}
                     </div>
                   </div>
+                )}
+                {incomes.length === 0 && expenses.length === 0 && (
+                  <span className="text-xs text-red flex flex-col items-center gap-3">
+                    - 현재 트래블 월렛 이용내역 이미지 업로드만 지원하고 있습니다.
+                    <br />
+                    - 이용 내역 화면의 1. 날짜, 2. 내용, 3. 금액 을
+                    담은 화면 이미지를 업로드 해주셔야 정확도가 올라갑니다!
+                    <Image
+                      src={"/assets/guide.png"}
+                      alt="guide"
+                      width={300}
+                      height={100}
+                    />
+                  </span>
                 )}
               </div>
             )}
