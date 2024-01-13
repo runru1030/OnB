@@ -22,7 +22,7 @@ export async function detectText(img: string, currencyId: string) {
   annotations?.forEach((annotation) => {
     if (!annotation.description) return;
     const text = annotation.description?.trim();
-    if (dateRegex.test(text)) date = text;
+    if (dateRegex.test(text)) date = text.replaceAll(".", "-");
 
     if (text === "충전") {
       convertObj.incomes.push({ date, value: 0 });
