@@ -35,10 +35,7 @@ export const getSumOfBudget = (budget: BudgetQueryData) => {
         acc + (curr.amount * curr.exchangeRate) / budget.Currency.amountUnit,
       0
     ),
-    totalExpenses: budget?.expenses?.reduce(
-      (acc, curr) => acc + curr.amount,
-      0
-    ),
+    totalExpenses,
     totalExpensesKRW:
       (totalExpenses * budget.exRateAVG) / budget.Currency.amountUnit,
   };
