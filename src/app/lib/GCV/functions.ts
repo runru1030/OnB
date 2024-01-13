@@ -24,7 +24,6 @@ export async function detectText(img: string, currencyId: string) {
   let prevText = "";
   annotations?.[0].description?.split("\n").forEach((annotation) => {
     const text = annotation?.trim();
-    console.log(text);
 
     const isAmountTarget =
       (text.includes("-") || text.includes("+")) &&
