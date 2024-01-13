@@ -66,7 +66,9 @@ const IncomeExpenseList = ({
                   {withBudgetTitle && (
                     <span className="font-medium">{li?.Budget.title}</span>
                   )}
-                  <span className="text-grey-300">{li?.title}</span>
+                  <span className="text-grey-300 max-w-[120px] truncate">
+                    {li?.title}
+                  </span>
                 </div>
                 <span
                   className={clsx(
