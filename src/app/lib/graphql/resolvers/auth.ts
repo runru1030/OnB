@@ -8,8 +8,6 @@ export default {
       args: { email: string },
       context: Context
     ) => {
-      console.log("active");
-      
       return await context.prisma.user.findUnique({
         where: { email: args.email },
       });
@@ -17,8 +15,6 @@ export default {
   },
   Mutation: {
     createAuth: async (_parent: undefined, args: User, context: Context) => {
-      console.log("active2");
-      
       return await context.prisma.user.upsert({
         where: { email: args.email },
         update: {},

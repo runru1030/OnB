@@ -10,7 +10,7 @@ import { use } from "react";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import AuthProvider from "./_components/AuthProvider";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "./utils/next-auth/authOptions";
 const pretendard = localFont({
   src: "../../public/font/PretendardVariable.woff2",
   display: "swap",

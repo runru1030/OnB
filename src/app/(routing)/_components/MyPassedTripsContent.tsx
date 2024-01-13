@@ -1,10 +1,10 @@
 import { getClient } from "@app/_components/ApolloClientRSC";
-import { authOptions } from "@app/api/auth/[...nextauth]/route";
 import { trip } from "@app/lib/graphql/queries";
 import { Session, getServerSession } from "next-auth";
 import { use } from "react";
 import { MyTripQueryData } from "../_types";
 import TripBox from "./TripBox";
+import { authOptions } from "@app/utils/next-auth/authOptions";
 const MyPassedTripsContent = () => {
   const session = use(getServerSession(authOptions)) as Session;
   const { data } = use(
