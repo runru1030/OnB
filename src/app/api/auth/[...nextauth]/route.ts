@@ -1,13 +1,10 @@
 import { getClient } from "@app/_components/ApolloClientRSC";
 import { auth } from "@app/lib/graphql/queries";
-import { prisma } from "@app/lib/prisma/db";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import KakaoProvider from "next-auth/providers/kakao";
 import NaverProvider from "next-auth/providers/naver";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
   },
