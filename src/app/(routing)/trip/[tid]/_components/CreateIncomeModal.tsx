@@ -17,6 +17,7 @@ import { Calendar } from "react-date-range";
 import { BudgetQueryData } from "../_types";
 import BudgetBox from "./BudgetBox";
 import { tripAtom, tripStore } from "./TripProvider";
+import { NumericInput } from "@components/Input/Numeric";
 
 const budgetAtom = atomWithReset({
   id: "",
@@ -63,8 +64,8 @@ const CreateIncomeModal = ({
       createIncome({
         variables: {
           ...incomeData,
-          amount: parseFloat(incomeData.amount),
-          exchangeRate: parseFloat(incomeData.exchangeRate),
+          amount: parseFloat(incomeData.amount.replaceAll(",", "")),
+          exchangeRate: parseFloat(incomeData.exchangeRate.replaceAll(",", "")),
           date: incomeData.date,
           budgetId: budgetData.id,
           tripId: tid,
@@ -180,13 +181,12 @@ const IcomeInputContent = () => {
           <div className="flex flex-col gap-4 flex-1">
             <div className="relative h-10">
               {
-                <Input
-                  type="number"
+                <NumericInput
                   value={incomeData.amount}
                   onChange={(e) => {
                     setIcomeData((p) => ({
                       ...p,
-                      amount: e.target.value.replace(/(^0+)/, ""),
+                      amount: e.target.value,
                     }));
                   }}
                   autoFocus
@@ -198,9 +198,6 @@ const IcomeInputContent = () => {
                     paddingRight: `${
                       (currencyName.split(" ").at(-1)?.length || 0) * 14 + 4
                     }px`,
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "e") e.preventDefault();
                   }}
                 />
               }
@@ -222,17 +219,16 @@ const IcomeInputContent = () => {
                 .at(-1)}`}</span>
               <span className="text-lg">=</span>
               <div className="relative h-[26px]">
-                <Input
-                  type="number"
+                <NumericInput
                   value={incomeData.exchangeRate}
                   onChange={(e) => {
                     setIcomeData((p) => ({
                       ...p,
-                      exchangeRate: e.target.value.replace(/(^0+)/, ""),
+                      exchangeRate: e.target.value,
                     }));
                   }}
                   placeholder={`${exchageData.deal_bas_r}`}
-                  className="outline-none focus:border-b-2 border-grey-400 rounded-none !p-0 !pr-4 text-right w-[60px] disabled:bg-white"
+                  className="outline-none focus:border-b-2 border-grey-400 rounded-none !p-0 !pr-4 text-right w-[100px] disabled:bg-white"
                   disabled={currencyUnit === "KRW"}
                 />
                 <span className="absolute right-0 top-[calc(50%-1px)] -translate-y-1/2">
@@ -277,9 +273,7 @@ const IcomeInputContent = () => {
             >
               <Calendar
                 date={incomeData.date}
-                onChange={(date) =>
-                  setIcomeData((p) => ({ ...p, date: date }))
-                }
+                onChange={(date) => setIcomeData((p) => ({ ...p, date: date }))}
               />
             </div>
           </div>
