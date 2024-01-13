@@ -100,13 +100,21 @@ const GenerateDetails = ({ budget }: { budget: BudgetQueryData }) => {
         setLoading(false);
       };
     }
+    e.target.files = null;
   };
   return (
     <Modal open={open} onOpenChange={setOpen}>
       <Modal.Trigger>
         <Button className="btn-blue-border">이미지로 불러오기</Button>
       </Modal.Trigger>
-      <Modal.Content className="w-full top-[52px] bottom-0 translate-y-0 !p-0 rounded-b-none">
+      <Modal.Content
+        className="w-full top-[52px] bottom-0 translate-y-0 !p-0 rounded-b-none"
+        onOpenAutoFocus={() => {
+          setExpenses([]);
+          setIncomes([]);
+          setLoading(false);
+        }}
+      >
         <Modal.Title className="p-4">
           <Modal.Close>
             <Button className="absolute top-1/2 right-4 !p-0 -translate-y-1/2">
