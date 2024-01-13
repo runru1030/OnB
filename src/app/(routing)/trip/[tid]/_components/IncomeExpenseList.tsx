@@ -16,17 +16,12 @@ const IncomeExpenseList = ({
   dataList,
   withBudgetTitle = false,
 }: IncomeExpenseListProps) => {
-  
   const dataByDate = useMemo(() => {
     const dataObj = {} as {
       [key: string]: DetailDataType[];
     };
     [...dataList]
-      .sort((a, b) =>
-        new Date(a.createdAt).getTime() <= new Date(b.createdAt).getTime()
-          ? 1
-          : -1
-      )
+      .sort((a, b) => (new Date(a.createdAt) <= new Date(b.createdAt) ? 1 : -1))
       .forEach((el) => {
         const date = new Date(el.date);
         const key = dateformatter(date);
@@ -48,9 +43,7 @@ const IncomeExpenseList = ({
   return (
     <>
       {Object.keys(dataByDate)
-        .sort((a, b) =>
-          new Date(a).getTime() <= new Date(b).getTime() ? 1 : -1
-        )
+        .sort((a, b) => (new Date(a) <= new Date(b) ? 1 : -1))
         .map((date: string) => (
           <div className="flex flex-col" key={date}>
             <span className="text-grey-200 px-4 py-2 text-sm tracking-wide border-b border-grey-50">
