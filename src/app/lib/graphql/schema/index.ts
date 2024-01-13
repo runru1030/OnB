@@ -87,8 +87,8 @@ export const typeDefs = `#graphql
   }
   type Query {
 	  trip(id: ID!): TripJoined 
-    trips:[Trip]
-    passedTrips:[Trip]
+    trips(userId: ID!):[Trip]
+    passedTrips(userId: ID!):[Trip]
 	  budget(id: ID!): Budget 
 	  budgets(tid: ID!): [Budget] 
 	  budgetTotal(tid: ID!): BudgetAgg 

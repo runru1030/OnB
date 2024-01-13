@@ -96,8 +96,8 @@ const GET_TRIP = gql`
   }
 `;
 const GET_TRIPS = gql`
-  query Trips {
-    trips {
+  query Trips($userId: ID!) {
+    trips(userId: $userId) {
       id
       title
       startedAt
@@ -115,8 +115,8 @@ const GET_TRIPS = gql`
 `;
 
 export const GET_PASSED_TRIPS = gql`
-  query PassedTrips {
-    passedTrips {
+  query PassedTrips($userId: ID!) {
+    passedTrips(userId: $userId) {
       id
       title
       startedAt
