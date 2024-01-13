@@ -148,6 +148,7 @@ const ExpenseInputContent = () => {
     () => getSumOfBudget(budgetData as BudgetQueryData),
     [budgetData]
   );
+
   return (
     <div className="flex-1 overflow-auto p-4">
       <div className="flex flex-col gap-4">
@@ -196,7 +197,10 @@ const ExpenseInputContent = () => {
             <span className="text-red-300">
               {(
                 (totalIncomes || 0) -
-                (totalExpenses + parseFloat(expenseData.amount) || 0)
+                (totalExpenses +
+                  parseFloat(
+                    expenseData.amount === "" ? "0" : expenseData.amount
+                  ) || 0)
               ).toLocaleString()}
             </span>
             <span className="text-red-300 text-base">/</span>
