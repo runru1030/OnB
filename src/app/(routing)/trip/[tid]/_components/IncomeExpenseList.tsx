@@ -1,12 +1,12 @@
 "use client";
-import { convertUTCtoKST, dateformatter } from "@app/utils";
+import { dateformatter } from "@app/utils";
 import clsx from "clsx";
 import { useMemo } from "react";
+import currencySymbol from "../_constants/currencySymbol";
 import { DetailDataType, DetailType } from "../_types";
 import { ExpenseQueryData, IncomeQueryData } from "../detail/_types";
 import CategoryTag from "./CategoryTag";
 import DetailModal from "./DetailModal";
-import currencySymbol from "../_constants/currencySymbol";
 
 interface IncomeExpenseListProps {
   dataList: (IncomeQueryData | ExpenseQueryData)[];
@@ -21,12 +21,7 @@ const IncomeExpenseList = ({
       [key: string]: DetailDataType[];
     };
     [...dataList]
-      .sort((a, b) =>
-        convertUTCtoKST(new Date(a.createdAt)) <
-        convertUTCtoKST(new Date(b.createdAt))
-          ? 1
-          : -1
-      )
+      .sort((a, b) => (new Date(a.date) < new Date(b.date) ? 1 : -1))
       .forEach((el) => {
         const date = new Date(el.date);
         const key = dateformatter(date);
@@ -42,59 +37,61 @@ const IncomeExpenseList = ({
           dataObj[key] = [li];
         }
       });
+
+    [...Object.keys(dataObj)].forEach((dateKey) => {
+      dataObj[dateKey].sort((a, b) =>
+        new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1
+      );
+    });
     return dataObj;
   }, [dataList]);
 
   return (
     <>
-      {Object.keys(dataByDate)
-        .sort((a, b) =>
-          convertUTCtoKST(new Date(a)) < convertUTCtoKST(new Date(b)) ? 1 : -1
-        )
-        .map((date: string) => (
-          <div className="flex flex-col" key={date}>
-            <span className="text-grey-200 px-4 py-2 text-sm tracking-wide border-b border-grey-50">
-              {date}
-            </span>
-            <div className="flex flex-col">
-              {dataByDate[date].map((li) => (
-                <DetailModal.Trigger
-                  key={li.id}
-                  className={clsx(
-                    "w-full flex items-center justify-between !p-4"
+      {Object.keys(dataByDate).map((date: string) => (
+        <div className="flex flex-col" key={date}>
+          <span className="text-grey-200 px-4 py-2 text-sm tracking-wide border-b border-grey-50">
+            {date}
+          </span>
+          <div className="flex flex-col">
+            {dataByDate[date].map((li) => (
+              <DetailModal.Trigger
+                key={li.id}
+                className={clsx(
+                  "w-full flex items-center justify-between !p-4"
+                )}
+                detail={li}
+              >
+                <div className="flex gap-4 items-center">
+                  {withBudgetTitle && (
+                    <span className="font-medium">{li?.Budget.title}</span>
                   )}
-                  detail={li}
+                  <span className="text-grey-300">{li?.title}</span>
+                </div>
+                <span
+                  className={clsx(
+                    li.type === "Expense" ? "text-red" : "text-blue",
+                    "flex gap-4 items-center text-lg font-medium"
+                  )}
                 >
-                  <div className="flex gap-4 items-center">
-                    {withBudgetTitle && (
-                      <span className="font-medium">{li?.Budget.title}</span>
+                  <span className="text-red-300">
+                    {li.type === "Expense" && (
+                      <CategoryTag
+                        category={(li as ExpenseQueryData).category}
+                      />
                     )}
-                    <span className="text-grey-300">{li?.title}</span>
-                  </div>
-                  <span
-                    className={clsx(
-                      li.type === "Expense" ? "text-red" : "text-blue",
-                      "flex gap-4 items-center text-lg font-medium"
-                    )}
-                  >
-                    <span className="text-red-300">
-                      {li.type === "Expense" && (
-                        <CategoryTag
-                          category={(li as ExpenseQueryData).category}
-                        />
-                      )}
-                    </span>
-                    <span>
-                      {li.type === "Expense" ? "- " : "+ "}
-                      {currencySymbol[li.Budget.Currency.id]}{" "}
-                      {li.amount.toLocaleString()}
-                    </span>
                   </span>
-                </DetailModal.Trigger>
-              ))}
-            </div>
+                  <span>
+                    {li.type === "Expense" ? "- " : "+ "}
+                    {currencySymbol[li.Budget.Currency.id]}{" "}
+                    {li.amount.toLocaleString()}
+                  </span>
+                </span>
+              </DetailModal.Trigger>
+            ))}
           </div>
-        ))}
+        </div>
+      ))}
       <DetailModal />
     </>
   );
