@@ -11,7 +11,7 @@ export default {
       return await context.prisma.income.findMany({
         where: { tripId: args.tid },
         include: { Budget: { include: { Currency: true } } },
-        orderBy: { createdAt: "desc" },
+        orderBy: { date: "desc" },
       });
     },
   },

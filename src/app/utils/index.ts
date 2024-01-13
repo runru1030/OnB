@@ -30,7 +30,8 @@ export const getSumOfBudget = (budget: BudgetQueryData) => {
       (acc, curr) => acc + curr.amount,
       0
     ),
-    totalExpensesKRW: totalExpenses * budget.exRateAVG,
+    totalExpensesKRW:
+      (totalExpenses * budget.exRateAVG) / budget.Currency.amountUnit,
   };
 };
 export const getSumOfDetail = (

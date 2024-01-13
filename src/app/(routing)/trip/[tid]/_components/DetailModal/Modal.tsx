@@ -17,6 +17,7 @@ import { EXPNSE_CATEGORY } from "../../_constants";
 import { BudgetQueryData, DetailDataType, DetailType } from "../../_types";
 import { ExpenseQueryData, IncomeQueryData } from "../../detail/_types";
 import CategoryTag from "../CategoryTag";
+import { NumericInput } from "@components/Input/Numeric";
 
 const modalOpenAtom = atom<boolean>(false);
 const detailAtom = atom<DetailDataType | undefined>(undefined);
@@ -110,8 +111,18 @@ const IcomeInputContent = () => {
   const detailData = useAtomValue(detailAtom);
   const [newIncomeData, setNewIncomeData] = useState({
     ...(detailData as IncomeQueryData),
-    amount: detailData?.amount.toString(),
-    exchangeRate: (detailData as IncomeQueryData)?.exchangeRate.toString(),
+    amount: detailData?.amount
+      .toString()
+      .replace(
+        /(\..*)$|(\d)(?=(\d{3})+(?!\d))/g,
+        (digit, fract) => fract || digit + ","
+      ),
+    exchangeRate: (detailData as IncomeQueryData)?.exchangeRate
+      .toString()
+      .replace(
+        /(\..*)$|(\d)(?=(\d{3})+(?!\d))/g,
+        (digit, fract) => fract || digit + ","
+      ),
   });
   const {
     id: currencyUnit,
@@ -135,8 +146,12 @@ const IcomeInputContent = () => {
       updateIncome({
         variables: {
           ...newIncomeData,
-          amount: parseFloat(newIncomeData.amount as string),
-          exchangeRate: parseFloat(newIncomeData.exchangeRate as string),
+          amount: parseFloat(
+            newIncomeData.amount?.replaceAll(",", "") as string
+          ),
+          exchangeRate: parseFloat(
+            newIncomeData.exchangeRate.replaceAll(",", "") as string
+          ),
         },
       });
     } catch (error: unknown) {
@@ -164,13 +179,12 @@ const IcomeInputContent = () => {
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-4 flex-1">
             <div className="relative h-10">
-              <Input
-                type="number"
+              <NumericInput
                 value={newIncomeData?.amount}
                 onChange={(e) => {
                   setNewIncomeData((p) => ({
                     ...p,
-                    amount: e.target.value.replace(/(^0+)/, ""),
+                    amount: e.target.value,
                   }));
                 }}
                 autoFocus
@@ -180,9 +194,6 @@ const IcomeInputContent = () => {
                   paddingRight: `${
                     (currencyName.split(" ").at(-1)?.length || 0) * 14 + 4
                   }px`,
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "e") e.preventDefault();
                 }}
               />
               <span className="absolute right-0 top-1/2 -translate-y-1/2">
@@ -203,17 +214,17 @@ const IcomeInputContent = () => {
                 .at(-1)}`}</span>
               <span className="text-lg">=</span>
               <div className="relative h-[26px]">
-                <Input
+                <NumericInput
                   type="number"
                   value={newIncomeData?.exchangeRate}
                   onChange={(e) => {
                     setNewIncomeData((p) => ({
                       ...p,
-                      exchangeRate: e.target.value.replace(/(^0+)/, ""),
+                      exchangeRate: e.target.value,
                     }));
                   }}
                   placeholder={newIncomeData?.exchangeRate}
-                  className="outline-none focus:border-b-2 border-grey-400 rounded-none !p-0 !pr-4 text-right w-[60px] disabled:bg-white"
+                  className="outline-none focus:border-b-2 border-grey-400 rounded-none !p-0 !pr-4 text-right w-[100px] disabled:bg-white"
                   disabled={currencyUnit === "KRW"}
                 />
                 <span className="absolute right-0 top-[calc(50%-1px)] -translate-y-1/2">
@@ -247,7 +258,7 @@ const IcomeInputContent = () => {
                 )}
                 onClick={() => setOpenCalendar((p) => !p)}
               >
-                {dateformatter(new Date(detailData?.createdAt || ""))}
+                {dateformatter(new Date(detailData?.date || ""))}
               </span>
             </div>
             <div
@@ -257,9 +268,9 @@ const IcomeInputContent = () => {
               )}
             >
               <Calendar
-                date={new Date(detailData?.createdAt || "")}
+                date={new Date(detailData?.date || "")}
                 onChange={(date) =>
-                  setNewIncomeData((p) => ({ ...p, createdAt: date }))
+                  setNewIncomeData((p) => ({ ...p, date: date }))
                 }
               />
             </div>
@@ -283,7 +294,12 @@ const ExpenseInputContent = () => {
   const detailData = useAtomValue(detailAtom);
   const [newExpenseData, setNewExpenseData] = useState({
     ...(detailData as ExpenseQueryData),
-    amount: detailData?.amount.toString() as string,
+    amount: detailData?.amount
+      .toString()
+      .replace(
+        /(\..*)$|(\d)(?=(\d{3})+(?!\d))/g,
+        (digit, fract) => fract || digit + ","
+      ) as string,
   });
   const { id: currencyUnit, name: currencyName } = (
     detailData?.Budget as BudgetQueryData
@@ -303,7 +319,9 @@ const ExpenseInputContent = () => {
       updateExpense({
         variables: {
           ...newExpenseData,
-          amount: parseFloat(newExpenseData.amount as string),
+          amount: parseFloat(
+            newExpenseData.amount.replaceAll(",", "") as string
+          ),
         },
       });
     } catch (error: unknown) {
@@ -330,13 +348,12 @@ const ExpenseInputContent = () => {
         </h2>
         <div className="flex flex-col gap-4">
           <div className="relative h-10 text-red">
-            <Input
-              type="number"
+            <NumericInput
               value={newExpenseData.amount}
               onChange={(e) => {
                 setNewExpenseData((p) => ({
                   ...p,
-                  amount: e.target.value.replace(/(^0+)/, ""),
+                  amount: e.target.value,
                 }));
               }}
               autoFocus
@@ -346,9 +363,6 @@ const ExpenseInputContent = () => {
                 paddingRight: `${
                   (currencyName.split(" ").at(-1)?.length || 0) * 14 + 4
                 }px`,
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "e") e.preventDefault();
               }}
             />
             <span className="absolute right-0 top-1/2 -translate-y-1/2">
@@ -398,7 +412,7 @@ const ExpenseInputContent = () => {
                 )}
                 onClick={() => setOpenCalendar((p) => !p)}
               >
-                {dateformatter(new Date(newExpenseData.createdAt))}
+                {dateformatter(new Date(newExpenseData.date))}
               </span>
             </div>
             <div
@@ -408,9 +422,9 @@ const ExpenseInputContent = () => {
               )}
             >
               <Calendar
-                date={new Date(newExpenseData.createdAt)}
+                date={new Date(newExpenseData.date)}
                 onChange={(date) =>
-                  setNewExpenseData((p) => ({ ...p, createdAt: date }))
+                  setNewExpenseData((p) => ({ ...p, date: date }))
                 }
               />
             </div>

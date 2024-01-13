@@ -56,6 +56,7 @@ const GET_BUDGET = gql`
         title
         category
         amount
+        date
         createdAt
         budgetId
         Budget {
@@ -73,6 +74,7 @@ const GET_BUDGET = gql`
         title
         amount
         exchangeRate
+        date
         createdAt
         budgetId
         Budget {
@@ -105,6 +107,7 @@ const GET_BUDGETS = gql`
         title
         category
         amount
+        date
         createdAt
         budgetId
         Budget {
@@ -121,6 +124,7 @@ const GET_BUDGETS = gql`
         title
         amount
         exchangeRate
+        date
         createdAt
         budgetId
         Budget {

@@ -20,6 +20,7 @@ import { ExpenseQueryData, IncomeQueryData } from "../detail/_types";
 import BudgetBox from "./BudgetBox";
 import CategoryTag from "./CategoryTag";
 import { tripAtom, tripStore } from "./TripProvider";
+import { NumericInput } from "@components/Input/Numeric";
 const budgetAtom = atomWithReset({
   id: "",
   Currency: { id: "", name: "", amountUnit: 1 },
@@ -32,7 +33,7 @@ const expenseReqAtom = atomWithReset({
   title: "",
   amount: "",
   category: "ETC",
-  createdAt: new Date(),
+  date: new Date(),
 });
 
 const modalOpenAtom = atom<boolean>(false);
@@ -67,7 +68,7 @@ const CreateExpenseModal = ({
       createExpense({
         variables: {
           ...expenseData,
-          amount: parseFloat(expenseData.amount),
+          amount: parseFloat(expenseData.amount.replaceAll(",", "")),
           budgetId: budgetData.id,
           tripId: tid,
         },
@@ -164,13 +165,12 @@ const ExpenseInputContent = () => {
         </h2>
         <div className="flex flex-col gap-4">
           <div className="relative h-10 text-red">
-            <Input
-              type="number"
+            <NumericInput
               value={expenseData.amount}
               onChange={(e) => {
                 setExpenseData((p) => ({
                   ...p,
-                  amount: e.target.value.replace(/(^0+)/, ""),
+                  amount: e.target.value,
                 }));
               }}
               autoFocus
@@ -183,9 +183,6 @@ const ExpenseInputContent = () => {
                     14 +
                   4
                 }px`,
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "e") e.preventDefault();
               }}
             />
             <span className="absolute right-0 top-1/2 -translate-y-1/2">
@@ -250,7 +247,7 @@ const ExpenseInputContent = () => {
                 )}
                 onClick={() => setOpenCalendar((p) => !p)}
               >
-                {dateformatter(new Date(expenseData.createdAt))}
+                {dateformatter(new Date(expenseData.date))}
               </span>
             </div>
             <div
@@ -260,10 +257,8 @@ const ExpenseInputContent = () => {
               )}
             >
               <Calendar
-                date={expenseData.createdAt}
-                onChange={(date) =>
-                  setExpenseData((p) => ({ ...p, createdAt: date }))
-                }
+                date={expenseData.date}
+                onChange={(date) => setExpenseData((p) => ({ ...p, date }))}
               />
             </div>
           </div>

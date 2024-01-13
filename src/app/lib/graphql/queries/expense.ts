@@ -5,7 +5,7 @@ const CREATE_EXPENSE = gql`
     $title: String
     $amount: Float
     $category: String
-    $createdAt: Date
+    $date: Date
     $budgetId: ID
     $tripId: ID
   ) {
@@ -13,7 +13,7 @@ const CREATE_EXPENSE = gql`
       title: $title
       amount: $amount
       category: $category
-      createdAt: $createdAt
+      date: $date
       budgetId: $budgetId
       tripId: $tripId
     ) {
@@ -21,6 +21,7 @@ const CREATE_EXPENSE = gql`
       title
       amount
       category
+      date
       createdAt
       budgetId
     }
@@ -39,7 +40,7 @@ const UPDATE_EXPENSE = gql`
     $title: String
     $amount: Float
     $category: String
-    $createdAt: Date
+    $date: Date
     $budgetId: ID
     $tripId: ID
   ) {
@@ -48,7 +49,7 @@ const UPDATE_EXPENSE = gql`
       title: $title
       amount: $amount
       category: $category
-      createdAt: $createdAt
+      date: $date
       budgetId: $budgetId
       tripId: $tripId
     ) {
@@ -56,6 +57,7 @@ const UPDATE_EXPENSE = gql`
       title
       amount
       category
+      date
       createdAt
       budgetId
     }
@@ -76,6 +78,7 @@ const GET_EXPENSES = gql`
       title
       category
       amount
+      date
       createdAt
       budgetId
       Budget {

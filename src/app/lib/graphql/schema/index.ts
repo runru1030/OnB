@@ -27,6 +27,7 @@ export const typeDefs = `#graphql
     title:String
     category:String
     amount:Float
+    date:Date
     createdAt:Date
     budgetId:ID!
     Budget:Budget
@@ -35,6 +36,7 @@ export const typeDefs = `#graphql
     title:String
     category:String
     amount:Float
+    date:Date
     createdAt:Date
     tripId:ID!
     budgetId:ID!
@@ -44,6 +46,7 @@ export const typeDefs = `#graphql
     title:String
     exchangeRate:Float
     amount:Float
+    date:Date
     createdAt:Date
     budgetId:ID!
     Budget:Budget
@@ -52,7 +55,7 @@ export const typeDefs = `#graphql
     title:String
     exchangeRate:Float
     amount:Float
-    createdAt:Date
+    date:Date
     budgetId:ID!
     tripId:ID!
   }
@@ -87,8 +90,8 @@ export const typeDefs = `#graphql
   }
   type Query {
 	  trip(id: ID!): TripJoined 
-    trips:[Trip]
-    passedTrips:[Trip]
+    trips(userId: ID!):[Trip]
+    passedTrips(userId: ID!):[Trip]
 	  budget(id: ID!): Budget 
 	  budgets(tid: ID!): [Budget] 
 	  budgetTotal(tid: ID!): BudgetAgg 
@@ -106,14 +109,14 @@ export const typeDefs = `#graphql
     updateBudget(id:ID!, title:String, type:String):Budget
     deleteBudget(id:ID!):Budget
 
-    createIncome(title:String, amount:Float, exchangeRate:Float, createdAt:Date, budgetId:ID, tripId:ID):Income
+    createIncome(title:String, amount:Float, exchangeRate:Float, date:Date, budgetId:ID, tripId:ID):Income
     createIncomes(incomes:[IncomeInput]):Income
-    updateIncome(id:ID!, title:String, amount:Float, exchangeRate:Float, createdAt:Date, budgetId:ID, tripId:ID):Income
+    updateIncome(id:ID!, title:String, amount:Float, exchangeRate:Float, date:Date, budgetId:ID, tripId:ID):Income
     deleteIncome(id:ID!, budgetId:ID!):Income
 
-    createExpense(title:String, category:String, amount:Float, createdAt:Date, budgetId:ID, tripId:ID):Expense
+    createExpense(title:String, category:String, amount:Float, date:Date, budgetId:ID, tripId:ID):Expense
     createExpenses(expenses:[ExpenseInput]):Expense
-    updateExpense(id:ID!, title:String, amount:Float, category:String, createdAt:Date, budgetId:ID, tripId:ID):Expense
+    updateExpense(id:ID!, title:String, amount:Float, category:String, date:Date, budgetId:ID, tripId:ID):Expense
     deleteExpense(id:ID!):Expense
 
     createAuth(email:String! name:String):User
