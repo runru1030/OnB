@@ -37,7 +37,6 @@ export const typeDefs = `#graphql
     category:String
     amount:Float
     date:Date
-    createdAt:Date
     tripId:ID!
     budgetId:ID!
   }
