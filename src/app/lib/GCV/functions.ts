@@ -11,7 +11,7 @@ export async function detectText(img: string, currencyId: string) {
   const dateRegex = new RegExp(
     /^\d{4}.(0[1-9]|1[012]).(0[1-9]|[12][0-9]|3[01])$/
   );
-  const resultObj = [] as {
+  const resultArr = [] as {
     date: string;
     amount: number;
     title: string;
@@ -24,6 +24,8 @@ export async function detectText(img: string, currencyId: string) {
   let prevText = "";
   annotations?.[0].description?.split("\n").forEach((annotation) => {
     const text = annotation?.trim();
+    console.log(text);
+
     const isAmountTarget =
       (text.includes("-") || text.includes("+")) &&
       text.split(currencySymbol[currencyId]).length === 2;
@@ -36,8 +38,8 @@ export async function detectText(img: string, currencyId: string) {
       date = text.replaceAll(".", "-");
       triggered = true;
     } else {
-      if (isAmountTarget || isAmountTargetZero) {
-        resultObj[idx].amount = parseFloat(
+      if ((isAmountTarget || isAmountTargetZero) && idx < resultArr.length) {
+        resultArr[idx].amount = parseFloat(
           text.split(currencySymbol[currencyId])[1].replaceAll(",", "")
         );
         idx += 1;
@@ -45,7 +47,7 @@ export async function detectText(img: string, currencyId: string) {
       }
       if (triggered) {
         if (["충전", "결제", "친구간 송금"].includes(text)) {
-          resultObj.push({ date, title, type: text, amount: 0 });
+          resultArr.push({ date, title, type: text, amount: 0 });
         } else {
           title = text;
         }
@@ -53,5 +55,5 @@ export async function detectText(img: string, currencyId: string) {
     }
     prevText = text;
   });
-  return resultObj;
+  return resultArr;
 }
