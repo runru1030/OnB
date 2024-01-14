@@ -75,7 +75,7 @@ const DetailContent = ({
 };
 
 const SettlementManager = () => {
-  const [num, setNum] = useState(2);
+  const [numInput, setNumInput] = useState("2");
   const [updateExpense] = useMutation(expense.UPDATE_EXPENSE);
   const [updateIncome] = useMutation(income.UPDATE_INCOME);
   const { selectionDataRows, setSelectionMode, selectionMode } =
@@ -90,8 +90,10 @@ const SettlementManager = () => {
       )}
     >
       <NumericInput
-        value={num.toString()}
-        onChange={(e) => setNum(parseInt(e.target.value))}
+        inputMode="numeric"
+        value={numInput}
+        placeholder="2"
+        onChange={(e) => setNumInput(e.target.value.replace(".", ""))}
         className="outline-none focus:border-b text-lg rounded-none text-center text-blue font-medium !py-0 w-[36px]"
       />
       <span className="text-blue-300">/ 1</span>
@@ -99,7 +101,9 @@ const SettlementManager = () => {
         className="btn-blue bg-blue-50 text-blue ml-4"
         disabled={
           Object.values(selectionDataRows).filter((row) => row.selected)
-            .length === 0
+            .length === 0 ||
+          isNaN(parseInt(numInput)) ||
+          parseInt(numInput) < 2
         }
         onClick={() => {
           Promise.all([
@@ -107,7 +111,10 @@ const SettlementManager = () => {
               .filter((row) => row.selected && Object.hasOwn(row, "category"))
               .map((row) =>
                 updateExpense({
-                  variables: { ...row, amount: row.amount / num },
+                  variables: {
+                    ...row,
+                    amount: row.amount / parseInt(numInput),
+                  },
                 })
               ),
             ...Object.values(selectionDataRows)
@@ -116,7 +123,10 @@ const SettlementManager = () => {
               )
               .map((row) =>
                 updateIncome({
-                  variables: { ...row, amount: row.amount / num },
+                  variables: {
+                    ...row,
+                    amount: row.amount / parseInt(numInput),
+                  },
                 })
               ),
           ]).then(() => {
