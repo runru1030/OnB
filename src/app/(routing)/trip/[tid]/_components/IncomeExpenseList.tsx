@@ -143,6 +143,9 @@ const SelectionManager = ({
   ...props
 }: PropsWithChildren<React.ComponentProps<typeof Button>>) => {
   const setSelectionMode = useSetAtom(selectionModeAtom);
+  useEffect(() => {
+    return setSelectionMode(false);
+  }, []);
   return (
     <Button onClick={() => setSelectionMode((p) => !p)} {...props}>
       {children}
