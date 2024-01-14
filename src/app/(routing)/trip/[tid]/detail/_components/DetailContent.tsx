@@ -17,10 +17,20 @@ const DetailContent = ({
   const { totalExpensesObj, totalExpensesKRW } =
     getSumOfDetail(filteredDataList);
   const [openBottom, setOpenBottom] = useState(false);
+  const { selectionMode } = IncomeExpenseList.useDataRowSelection();
   return (
     <div className="main-content flex flex-col px-0 gap-2">
       <FilterOptionModal />
       <div className="px-4 flex gap-2">
+        <IncomeExpenseList.SelectionManager
+          className={clsx(
+            "border btn-grey-border text-sm pr-2.5",
+            selectionMode ? "border-blue text-blue" : "border-grey-50 "
+          )}
+        >
+          선택
+          <KeyboardArrowDownSharpIcon />
+        </IncomeExpenseList.SelectionManager>
         <FilterOptionModal.Trigger
           filterType="date"
           className="border border-grey-50 btn-grey-border text-sm pr-2.5"
