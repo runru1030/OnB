@@ -3,7 +3,7 @@ import { getSumOfDetail } from "@app/utils";
 import clsx from "clsx";
 import { useMemo } from "react";
 import IncomeExpenseList from "../../_components/IncomeExpenseList";
-import { DetailAggregation } from "../../detail/_components/DetailContent";
+import { DetailAggregation, SettlementManager } from "../../detail/_components/DetailContent";
 import FilterOptionModal from "../../detail/_components/FilterOptionModal";
 import { ExpenseQueryData, IncomeQueryData } from "../../detail/_types";
 
@@ -47,6 +47,7 @@ const DetailContent = ({
           카테고리
         </FilterOptionModal.Trigger>
       </div>
+      <SettlementManager />
       {filteredDataList.length !== 0 ? (
         <>
           <div className="flex-1">

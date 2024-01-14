@@ -74,7 +74,7 @@ const DetailContent = ({
   );
 };
 
-const SettlementManager = () => {
+export const SettlementManager = () => {
   const [numInput, setNumInput] = useState("2");
   const [updateExpense] = useMutation(expense.UPDATE_EXPENSE);
   const [updateIncome] = useMutation(income.UPDATE_INCOME);
