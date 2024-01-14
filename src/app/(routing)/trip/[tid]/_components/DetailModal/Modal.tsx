@@ -92,12 +92,12 @@ export const Trigger = ({
   const setDetailData = useSetAtom(detailAtom);
   return (
     <Button
+      {...props}
       onClick={(e) => {
+        props?.onClick?.(e);
         setDetailData(detail);
         setOpenAtom(true);
-        props?.onClick?.(e);
       }}
-      {...props}
     >
       {children}
     </Button>

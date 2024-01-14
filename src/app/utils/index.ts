@@ -45,6 +45,8 @@ export const getSumOfDetail = (
 ) => {
   const totalExpensesObj = {} as { [key: string]: number };
   let totalExpensesKRW = 0;
+  const totalIncomesObj = {} as { [key: string]: number };
+  let totalIncomesKRW = 0;
   detailDataList.forEach((detail) => {
     if (Object.hasOwn(detail, "category")) {
       if (!totalExpensesObj[detail.Budget.Currency.id]) {
@@ -54,11 +56,21 @@ export const getSumOfDetail = (
       totalExpensesKRW +=
         (detail.amount * detail.Budget.exRateAVG) /
         detail.Budget.Currency.amountUnit;
+    } else {
+      if (!totalIncomesObj[detail.Budget.Currency.id]) {
+        totalIncomesObj[detail.Budget.Currency.id] = 0;
+      }
+      totalIncomesObj[detail.Budget.Currency.id] += detail.amount;
+      totalIncomesKRW +=
+        (detail.amount * (detail as IncomeQueryData).exchangeRate) /
+        detail.Budget.Currency.amountUnit;
     }
   });
   return {
     totalExpensesObj,
     totalExpensesKRW,
+    totalIncomesObj,
+    totalIncomesKRW,
   };
 };
 export const onFocusSetCursorPosition = (

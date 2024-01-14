@@ -1,5 +1,5 @@
 "use client";
-import { dateformatter } from "@app/utils";
+import { dateformatter, getSumOfDetail } from "@app/utils";
 import clsx from "clsx";
 import React, { PropsWithChildren, useEffect, useMemo } from "react";
 import currencySymbol from "../_constants/currencySymbol";
@@ -18,7 +18,7 @@ const IncomeExpenseList = ({
   dataList,
   withBudgetTitle = false,
 }: IncomeExpenseListProps) => {
-  const selectionModeData = useAtomValue(selectionModeAtom);
+  const selectionMode = useAtomValue(selectionModeAtom);
   const [selectionDataRows, setSelectionDataRows] = useAtom(
     selectionDataRowsAtom
   );
@@ -30,7 +30,7 @@ const IncomeExpenseList = ({
         {}
       )
     );
-  }, [dataList]);
+  }, [dataList, selectionMode]);
 
   const dataRowsByDate = useMemo(() => {
     const dataObj = {} as {
@@ -71,53 +71,58 @@ const IncomeExpenseList = ({
           <div className="flex flex-col">
             {dataRowsByDate[date].map((li) => (
               <DetailModal.Trigger
-                key={li.id}
                 className={clsx(
-                  "w-full flex items-center justify-between !p-4",
+                  "w-full !p-0",
                   selectionDataRows[li.id]?.selected &&
                     (li.type === "Income" ? "bg-blue-50" : "bg-red-50")
                 )}
                 detail={li}
-                onClick={(e) => {
-                  if (selectionModeData) {
-                    setSelectionDataRows((p) => ({
-                      ...p,
-                      [li.id]: {
-                        ...selectionDataRows[li.id],
-                        selected: !selectionDataRows[li.id].selected,
-                      },
-                    }));
-                    e.preventDefault();
-                  }
-                }}
+                key={li.id}
               >
-                <div className="flex gap-4 items-center">
-                  {withBudgetTitle && (
-                    <span className="font-medium">{li?.Budget.title}</span>
-                  )}
-                  <span className="text-grey-300 max-w-[120px] truncate">
-                    {li?.title}
+                <div
+                  onClick={(e) => {
+                    if (selectionMode) {
+                      setSelectionDataRows((p) => ({
+                        ...p,
+                        [li.id]: {
+                          ...selectionDataRows[li.id],
+                          selected: !selectionDataRows[li.id].selected,
+                        },
+                      }));
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }
+                  }}
+                  className="flex items-center justify-between !p-4"
+                >
+                  <div className="flex gap-4 items-center">
+                    {withBudgetTitle && (
+                      <span className="font-medium">{li?.Budget.title}</span>
+                    )}
+                    <span className="text-grey-300 max-w-[120px] truncate">
+                      {li?.title}
+                    </span>
+                  </div>
+                  <span
+                    className={clsx(
+                      li.type === "Expense" ? "text-red" : "text-blue",
+                      "flex gap-4 items-center text-lg font-medium"
+                    )}
+                  >
+                    <span className="text-red-300">
+                      {li.type === "Expense" && (
+                        <CategoryTag
+                          category={(li as ExpenseQueryData).category}
+                        />
+                      )}
+                    </span>
+                    <span>
+                      {li.type === "Expense" ? "- " : "+ "}
+                      {currencySymbol[li.Budget.Currency.id]}{" "}
+                      {li.amount.toLocaleString()}
+                    </span>
                   </span>
                 </div>
-                <span
-                  className={clsx(
-                    li.type === "Expense" ? "text-red" : "text-blue",
-                    "flex gap-4 items-center text-lg font-medium"
-                  )}
-                >
-                  <span className="text-red-300">
-                    {li.type === "Expense" && (
-                      <CategoryTag
-                        category={(li as ExpenseQueryData).category}
-                      />
-                    )}
-                  </span>
-                  <span>
-                    {li.type === "Expense" ? "- " : "+ "}
-                    {currencySymbol[li.Budget.Currency.id]}{" "}
-                    {li.amount.toLocaleString()}
-                  </span>
-                </span>
               </DetailModal.Trigger>
             ))}
           </div>
@@ -150,11 +155,25 @@ const useDataRowSelection = () => {
   const [selectionDataRows, setSelectionDataRows] = useAtom(
     selectionDataRowsAtom
   );
+  const {
+    totalExpensesObj,
+    totalExpensesKRW,
+    totalIncomesObj,
+    totalIncomesKRW,
+  } = getSumOfDetail(
+    Object.values(selectionDataRows).filter((row) => row.selected)
+  );
   return {
     selectionMode,
     setSelectionMode,
     selectionDataRows,
     setSelectionDataRows,
+    sumOfSelectionData: {
+      totalExpensesObj,
+      totalExpensesKRW,
+      totalIncomesObj,
+      totalIncomesKRW,
+    },
   };
 };
 IncomeExpenseList.SelectionManager = SelectionManager;

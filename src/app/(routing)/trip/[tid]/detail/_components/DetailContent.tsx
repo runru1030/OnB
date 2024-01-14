@@ -2,7 +2,7 @@
 import { getSumOfDetail } from "@app/utils";
 import KeyboardArrowDownSharpIcon from "@mui/icons-material/KeyboardArrowDownSharp";
 import clsx from "clsx";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import IncomeExpenseList from "../../_components/IncomeExpenseList";
 import currencySymbol from "../../_constants/currencySymbol";
 import { ExpenseQueryData, IncomeQueryData } from "../_types";
@@ -14,10 +14,14 @@ const DetailContent = ({
   dataList: (IncomeQueryData | ExpenseQueryData)[];
 }) => {
   const { filteredDataList } = FilterOptionModal.useDataFilter({ dataList });
-  const { totalExpensesObj, totalExpensesKRW } =
-    getSumOfDetail(filteredDataList);
+  const sumOfTotalData = getSumOfDetail(filteredDataList);
   const [openBottom, setOpenBottom] = useState(false);
-  const { selectionMode } = IncomeExpenseList.useDataRowSelection();
+  const { selectionMode, sumOfSelectionData } =
+    IncomeExpenseList.useDataRowSelection();
+  const sumOfData = useMemo(() => {
+    return selectionMode ? sumOfSelectionData : sumOfTotalData;
+  }, [selectionMode, sumOfTotalData, sumOfSelectionData]);
+
   return (
     <div className="main-content flex flex-col px-0 gap-2">
       <FilterOptionModal />
@@ -58,37 +62,71 @@ const DetailContent = ({
           <div className="flex-1">
             <IncomeExpenseList dataList={filteredDataList} withBudgetTitle />
           </div>
-          <div className="sticky bottom-0 left-0 flex flex-col bg-red-50 rounded-t-3xl w-full px-6 pb-8 gap-3 shadow-normal ">
+          <div className="sticky bottom-0 left-0 flex flex-col bg-white rounded-t-3xl w-full px-6 pb-8 gap-3 shadow-lg border border-grey-50">
             <div className="flex flex-col">
               <span
                 className="!p-0 w-full flex justify-center"
                 onClick={() => setOpenBottom((p) => !p)}
               >
-                <hr className="my-3 border border-red-100 w-12" />
+                <hr className="my-3 border border-grey-100 w-12" />
               </span>
-              <div className="flex pb-2 justify-center">
-                <span className="font-medium text-lg text-red">
-                  {currencySymbol["KRW"]} {totalExpensesKRW.toLocaleString()}{" "}
-                  지출
+              <div className="flex gap-2">
+                <span className="text-center text-blue flex-1">
+                  <span className="text-blue-300">충전</span>
+                  <br />
+                  {currencySymbol["KRW"]}{" "}
+                  {sumOfData.totalIncomesKRW.toLocaleString()}
+                </span>
+                <span className="text-center text-red flex-1">
+                  <span className="text-red-300">지출</span>
+                  <br />
+                  {currencySymbol["KRW"]}{" "}
+                  {sumOfData.totalExpensesKRW.toLocaleString()}
                 </span>
               </div>
               <div
                 className={clsx(
-                  "flex flex-col m-2 gap-1 overflow-scroll duration-300 border-red-300",
+                  "flex flex-col mt-4 pt-4 gap-1 overflow-scroll duration-300 border-grey-50",
                   openBottom
-                    ? "h-[100px] border-t border-red-300 pt-1"
+                    ? "h-[120px] border-t border-grey-200 pt-1"
                     : "h-0 overflow-hidden"
                 )}
               >
-                {Object.keys(totalExpensesObj).map((currency) => (
+                {[
+                  ...new Set([
+                    ...Object.keys(sumOfData.totalExpensesObj),
+                    ...Object.keys(sumOfData.totalIncomesObj),
+                  ]),
+                ].map((currency) => (
                   <div
                     key={currency}
-                    className="flex text-red-300 justify-between"
+                    className="flex text-grey-400 items-center"
                   >
-                    <span>{currency}</span>
-                    <span>
-                      {currencySymbol[currency]}{" "}
-                      {totalExpensesObj[currency].toLocaleString()}
+                    {" "}
+                    <span className="flex-1">
+                      {sumOfData.totalIncomesObj[currency] ? (
+                        <>
+                          {currencySymbol[currency]}{" "}
+                          {sumOfData.totalIncomesObj[
+                            currency
+                          ]?.toLocaleString()}
+                        </>
+                      ) : (
+                        "-"
+                      )}
+                    </span>
+                    <span className="text-sm text-grey-100">{currency}</span>
+                    <span className="flex-1 text-right">
+                      {sumOfData.totalExpensesObj[currency] ? (
+                        <>
+                          {currencySymbol[currency]}{" "}
+                          {sumOfData.totalExpensesObj[
+                            currency
+                          ]?.toLocaleString()}
+                        </>
+                      ) : (
+                        "-"
+                      )}
                     </span>
                   </div>
                 ))}
