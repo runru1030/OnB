@@ -62,6 +62,7 @@ const GET_BUDGET = gql`
         Budget {
           title
           type
+          exRateAVG
           Currency {
             id
             amountUnit

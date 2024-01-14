@@ -47,8 +47,7 @@ const useDataFilter = ({
     if (!selectionDate.ALL) {
       filtered = filtered.filter(
         (data) =>
-          new Date(data.date).getDate() >=
-            selectionDate.startDate.getDate() &&
+          new Date(data.date).getDate() >= selectionDate.startDate.getDate() &&
           new Date(data.date).getDate() <= selectionDate.endDate.getDate()
       );
     }
@@ -67,7 +66,14 @@ const useDataFilter = ({
     return filtered;
   }, [dataList, selectionDate, selectionCategories, selectionBudgetType]);
 
-  return { filteredDataList };
+  const filterMode = useMemo(
+    () =>
+      !selectionDate.ALL ||
+      !selectionCategories.ALL ||
+      !selectionBudgetType.ALL,
+    [selectionDate, selectionCategories, selectionBudgetType]
+  );
+  return { filteredDataList, filterMode };
 };
 const FilterOptionModal = () => {
   const [filterType, setFilterType] = useAtom(filterTypeAtom);
