@@ -4,8 +4,8 @@ import { Input } from ".";
 const NumericInput = ({ ...props }: React.ComponentProps<typeof Input>) => {
   return (
     <Input
+      inputMode="decimal"
       {...props}
-      inputMode="numeric"
       onChange={(e) => {
         e.target.value = e.target.value
           .replaceAll(/[^0-9.]/g, "")

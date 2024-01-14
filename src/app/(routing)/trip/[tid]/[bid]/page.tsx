@@ -2,8 +2,8 @@ import { getClient } from "@app/_components/ApolloClientRSC";
 import { budget } from "@app/lib/graphql/queries";
 import Header from "@components/Header";
 import { use } from "react";
-import IncomeExpenseList from "../_components/IncomeExpenseList";
 import BudgetInfoContent from "./_components/BudgetInfoContent";
+import DetailContent from "./_components/DetailContent";
 import EditBudgetModalWithTrigger from "./_components/EditBudgetModalWithTrigger";
 
 const Page = ({ params: { bid } }: { params: { bid: string } }) => {
@@ -17,15 +17,11 @@ const Page = ({ params: { bid } }: { params: { bid: string } }) => {
         <EditBudgetModalWithTrigger budget={budgetData} />
         <span className="text-lg font-medium ">{budgetData.title}</span>
       </Header>
-      <div className="flex flex-col h-[calc(100%-60px)] overflow-auto">
+      <div className="main-content !p-0">
         <BudgetInfoContent budget={budgetData} />
-        <div className="flex flex-col gap-2">
-          {(budgetData?.incomes || budgetData?.expenses) && (
-            <IncomeExpenseList
-              dataList={[...budgetData.incomes, ...budgetData.expenses]}
-            />
-          )}
-        </div>
+        <DetailContent
+          dataList={[...budgetData.incomes, ...budgetData.expenses]}
+        />
       </div>
     </div>
   );

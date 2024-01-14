@@ -219,10 +219,11 @@ const GenerateDetails = ({ budget }: { budget: BudgetQueryData }) => {
                 )}
                 {incomes.length === 0 && expenses.length === 0 && (
                   <span className="text-xs text-red flex flex-col items-center gap-3">
-                    - 현재 트래블 월렛 이용내역 이미지 업로드만 지원하고 있습니다.
+                    - 현재 트래블 월렛 이용내역 이미지 업로드만 지원하고
+                    있습니다.
                     <br />
-                    - 이용 내역 화면의 1. 날짜, 2. 내용, 3. 금액 을
-                    담은 화면 이미지를 업로드 해주셔야 정확도가 올라갑니다!
+                    - 이용 내역 화면의 1. 날짜, 2. 내용, 3. 금액 을 담은 화면
+                    이미지를 업로드 해주셔야 정확도가 올라갑니다!
                     <Image
                       src={"/assets/guide.png"}
                       alt="guide"
@@ -241,12 +242,12 @@ const GenerateDetails = ({ budget }: { budget: BudgetQueryData }) => {
               Promise.all([
                 createIncomes({
                   variables: {
-                    incomes: targetIncomes,
+                    incomes: targetIncomes.reverse(),
                   },
                 }),
                 createExpenses({
                   variables: {
-                    expenses: targetExpenses,
+                    expenses: targetExpenses.reverse(),
                   },
                 }),
               ]).then(() => {

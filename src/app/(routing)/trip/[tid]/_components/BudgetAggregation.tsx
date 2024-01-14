@@ -12,7 +12,7 @@ const BudgetAggregation = ({ tid }: { tid: string }) => {
     data?.budgetTotal ?? 0;
 
   return (
-    <div className="fixed bottom-0 left-0 flex flex-col bg-grey-light-300 rounded-t-2xl w-full p-6 pb-8 gap-3 shadow-normal">
+    <div className="sticky bottom-0 left-0 flex flex-col bg-white rounded-t-3xl w-full p-8 gap-3 shadow-lg border border-grey-50">
       {totalBudgetCount !== 0 && (
         <div className="flex gap-4 mb-2">
           <CreateIncomeModal />
