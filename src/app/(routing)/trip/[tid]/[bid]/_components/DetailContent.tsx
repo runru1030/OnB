@@ -1,6 +1,5 @@
 "use client";
 import { getSumOfDetail } from "@app/utils";
-import KeyboardArrowDownSharpIcon from "@mui/icons-material/KeyboardArrowDownSharp";
 import clsx from "clsx";
 import { useMemo } from "react";
 import IncomeExpenseList from "../../_components/IncomeExpenseList";
@@ -29,26 +28,23 @@ const DetailContent = ({
       <div className="px-4 flex gap-2">
         <IncomeExpenseList.SelectionManager
           className={clsx(
-            "border btn-grey-border text-sm pr-2.5",
+            "border btn-grey-border text-sm",
             selectionMode ? "border-blue text-blue" : "border-grey-50 "
           )}
         >
           선택
-          <KeyboardArrowDownSharpIcon />
         </IncomeExpenseList.SelectionManager>
         <FilterOptionModal.Trigger
           filterType="date"
-          className="border border-grey-50 btn-grey-border text-sm pr-2.5"
+          className="border border-grey-50 btn-grey-border text-sm"
         >
           기간
-          <KeyboardArrowDownSharpIcon />
         </FilterOptionModal.Trigger>
         <FilterOptionModal.Trigger
           filterType="category"
-          className="border border-grey-50 btn-grey-border text-sm pr-2.5"
+          className="border border-grey-50 btn-grey-border text-sm"
         >
           카테고리
-          <KeyboardArrowDownSharpIcon />
         </FilterOptionModal.Trigger>
       </div>
       {filteredDataList.length !== 0 ? (

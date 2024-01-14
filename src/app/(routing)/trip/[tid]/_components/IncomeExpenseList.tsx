@@ -134,7 +134,7 @@ const IncomeExpenseList = ({
 };
 const selectionModeAtom = atom(false);
 const selectionDataRowsAtom = atom<{
-  [key: string]: DetailDataType & {
+  [key: string]: (IncomeQueryData | ExpenseQueryData) & {
     selected: boolean;
   };
 }>({});

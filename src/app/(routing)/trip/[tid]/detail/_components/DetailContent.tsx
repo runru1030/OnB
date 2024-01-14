@@ -1,7 +1,11 @@
 "use client";
+import { useMutation } from "@apollo/client";
+import { expense, income } from "@app/lib/graphql/queries";
 import { getSumOfDetail } from "@app/utils";
-import KeyboardArrowDownSharpIcon from "@mui/icons-material/KeyboardArrowDownSharp";
+import Button from "@components/Button";
+import { NumericInput } from "@components/Input/Numeric";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import IncomeExpenseList from "../../_components/IncomeExpenseList";
 import currencySymbol from "../../_constants/currencySymbol";
@@ -28,35 +32,32 @@ const DetailContent = ({
       <div className="px-4 flex gap-2">
         <IncomeExpenseList.SelectionManager
           className={clsx(
-            "border btn-grey-border text-sm pr-2.5",
+            "border btn-grey-border text-sm",
             selectionMode ? "border-blue text-blue" : "border-grey-50 "
           )}
         >
           선택
-          <KeyboardArrowDownSharpIcon />
         </IncomeExpenseList.SelectionManager>
         <FilterOptionModal.Trigger
           filterType="date"
-          className="border border-grey-50 btn-grey-border text-sm pr-2.5"
+          className="border border-grey-50 btn-grey-border text-sm"
         >
           기간
-          <KeyboardArrowDownSharpIcon />
         </FilterOptionModal.Trigger>
         <FilterOptionModal.Trigger
           filterType="category"
-          className="border border-grey-50 btn-grey-border text-sm pr-2.5"
+          className="border border-grey-50 btn-grey-border text-sm"
         >
           카테고리
-          <KeyboardArrowDownSharpIcon />
         </FilterOptionModal.Trigger>
         <FilterOptionModal.Trigger
           filterType="budgetType"
-          className="border border-grey-50 btn-grey-border text-sm pr-2.5"
+          className="border border-grey-50 btn-grey-border text-sm"
         >
           타입
-          <KeyboardArrowDownSharpIcon />
         </FilterOptionModal.Trigger>
       </div>
+      <SettlementManager />
       {filteredDataList.length !== 0 ? (
         <>
           <div className="flex-1">
@@ -69,6 +70,63 @@ const DetailContent = ({
           지출 및 충전 내역이 없습니다!
         </div>
       )}
+    </div>
+  );
+};
+
+const SettlementManager = () => {
+  const [num, setNum] = useState(2);
+  const [updateExpense] = useMutation(expense.UPDATE_EXPENSE);
+  const [updateIncome] = useMutation(income.UPDATE_INCOME);
+  const { selectionDataRows, setSelectionMode, selectionMode } =
+    IncomeExpenseList.useDataRowSelection();
+
+  const router = useRouter();
+  return (
+    <div
+      className={clsx(
+        "flex items-center px-4 justify-end duration-300 overflow-hidden",
+        selectionMode ? "h-[40px]" : "h-0"
+      )}
+    >
+      <NumericInput
+        value={num.toString()}
+        onChange={(e) => setNum(parseInt(e.target.value))}
+        className="outline-none focus:border-b text-lg rounded-none text-center text-blue font-medium !py-0 w-[36px]"
+      />
+      <span className="text-blue-300">/ 1</span>
+      <Button
+        className="btn-blue bg-blue-50 text-blue ml-4"
+        disabled={
+          Object.values(selectionDataRows).filter((row) => row.selected)
+            .length === 0
+        }
+        onClick={() => {
+          Promise.all([
+            ...Object.values(selectionDataRows)
+              .filter((row) => row.selected && Object.hasOwn(row, "category"))
+              .map((row) =>
+                updateExpense({
+                  variables: { ...row, amount: row.amount / num },
+                })
+              ),
+            ...Object.values(selectionDataRows)
+              .filter(
+                (row) => row.selected && Object.hasOwn(row, "exchangeRate")
+              )
+              .map((row) =>
+                updateIncome({
+                  variables: { ...row, amount: row.amount / num },
+                })
+              ),
+          ]).then(() => {
+            setSelectionMode(false);
+            router.refresh();
+          });
+        }}
+      >
+        정산하기
+      </Button>
     </div>
   );
 };
