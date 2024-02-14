@@ -1,7 +1,7 @@
 ![image](https://github.com/runru1030/OnB/assets/70322673/d2fe44f9-787e-4f12-ba0d-cb8f0440d851)
 
 ### <div align="center">여행 경비 관리 웹앱 서비스, OnB</div>  
-<div align="center">2023.12.15 - (진행 중)</div> 
+<div align="center">2023.12.08 - (진행 중)</div> 
 </br></br>
 </br></br>
 
